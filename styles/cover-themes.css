@@ -1,0 +1,136 @@
+.cover-preview.theme-minimal {
+  background: #222;
+  color: white;
+}
+
+.cover-preview.theme-minimal .decor-top,
+.cover-preview.theme-minimal .decor-bottom {
+  display: none;
+}
+
+.cover-preview.theme-nature {
+  background: linear-gradient(135deg, #eef6ea, #cfe3c3);
+  color: #264d2f;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 48px;
+}
+
+.cover-preview.theme-nature .cover-content {
+  text-align: left;
+}
+
+.cover-preview.theme-nature h1 {
+  font-size: 42px;
+  line-height: 1.2;
+}
+
+.cover-preview.theme-nature .decor-top {
+  width: 260px;
+  height: 260px;
+  top: -80px;
+  right: -60px;
+  background: rgba(76, 130, 90, 0.2);
+  border-radius: 40% 60% 50% 70%;
+}
+
+.cover-preview.theme-nature .decor-bottom {
+  width: 300px;
+  height: 300px;
+  bottom: -120px;
+  left: -80px;
+  background: rgba(76, 130, 90, 0.15);
+  border-radius: 60% 40% 65% 35%;
+}
+
+.cover-preview.theme-album {
+  background: radial-gradient(circle at 50% 20%, #5a47d6, #111 65%);
+  color: white;
+}
+
+.cover-preview.theme-album .cover-content {
+  text-align: center;
+}
+
+.cover-preview.theme-album h1 {
+  font-size: 50px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.cover-preview.theme-album p {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.cover-preview.theme-album .decor-top {
+  width: 400px;
+  height: 400px;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(140, 110, 255, 0.25);
+  border-radius: 50%;
+  filter: blur(30px);
+}
+
+.cover-preview.theme-album .decor-bottom {
+  width: 260px;
+  height: 260px;
+  bottom: -100px;
+  right: -80px;
+  background: rgba(0, 255, 247, 0.1);
+  border-radius: 50%;
+  filter: blur(20px);
+}
+
+.cover-preview.theme-elegant {
+  background: linear-gradient(135deg, #f7f1e3, #e2d8c8);
+  color: #2f2a26;
+  border: 1px solid rgba(120, 105, 90, 0.2);
+}
+
+.cover-preview.theme-elegant h1 {
+  font-size: 46px;
+  font-weight: 500;
+}
+
+.cover-preview.theme-elegant p {
+  font-size: 15px;
+  letter-spacing: 0.3px;
+}
+
+.cover-preview.theme-elegant .decor-top {
+  width: 200px;
+  height: 200px;
+  top: 30px;
+  right: 30px;
+  border: 2px solid rgba(120, 105, 90, 0.2);
+  border-radius: 50%;
+}
+
+.cover-preview.theme-elegant .decor-bottom {
+  width: 260px;
+  height: 260px;
+  bottom: -120px;
+  left: -100px;
+  border: 2px solid rgba(120, 105, 90, 0.15);
+  border-radius: 50%;
+}
+
+.cover-preview.font-modern {
+  font-family: Arial, sans-serif;
+}
+
+.cover-preview.font-classic {
+  font-family: Georgia, serif;
+}
+
+.cover-preview.font-playful {
+  font-family: "Trebuchet MS", "Comic Sans MS", sans-serif;
+}
+
+.cover-preview.font-elegant {
+  font-family: "Times New Roman", serif;
+  letter-spacing: 0.5px;
+}

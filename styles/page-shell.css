@@ -1,0 +1,30 @@
+.editor-page-shell {
+  width: min(900px, calc(100vw - 360px));
+  aspect-ratio: 3 / 4;
+  margin: 24px auto;
+  padding: 28px;
+  box-sizing: border-box;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
+  overflow-y: auto;
+}
+
+.editor-page-title {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.editor-page-date {
+  margin-bottom: 18px;
+  color: #666;
+}
+
+@media (max-width: 900px) {
+  .editor-page-shell {
+    width: calc(100vw - 32px);
+    aspect-ratio: auto;
+    min-height: calc(100vh - 110px);
+    margin: 16px auto;
+  }
+}
