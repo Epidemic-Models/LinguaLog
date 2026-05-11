@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinguaLog</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f8b7c8">
+  <link rel="apple-touch-icon" href="assets/icons/profile.png">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LinguaLog">
+
+  <link rel="stylesheet" href="./styles/main.css?v=2" />
+  <link rel="stylesheet" href="./styles/app-themes.css" />
+  <link rel="stylesheet" href="./styles/cover.css?v=2" />
+  <link rel="stylesheet" href="./styles/cover-themes.css" />
+  <link rel="stylesheet" href="./styles/journal-general.css" />
+  <link rel="stylesheet" href="./styles/blank-canvas.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@400;600;700&family=Lora:wght@400;600;700&family=Merriweather:wght@400;700&family=Poppins:wght@400;600;700&family=Nunito:wght@400;600;700;800&family=Montserrat:wght@400;600;700;800&family=Cormorant+Garamond:wght@400;600;700&family=DM+Serif+Display&family=Dancing+Script:wght@400;600;700&family=Pacifico&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body>
+
+  <div id="authModal" class="auth-modal hidden">
+    <div class="auth-card">
+      <button class="auth-close" onclick="closeAuthModal()">×</button>
+      <img src="assets/icons/profile.png" class="auth-profile-icon" alt="" />
+
+      <h2>Welcome to LinguaLog</h2>
+      <p>Create an account or log in to save your journal online.</p>
+
+      <input id="authEmail" type="email" placeholder="Email" />
+      <input id="authPassword" type="password" placeholder="Password" />
+
+      <button onclick="handleSignUp()">Create account</button>
+      <button onclick="handleSignIn()">Log in</button>
+      <button onclick="handlePasswordReset()">Forgot password?</button>
+    </div>
+  </div>
+
+  <!-- ADD PROFILE MODAL HERE -->
+
+  <div id="profileModal" class="profile-modal hidden">
+
+    <div class="profile-card">
+
+      <button class="profile-close" onclick="closeProfileModal()">×</button>
+
+      <img src="assets/icons/profile.png" class="profile-avatar" alt="" />
+
+      <h2>Your Profile</h2>
+
+      <input id="profileUsername" type="text" placeholder="Username" />
+
+      <input id="profileNativeLanguage" type="text" placeholder="Native language" />
+
+      <input id="profileLearningLanguage" type="text" placeholder="Learning language" />
+
+      <textarea
+
+        id="profileBio"
+
+        placeholder="Write something about yourself..."
+
+      ></textarea>
+
+      <button onclick="saveProfile()">
+
+        Save Profile
+
+      </button>
+
+      <button onclick="signOut()">
+
+        Log out
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- Main UI loads here -->
+  <div id="appRoot"></div>
+
+  <!-- Modals load here -->
+  <div id="modalRoot"></div>
+
+  <!-- Scripts -->
+  <script src="scripts/ui-loader.js"></script>
+
+  <script src="scripts/cover-themes.js"></script>
+  <script src="scripts/cover-zodiac.js"></script>
+  <script src="scripts/cover-templates.js"></script>
+  <script src="scripts/cover.js"></script>
+
+  <script src="scripts/textbox-svg-pack.js"></script>
+  <script src="scripts/blank-canvas.js"></script>
+  <script src="scripts/journal-general.js"></script>
+  <script src="scripts/journal-language.js"></script>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="scripts/supabase-config.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/profile.js"></script>
+  <script src="scripts/cloud-journals.js"></script>
+  <script src="scripts/install-pwa.js"></script>
+  <script src="scripts/script.js"></script>
+  <script src="scripts/journal-view.js"></script>
+
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./service-worker.js")
+        .then(() => console.log("Service Worker Registered"));
+    }
+  </script>
+
+</body>
+</html>
