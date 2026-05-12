@@ -77,6 +77,9 @@ async function handleSignIn() {
     }
   }
 
+  // start realtime sync
+  await startRealtimeSync?.();
+
   closeAuthModal();
 
   if (typeof showLibraryPage === "function") {

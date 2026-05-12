@@ -1095,6 +1095,10 @@ function initializeApp() {
     window.__freeformOutsideClickBound = true;
   }
 
+  initCloudSync?.();
+  startCloudAutoSync?.();
+  startRealtimeSync?.();
+
   updateNewPagePreview?.();
 }
 
@@ -1115,6 +1119,34 @@ document.addEventListener("click", (e) => {
     setTimeout(() => burst.remove(), 700);
 
     openNewPageModal();
+  }
+});
+
+document.addEventListener("input", (event) => {
+  const target = event.target;
+
+  if (
+    target.matches("input") ||
+    target.matches("textarea") ||
+    target.isContentEditable
+  ) {
+    markLocalChanges?.();
+
+    scheduleAutosave?.();
+  }
+});
+
+document.addEventListener("change", (event) => {
+  const target = event.target;
+
+  if (
+    target.matches("select") ||
+    target.matches("input") ||
+    target.matches("textarea")
+  ) {
+    markLocalChanges?.();
+
+    scheduleAutosave?.();
   }
 });
 
