@@ -78,7 +78,9 @@ async function handleSignIn() {
   }
 
   // start realtime sync
-  await startRealtimeSync?.();
+  if (typeof window.startRealtimeSync === "function") {
+    await window.startRealtimeSync();
+  }
 
   closeAuthModal();
 
