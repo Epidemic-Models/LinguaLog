@@ -1,0 +1,209 @@
+<div id="newPageModal" class="new-journal-modal hidden">
+    <div class="new-journal-panel">
+      <div class="new-journal-header">
+        <h2>Create a new page</h2>
+        <button
+          type="button"
+          class="new-journal-close"
+          onclick="closeNewPageModal()"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="new-journal-body">
+        <div class="new-journal-form">
+          <label for="newPageType">Page type</label>
+          <select id="newPageType">
+            <option value="default">Use journal default</option>
+            <option value="language">Language Page</option>
+            <option value="general">General Page</option>
+          </select>
+
+          <label for="newPageContentMode">Content mode</label>
+          <select id="newPageContentMode">
+            <option value="structured">Structured layout</option>
+            <option value="blank">Blank background page</option>
+          </select>
+
+          <label for="newPageTheme">Theme</label>
+          <select id="newPageTheme">
+            <option value="default">Use journal default</option>
+            <option value="soft-pastel">Soft Pastel</option>
+            <option value="soft-elegant">Soft Elegant</option>
+            <option value="warm-motivation">Warm Motivation</option>
+            <option value="focus-deep-work">Focus Deep Work</option>
+            <option value="night-luxury">Night Luxury</option>
+            <option value="fresh-growth">Fresh Growth</option>
+            <option value="editorial-light">Editorial Light</option>
+          </select>
+
+          <label for="newPageLayout">Layout</label>
+          <select id="newPageLayout">
+            <option value="default">Use journal default</option>
+            <option value="journal">Journal</option>
+            <option value="planner">Planner</option>
+          </select>
+
+          <label>Template background</label>
+          <button
+            type="button"
+            class="template-open-btn"
+            onclick="openTemplateLibrary('page')"
+          >
+            Choose from library
+          </button>
+
+          <div id="selectedTemplatePreview" class="selected-template-preview hidden">
+            <img id="selectedTemplateThumb" alt="Selected template" />
+          </div>
+
+          <div class="new-journal-actions">
+            <button
+              type="button"
+              class="new-journal-cancel"
+              onclick="closeNewPageModal()"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="new-journal-create"
+              onclick="createNewPageFromModal()"
+            >
+              Create page
+            </button>
+          </div>
+        </div>
+
+        <div id="newPagePreview" class="new-journal-preview">
+          <div class="preview-mini-page theme-soft-pastel layout-journal">
+            <div class="preview-kicker">Page Preview</div>
+            <div class="preview-title">New Page</div>
+            <div class="preview-grid">
+              <div class="preview-box preview-box-large"></div>
+              <div class="preview-box"></div>
+              <div class="preview-box"></div>
+              <div class="preview-box preview-box-wide"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW JOURNAL MODAL -->
+  <div id="newJournalModal" class="new-journal-modal hidden">
+    <div class="new-journal-panel">
+      <div class="new-journal-header">
+        <h2>Create a new journal</h2>
+        <button
+          type="button"
+          class="new-journal-close"
+          onclick="closeNewJournalModal()"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="new-journal-body">
+        <div class="new-journal-form">
+          <label for="newJournalName">Journal name</label>
+          <input id="newJournalName" type="text" placeholder="Daily Bites" />
+
+          <label for="newJournalType">Journal type</label>
+          <select id="newJournalType">
+            <option value="language">Language Journal</option>
+            <option value="general">General Journal</option>
+            <option value="study">Study Journal</option>
+            <option value="reading">Reading Journal</option>
+            <option value="travel">Travel Journal</option>
+            <option value="wellness">Wellness Journal</option>
+            <option value="gratitude">Gratitude Journal</option>
+            <option value="recipe">Recipe Journal</option>
+            <option value="project">Project Journal</option>
+          </select>
+
+          <label for="newJournalEmoji">Emoji</label>
+          <input id="newJournalEmoji" type="text" placeholder="📘" value="📘" />
+
+          <label for="journalTheme">Theme</label>
+          <select id="journalTheme">
+            <option value="soft-pastel">Soft Pastel</option>
+            <option value="soft-elegant">Soft Elegant</option>
+            <option value="warm-motivation">Warm Motivation</option>
+            <option value="focus-deep-work">Focus Deep Work</option>
+            <option value="night-luxury">Night Luxury</option>
+            <option value="fresh-growth">Fresh Growth</option>
+            <option value="editorial-light">Editorial Light</option>
+          </select>
+
+          <label for="journalLayout">Layout</label>
+          <select id="journalLayout">
+            <option value="journal">Journal</option>
+            <option value="planner">Planner</option>
+          </select>
+
+          <div class="new-journal-actions">
+            <button
+              type="button"
+              class="new-journal-cancel"
+              onclick="closeNewJournalModal()"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="new-journal-create"
+              onclick="createJournalFromModal()"
+            >
+              Create journal
+            </button>
+          </div>
+        </div>
+
+        <div id="newJournalPreview" class="new-journal-preview">
+          <div class="preview-mini-page theme-soft-pastel layout-journal">
+            <div class="preview-kicker">Preview</div>
+            <div class="preview-title">Daily Bites</div>
+            <div class="preview-grid">
+              <div class="preview-box preview-box-large"></div>
+              <div class="preview-box"></div>
+              <div class="preview-box"></div>
+              <div class="preview-box preview-box-wide"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEMPLATE LIBRARY MODAL -->
+  <div id="templateLibraryModal" class="template-library-modal hidden">
+    <div class="template-library-panel">
+      <div class="template-library-header">
+        <h2>Choose a template</h2>
+
+        <button
+          type="button"
+          class="template-library-close"
+          onclick="closeTemplateLibrary()"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="template-library-toolbar">
+        <button
+          type="button"
+          class="template-clear-btn"
+          onclick="clearTemplateSelection()"
+        >
+          No background
+        </button>
+      </div>
+
+      <div id="templateLibraryGrid" class="template-library-grid"></div>
+    </div>
+  </div>
+</div>

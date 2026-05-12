@@ -1,0 +1,432 @@
+/* =====================================================
+   BLANK / FREEFORM PAGE
+===================================================== */
+
+.freeform-editor-shell {
+  position: relative;
+  min-height: 100vh;
+  padding: 24px 24px 60px;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* PAGE WRAPPER */
+.freeform-page-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* REAL PAGE SIZE */
+.freeform-page {
+  position: relative;
+  width: min(900px, calc(100vw - 120px));
+  max-width: 900px;
+  aspect-ratio: 3 / 4;
+  min-height: 0;
+
+  border-radius: 28px;
+  overflow: hidden;
+
+  background-color: #f8f5f1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+}
+
+/* TOP BUTTONS */
+.freeform-top-actions {
+  position: fixed;
+
+  top: 90px;
+
+  right: 90px;
+
+  z-index: 99999;
+  display: flex;
+  gap: 12px;
+}
+
+.freeform-menu-wrap {
+
+  position: relative;
+
+  overflow: visible;
+
+}
+
+.freeform-customize-btn,
+.freeform-save-btn {
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  border: none;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.freeform-save-btn {
+  background: linear-gradient(135deg, #6f63ff, #79a8ff);
+  color: white;
+}
+
+/* POPOVER */
+.freeform-popover {
+  position: fixed;
+  top: 160px;
+  right: 90px;
+  z-index: 100000;
+  width: 320px;
+}
+
+.freeform-popover.hidden {
+  display: none;
+}
+
+.freeform-panel {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 22px;
+  padding: 14px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.freeform-panel-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.freeform-panel-title {
+  width: 100%;
+  font-size: 13px;
+  font-weight: 700;
+  color: #7a7168;
+}
+
+.freeform-panel button {
+  width: auto !important;
+  padding: 10px 12px !important;
+  border: none !important;
+  border-radius: 12px !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #2f2f2f !important;
+  cursor: pointer;
+}
+
+/* TITLE */
+.freeform-floating-title {
+  position: absolute;
+  left: 48px;
+  right: 48px;
+  top: 54px;
+  z-index: 30;
+}
+
+.freeform-page-title {
+
+  width: 100%;
+
+  border: none;
+
+  outline: none;
+
+  box-shadow: none;
+
+  font-size: 2rem;
+
+  font-weight: 800;
+
+  color: #2d2925;
+
+  font-family: "Inter", sans-serif;
+
+  opacity: 1;
+
+  background: transparent;
+
+  padding: 10px 14px;
+
+  border-radius: 14px;
+
+}
+
+.freeform-page-title::placeholder {
+  color: rgba(45, 41, 37, 0.55);
+}
+
+.freeform-page-title:focus {
+  opacity: 1;
+}
+
+/* main writing area BELOW title */
+.freeform-direct-text {
+  position: absolute;
+  left: 48px;
+  right: 48px;
+  top: 145px;
+  bottom: 48px;
+  width: auto;
+  height: auto;
+
+  border: none;
+  outline: none;
+  resize: none;
+
+  background: transparent;
+  box-shadow: none;
+  color: #3f392f;
+  font-family: "Inter", sans-serif;
+  opacity: 1;
+
+  padding: 14px;
+  line-height: 1.8;
+  border-radius: 16px;
+  overflow-y: auto;
+}
+
+.freeform-direct-text::placeholder {
+  color: rgba(63, 57, 47, 0.55) !important;
+}
+
+.freeform-direct-text {
+  top: 145px !important;
+}
+
+/* ELEMENTS + DRAWING */
+
+.freeform-elements-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+}
+
+.freeform-elements-layer .canvas-element {
+  pointer-events: auto;
+}
+
+.freeform-drawing-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Editable text */
+
+.editable-text {
+  outline: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.editable-text:empty::before {
+  content: attr(data-placeholder);
+  color: rgba(60, 55, 50, 0.45);
+}
+
+/* Canvas elements */
+
+.canvas-element {
+  position: absolute;
+  box-sizing: border-box;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  user-select: none;
+  resize: none;
+}
+
+.canvas-element.selected {
+  outline: 1px dashed rgba(0, 0, 0, 0.22) !important;
+  outline-offset: 6px;
+  overflow: visible !important;
+}
+
+/* Controls */
+
+.canvas-drag-handle,
+.canvas-delete-btn,
+.canvas-resize-handle,
+.canvas-text-move-handle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+  z-index: 60;
+}
+
+.canvas-element:hover .canvas-drag-handle,
+.canvas-element:hover .canvas-delete-btn,
+.canvas-element:hover .canvas-resize-handle,
+.canvas-element:hover .canvas-text-move-handle,
+.canvas-element.selected .canvas-drag-handle,
+.canvas-element.selected .canvas-delete-btn,
+.canvas-element.selected .canvas-resize-handle,
+.canvas-element.selected .canvas-text-move-handle {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.canvas-drag-handle {
+  left: 50%;
+  bottom: -34px;
+  transform: translateX(-50%);
+  min-width: 80px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.88);
+  color: #333;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: move;
+}
+
+.canvas-delete-btn {
+  top: -14px;
+  right: -14px;
+  width: 30px !important;
+  height: 30px !important;
+  border: none !important;
+  border-radius: 999px !important;
+  background: rgba(30,30,30,0.55) !important;
+  color: white !important;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.canvas-resize-handle {
+  right: -12px;
+  bottom: -12px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);
+  color: #222;
+  font-size: 13px;
+  cursor: nwse-resize;
+}
+
+.canvas-text-move-handle {
+  left: 50%;
+  top: 8px;
+  transform: translateX(-50%);
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: move;
+}
+
+/* Cute textboxes */
+
+.canvas-element.textbox {
+  overflow: visible !important;
+}
+
+.cute-textbox-bg {
+  position: absolute;
+  inset: 0;
+  color: var(--element-frame-color, #222);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cute-textbox-bg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cute-textbox-text {
+  position: absolute;
+  left: 16%;
+  top: 30%;
+  width: 68%;
+  height: 38%;
+  z-index: 5;
+
+  border: none;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
+
+  color: var(--element-text-color, #2d2925);
+  font-family: var(--element-font, "Inter", sans-serif);
+  font-size: 18px;
+  line-height: 1.1;
+  text-align: center;
+
+  overflow: hidden;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Stickers */
+
+.canvas-sticker {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 42px;
+}
+
+.freeform-save-btn.saved {
+  animation: savePulse 0.45s ease;
+  background: linear-gradient(135deg, #56d59a, #7fe7c2) !important;
+}
+
+@keyframes savePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* MOBILE */
+@media (max-width: 900px) {
+  .freeform-editor-shell {
+    padding: 16px 12px 90px;
+  }
+
+  .freeform-page {
+    width: calc(100vw - 32px);
+    max-width: none;
+    aspect-ratio: 3 / 4;
+  }
+
+  .freeform-floating-title {
+    left: 28px;
+    right: 28px;
+    top: 30px;
+  }
+
+  .freeform-direct-text {
+    left: 28px;
+    right: 28px;
+    top: 100px;
+    bottom: 32px;
+  }
+}

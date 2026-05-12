@@ -1,0 +1,245 @@
+<div id="coverPage" class="cover-page hidden">
+  <div class="cover-layout">
+    <aside class="cover-sidebar">
+      <div class="cover-sidebar-inner">
+        <div class="cover-brand">
+          <img src="assets/home/logo.png" class="cover-logo" alt="LinguaLog logo" />
+          <h2>Customize your journal</h2>
+        </div>
+
+        <div class="cover-top-actions">
+          <button class="cover-nav-btn" onclick="showWelcomePage()">
+            <img src="assets/icons/home.png" class="cover-nav-icon" alt="" />
+            <span>Home</span>
+          </button>
+
+          <button class="cover-nav-btn" onclick="showLibraryPage()">
+            <img src="assets/icons/library.png" class="cover-nav-icon" alt="" />
+            <span>Library</span>
+          </button>
+        </div>
+
+        <section id="sectionBasics" class="cover-section">
+          <h3>Basics</h3>
+
+          <label for="journalName">Journal name</label>
+          <div class="cover-field-row">
+            <input id="journalName" type="text" placeholder="My Norwegian Journal" />
+            <select id="showCoverTitle">
+              <option value="show">Show</option>
+              <option value="hide">Hide</option>
+            </select>
+          </div>
+
+          <label for="subtitle">Subtitle</label>
+          <div class="cover-field-row">
+            <input id="subtitle" type="text" placeholder="Your personal language journey" />
+            <select id="showCoverSubtitle">
+              <option value="show">Show</option>
+              <option value="hide">Hide</option>
+            </select>
+          </div>
+
+          <label for="coverEmoji">Cover icon</label>
+          <div class="cover-field-row">
+            <input id="coverEmoji" type="text" placeholder="📘" />
+            <select id="showCoverIcon">
+              <option value="show">Show</option>
+              <option value="hide">Hide</option>
+            </select>
+          </div>
+
+          <label for="userName">Your name</label>
+          <div class="cover-field-row">
+            <input id="userName" type="text" placeholder="Your name" />
+            <select id="showCoverAuthor">
+              <option value="show">Show</option>
+              <option value="hide">Hide</option>
+            </select>
+          </div>
+
+          <label for="learningLanguage">Learning language</label>
+          <input id="learningLanguage" type="text" placeholder="Norwegian" />
+
+          <label for="translationLanguage">Translation language</label>
+          <input id="translationLanguage" type="text" placeholder="English" />
+
+          <label for="showCoverLanguages">Languages fallback</label>
+          <select id="showCoverLanguages">
+            <option value="show">Show when subtitle is empty</option>
+            <option value="hide">Hide</option>
+          </select>
+        </section>
+
+        <section class="cover-section">
+          <h3>Text enhancement</h3>
+
+          <p class="cover-helper-text">
+            Click a text/icon on the cover, then edit it here.
+          </p>
+
+          <div class="cover-enhance-panel">
+            <label>Selected item</label>
+            <div id="coverSelectedLabel" class="cover-selected-label">
+              Nothing selected
+            </div>
+
+            <label for="coverEnhanceColor">Color</label>
+            <input
+              id="coverEnhanceColor"
+              type="color"
+              value="#ffffff"
+              onchange="changeSelectedCoverStyle('color', this.value)"
+            />
+
+            <label for="coverEnhanceFont">Font</label>
+            <select
+              id="coverEnhanceFont"
+              onchange="changeSelectedCoverStyle('font', this.value)"
+            >
+              <option value="'Inter', sans-serif">Inter</option>
+              <option value="'Poppins', sans-serif">Poppins</option>
+              <option value="'Nunito', sans-serif">Nunito</option>
+              <option value="'Montserrat', sans-serif">Montserrat</option>
+              <option value="'Segoe UI', sans-serif">Segoe UI</option>
+              <option value="Arial, sans-serif">Arial</option>
+              <option value="Helvetica, Arial, sans-serif">Helvetica</option>
+              <option value="Verdana, sans-serif">Verdana</option>
+              <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+              <option value="Tahoma, sans-serif">Tahoma</option>
+              <option value="'Playfair Display', serif">Playfair Display</option>
+              <option value="'Lora', serif">Lora</option>
+              <option value="'Merriweather', serif">Merriweather</option>
+              <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+              <option value="'DM Serif Display', serif">DM Serif Display</option>
+              <option value="Georgia, serif">Georgia</option>
+              <option value="'Times New Roman', serif">Times New Roman</option>
+              <option value="Garamond, serif">Garamond</option>
+              <option value="'Palatino Linotype', serif">Palatino</option>
+              <option value="'Dancing Script', cursive">Dancing Script</option>
+              <option value="'Pacifico', cursive">Pacifico</option>
+              <option value="'Brush Script MT', cursive">Brush Script</option>
+            </select>
+
+            <label for="coverEnhanceSize">Size</label>
+            <select
+              id="coverEnhanceSize"
+              onchange="changeSelectedCoverStyle('size', this.value)"
+            >
+              <option value="12">12</option>
+              <option value="14">14</option>
+              <option value="16">16</option>
+              <option value="18">18</option>
+              <option value="20">20</option>
+              <option value="24">24</option>
+              <option value="28">28</option>
+              <option value="32">32</option>
+              <option value="36">36</option>
+              <option value="40">40</option>
+              <option value="48">48</option>
+              <option value="56">56</option>
+              <option value="64">64</option>
+              <option value="72">72</option>
+              <option value="84">84</option>
+              <option value="96">96</option>
+            </select>
+
+            <button type="button" onclick="resetSelectedCoverPosition()">
+              Reset position
+            </button>
+          </div>
+        </section>
+
+        <section id="sectionStyle" class="cover-section">
+          <h3>Background</h3>
+
+          <label for="coverBackgroundMode">Background source</label>
+          <select id="coverBackgroundMode" onchange="updateCoverSourceVisibility(); updatePreview();">
+            <option value="theme">Theme style</option>
+            <option value="zodiac">Zodiac</option>
+            <option value="template">Template library</option>
+            <option value="upload">Upload image</option>
+          </select>
+
+          <div id="coverThemeControls" class="cover-source-group">
+            <label for="coverStyle">Cover style</label>
+            <select id="coverStyle">
+              <option value="minimal">Minimal</option>
+              <option value="nature">Nature</option>
+              <option value="album">Album</option>
+              <option value="elegant">Elegant</option>
+              <option value="cosmic">Cosmic</option>
+              <option value="pastel">Pastel</option>
+              <option value="nordic">Nordic</option>
+              <option value="custom">Custom image</option>
+            </select>
+
+            <label for="themeColor">Theme color</label>
+            <input id="themeColor" type="color" value="#222222" />
+          </div>
+
+          <div id="coverZodiacControls" class="cover-source-group hidden">
+            <label for="zodiacSign">Zodiac sign</label>
+            <select id="zodiacSign">
+              <option value="">None</option>
+              <option value="aries">Aries</option>
+              <option value="taurus">Taurus</option>
+              <option value="gemini">Gemini</option>
+              <option value="cancer">Cancer</option>
+              <option value="leo">Leo</option>
+              <option value="virgo">Virgo</option>
+              <option value="libra">Libra</option>
+              <option value="scorpio">Scorpio</option>
+              <option value="sagittarius">Sagittarius</option>
+              <option value="capricorn">Capricorn</option>
+              <option value="aquarius">Aquarius</option>
+              <option value="pisces">Pisces</option>
+            </select>
+          </div>
+
+          <div id="coverTemplateControls" class="cover-source-group hidden">
+            <button type="button" class="template-open-btn" onclick="openTemplateLibrary('cover')">
+              Open template library
+            </button>
+
+            <div id="selectedCoverTemplatePreview" class="selected-template-preview hidden">
+              <img id="selectedCoverTemplateThumb" alt="Selected cover template" />
+            </div>
+          </div>
+
+          <div id="coverUploadControls" class="cover-source-group hidden">
+            <label for="customCoverImage">Custom cover image</label>
+            <input id="customCoverImage" type="file" accept="image/*" />
+          </div>
+        </section>
+
+        <button class="cover-start-btn" onclick="startJournal()">
+          <img src="assets/icons/write.png" class="cover-start-icon" alt="" />
+          <span>Start Journal</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="cover-preview-container">
+      <div id="coverPreview" class="cover-preview theme-minimal">
+        <div id="coverImageLayer" class="cover-image-layer"></div>
+        <div class="cover-overlay"></div>
+        <div id="floatingLetters" class="floating-letters"></div>
+
+        <div class="cover-content">
+          <div id="previewEmoji" class="preview-emoji cover-draggable" data-cover-element="icon">📘</div>
+
+          <h1 id="previewTitle" class="cover-draggable" data-cover-element="title">
+            LinguaLog
+          </h1>
+
+          <p id="previewSubtitle" class="cover-draggable" data-cover-element="subtitle">
+            Your personal language journal
+          </p>
+
+          <p id="previewAuthor" class="preview-author cover-draggable" data-cover-element="author"></p>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

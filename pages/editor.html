@@ -1,0 +1,65 @@
+<div id="appLayout" class="app-layout hidden">
+  <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <button type="button" class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+  <aside class="sidebar" id="journalSidebar">
+    <div class="journal-brand">
+      <img src="assets/home/logo.png" class="sidebar-logo" alt="LinguaLog logo" />
+
+      <div>
+        <h1 id="sidebarTitle">LinguaLog</h1>
+        <p id="sidebarSubtitle" class="sidebar-subtitle">Your journal</p>
+      </div>
+    </div>
+
+    <div class="sidebar-nav">
+      <button type="button" class="nav-item active" onclick="closeSidebar(); showWelcomePage()">
+        <img src="assets/icons/home.png" class="nav-icon" alt="" />
+        <span>Home</span>
+      </button>
+
+      <button type="button" class="nav-item" onclick="closeSidebar(); showLibraryPage()">
+        <img src="assets/icons/library.png" class="nav-icon" alt="" />
+        <span>Library</span>
+      </button>
+
+      <button type="button" class="nav-item" onclick="closeSidebar(); openNewPageModal()">
+        <img src="assets/icons/new_page.png" class="nav-icon" alt="" />
+        <span>New Page</span>
+      </button>
+
+      <button type="button" class="nav-item" onclick="closeSidebar(); showCoverPage()">
+        <img src="assets/icons/cover.png" class="nav-icon" alt="" />
+        <span>Edit Cover</span>
+      </button>
+
+      <button
+        type="button"
+        class="nav-item"
+        onclick="closeSidebar(); openCurrentJournalReadMode()"
+      >
+        <img src="assets/icons/read.png" class="nav-icon" alt="" />
+        <span>Read Mode</span>
+      </button>
+
+      <button
+        type="button"
+        class="nav-item auth-open-btn"
+        onclick="closeSidebar(); openProfileModal()"
+      >
+        <img src="assets/icons/profile.png" class="nav-icon" alt="" />
+        <span>My Profile</span>
+      </button>
+          </div>
+
+          <div class="sidebar-section">
+            <h2>Pages</h2>
+            <div id="pagesList"></div>
+          </div>
+        </aside>
+
+        <main class="main-content">
+          <div id="editorContainer"></div>
+        </main>
+      </div>

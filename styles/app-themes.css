@@ -1,0 +1,100 @@
+/* Keep this file only for optional visual theme overrides.
+   No layout rules here. */
+
+/* APP THEME: MINIMAL */
+.app-theme-minimal .sidebar {
+  background: linear-gradient(180deg, #fcfcfc, #f4f4f4);
+}
+
+.app-theme-minimal .main-content {
+  background: transparent;
+}
+
+/* APP THEME: NATURE */
+.app-theme-nature .sidebar {
+  background: linear-gradient(180deg, #e8f2e4, #dce9d6);
+}
+
+.app-theme-nature .main-content {
+  background: radial-gradient(circle at top right, #eef6ea, #ffffff);
+}
+
+.app-theme-nature .page-item.active {
+  background: rgba(76, 130, 90, 0.08);
+  border-color: rgba(76, 130, 90, 0.28);
+}
+
+/* APP THEME: ALBUM */
+.app-theme-album {
+  background: #111;
+}
+
+.app-theme-album .sidebar {
+  background: #151515;
+  color: white;
+}
+
+.app-theme-album .sidebar h1,
+.app-theme-album .sidebar h2,
+.app-theme-album .sidebar .sidebar-subtitle {
+  color: white;
+}
+
+.app-theme-album .page-item {
+  background: #222;
+  border-color: #333;
+  color: white;
+}
+
+.app-theme-album .page-date {
+  color: #bbb;
+}
+
+.app-theme-album .main-content {
+  background: radial-gradient(circle, #111, #000);
+}
+
+.app-theme-album .language-page-card,
+.app-theme-album .general-journal,
+.app-theme-album .editor-surface,
+.app-theme-album .freeform-page {
+  background: rgba(28, 28, 28, 0.88);
+  color: white;
+}
+
+.app-theme-album input,
+.app-theme-album textarea,
+.app-theme-album select {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  border-color: #444;
+}
+
+.app-theme-album .lang-chip,
+.app-theme-album #results,
+.app-theme-album .search-result-card {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+/* APP THEME: ELEGANT */
+.app-theme-elegant .sidebar {
+  background: linear-gradient(180deg, #fbf6ef, #f4ecdf);
+}
+
+.app-theme-elegant .main-content {
+  background: #faf7f2;
+}
+
+.app-theme-elegant .language-page-card,
+.app-theme-elegant .general-journal,
+.app-theme-elegant .editor-surface,
+.app-theme-elegant .freeform-page {
+  background: rgba(255, 253, 248, 0.9);
+  box-shadow: 0 14px 34px rgba(90, 74, 55, 0.08);
+}
+
+.app-theme-elegant .page-item.active {
+  background: rgba(120, 105, 90, 0.08);
+  border-color: rgba(120, 105, 90, 0.22);
+}

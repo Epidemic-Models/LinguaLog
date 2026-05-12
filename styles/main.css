@@ -1,0 +1,1978 @@
+/* =====================================================
+   ROOT + RESET
+===================================================== */
+
+:root {
+  --primary-color: #222222;
+  --bg: #f6f4ef;
+  --surface: rgba(255, 255, 255, 0.84);
+  --surface-strong: rgba(255, 255, 255, 0.94);
+  --line: rgba(0, 0, 0, 0.08);
+  --text: #222;
+  --muted: #666;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.hidden {
+  display: none !important;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.92;
+}
+
+label {
+  display: block;
+  margin: 18px 0 8px;
+  font-weight: 700;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: white;
+  color: #222;
+}
+
+textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+
+/* =====================================================
+   APP LAYOUT
+===================================================== */
+
+.app-layout {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.app-layout.read-mode .sidebar,
+.app-layout.read-mode .menu-btn,
+.app-layout.read-mode .sidebar-overlay {
+  display: none !important;
+}
+
+.app-layout.read-mode .main-content {
+  width: 100%;
+}
+
+.main-content {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow-y: auto;
+  background: transparent;
+}
+
+#editorContainer {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 32px;
+}
+
+/* =====================================================
+   PAGE LIST
+===================================================== */
+
+.page-item {
+  padding: 14px 14px 12px;
+  margin-bottom: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.page-item:hover {
+  transform: translateY(-1px);
+  background: #fafafa;
+}
+
+.page-item.active {
+  background: #dff7ee;
+  border: 2px solid #7fd6b2;
+  box-shadow: 0 0 0 1px rgba(127, 214, 178, 0.25);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.page-title {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.page-date {
+  font-size: 13px;
+  color: #666;
+  margin-top: 6px;
+}
+
+.page-item.active .page-title {
+  color: #103b2b;
+}
+
+.page-item.active .page-date {
+  color: #2f6b56;
+}
+
+.page-delete-btn {
+  width: auto !important;
+  min-width: 36px !important;
+  height: 32px !important;
+  padding: 0 8px !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 999px !important;
+  background: rgba(0, 0, 0, 0.08) !important;
+  color: #444 !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.page-delete-btn:hover {
+  background: rgba(200, 30, 30, 0.12) !important;
+  color: #c81e1e !important;
+}
+
+.page-item.active .page-delete-btn {
+  background: #8ecfb4 !important;
+  color: white !important;
+}
+
+
+/* =====================================================
+   JOURNAL PAGE SIZE
+===================================================== */
+
+.card,
+.language-page-card,
+.general-journal,
+.editor-surface,
+.freeform-page {
+  width: min(920px, calc(100vw - 120px));
+  max-width: 920px;
+  aspect-ratio: 3 / 4;
+  min-height: auto;
+  margin: 24px auto;
+  padding: 28px;
+  box-sizing: border-box;
+  border-radius: 28px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+}
+
+.card {
+  background: white;
+  border-top: 4px solid var(--primary-color);
+}
+
+.date,
+.general-date,
+.editor-page-date {
+  margin-bottom: 18px;
+  color: #555;
+  font-size: 18px;
+}
+
+.card #languagePageTitle,
+#generalPageTitle,
+.editor-page-title {
+  margin-bottom: 8px;
+}
+
+
+/* =====================================================
+   LANGUAGE JOURNAL
+===================================================== */
+
+.language-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.lang-chip {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #f2f2f2;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.swap-btn {
+  width: auto !important;
+  padding: 8px 12px !important;
+  border-radius: 10px;
+  border: none !important;
+  background: #ddd !important;
+  color: #222 !important;
+}
+
+#results,
+.search-result-card {
+  margin: 12px 0 20px;
+  padding: 14px 16px;
+  background: #f4f4f4;
+  color: #111;
+  border-radius: 14px;
+  min-height: 24px;
+  line-height: 1.5;
+}
+
+.search-result-header {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.search-result-words div {
+  margin-bottom: 4px;
+}
+
+.search-note {
+  margin-top: 10px;
+  font-style: italic;
+  color: #333;
+}
+
+#entries {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+#entries .entry-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px !important;
+  gap: 12px;
+  align-items: center;
+}
+
+#entries .word-input,
+#entries .meaning-input,
+#entries .entry-row input {
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+#entries .remove-btn {
+  width: 44px !important;
+  min-width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 12px !important;
+  background: rgba(0, 0, 0, 0.08) !important;
+  color: #444 !important;
+  font-size: 22px !important;
+  line-height: 1 !important;
+  opacity: 0;
+}
+
+#entries .entry-row:hover .remove-btn {
+  opacity: 1;
+}
+
+.add-row-btn,
+.language-page-card > button[onclick="saveData()"] {
+  width: 100% !important;
+  margin-top: 6px;
+  padding: 14px 16px !important;
+  border: none !important;
+  border-radius: 14px !important;
+  background: #1f1f22 !important;
+  color: white !important;
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   GENERAL JOURNAL
+===================================================== */
+
+.general-shell {
+  width: 100%;
+}
+
+.general-content {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 20px;
+}
+
+.general-main,
+.general-side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.general-card {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.04);
+}
+
+.general-save-btn {
+  width: 100% !important;
+  padding: 14px 16px !important;
+  border: none !important;
+  background: #1f1f22 !important;
+  color: white !important;
+  border-radius: 14px !important;
+  font-weight: 700;
+}
+
+.checklist-row {
+  display: grid;
+  grid-template-columns: 24px 1fr 44px;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.general-check-text {
+  width: 100%;
+}
+
+/* =====================================================
+   READ MODE
+===================================================== */
+
+body[data-view-mode="read"] .sidebar,
+body[data-view-mode="read"] .menu-btn,
+body[data-view-mode="read"] .sidebar-overlay {
+  display: none !important;
+}
+
+/* 🔒 Hide interactive UI ONLY inside editor */
+body[data-view-mode="read"] #appLayout .cover-sidebar,
+body[data-view-mode="read"] #appLayout .freeform-toolbar,
+body[data-view-mode="read"] #appLayout .freeform-popover,
+body[data-view-mode="read"] #appLayout .page-delete-btn,
+body[data-view-mode="read"] #appLayout .add-row-btn,
+body[data-view-mode="read"] #appLayout .remove-btn,
+body[data-view-mode="read"] #appLayout .general-save-btn {
+  display: none !important;
+}
+
+body[data-view-mode="read"] .main-content,
+body[data-view-mode="read"] #editorContainer,
+body[data-view-mode="read"] .card,
+body[data-view-mode="read"] .language-page-card,
+body[data-view-mode="read"] .general-journal,
+body[data-view-mode="read"] .editor-surface,
+body[data-view-mode="read"] .freeform-page {
+  scrollbar-width: none;
+}
+
+body[data-view-mode="read"] .main-content::-webkit-scrollbar,
+body[data-view-mode="read"] #editorContainer::-webkit-scrollbar,
+body[data-view-mode="read"] .card::-webkit-scrollbar,
+body[data-view-mode="read"] .language-page-card::-webkit-scrollbar,
+body[data-view-mode="read"] .general-journal::-webkit-scrollbar,
+body[data-view-mode="read"] .editor-surface::-webkit-scrollbar,
+body[data-view-mode="read"] .freeform-page::-webkit-scrollbar {
+  display: none;
+}
+
+body[data-view-mode="read"],
+html:has(body[data-view-mode="read"]) {
+  scrollbar-width: none;
+}
+
+html:has(body[data-view-mode="read"])::-webkit-scrollbar {
+  display: none;
+}
+body[data-view-mode="read"] .cover-preview-container,
+body[data-view-mode="read"] .new-journal-panel {
+  scrollbar-width: none;
+}
+
+body[data-view-mode="read"]::-webkit-scrollbar,
+body[data-view-mode="read"] .cover-preview-container::-webkit-scrollbar,
+body[data-view-mode="read"] .new-journal-panel::-webkit-scrollbar {
+  display: none;
+}
+
+body[data-view-mode="read"] .new-journal-panel {
+  overflow: hidden;
+}
+ i dont understand how to fix this 
+/* ✅ ONLY center the EDITOR — NOT cover page */
+body[data-view-mode="read"] #editorContainer {
+  min-height: 100vh;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🚫 DO NOT TOUCH COVER PAGE */
+body[data-view-mode="read"] .cover-preview-container {
+  display: block !important;
+  padding: 0 !important;
+  min-height: auto !important;
+}
+
+/* ✅ Clean page layout */
+body[data-view-mode="read"] .language-page-card,
+body[data-view-mode="read"] .general-journal,
+body[data-view-mode="read"] .editor-surface,
+body[data-view-mode="read"] .freeform-page {
+  width: min(920px, calc(100vw - 120px));
+  max-width: 920px;
+  margin: 40px auto;
+}
+
+/* ✅ Make inputs read-only style */
+body[data-view-mode="read"] #appLayout input,
+body[data-view-mode="read"] #appLayout textarea {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+
+.read-mode-nav {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5000;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.86);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+}
+
+.read-mode-nav button {
+  width: auto !important;
+  min-width: 48px;
+  padding: 10px 16px !important;
+  border: none;
+  border-radius: 999px;
+  background: #1f1f22;
+  color: white;
+  font-weight: 800;
+}
+
+.read-mode-nav span {
+  font-weight: 800;
+  color: #222;
+  min-width: 70px;
+  text-align: center;
+}
+
+
+/* =====================================================
+   PAGE FLIP
+===================================================== */
+
+#editorContainer,
+.cover-preview-container {
+  perspective: 1400px;
+}
+
+.page-flip-next {
+  animation: pageFlipNext3D 0.75s ease both;
+  transform-origin: left center;
+}
+
+.page-flip-prev {
+  animation: pageFlipPrev3D 0.75s ease both;
+  transform-origin: right center;
+}
+
+@keyframes pageFlipNext3D {
+  0% {
+    transform: rotateY(-65deg) translateX(40px);
+    opacity: 0.25;
+    filter: brightness(0.82);
+  }
+
+  55% {
+    transform: rotateY(8deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotateY(0);
+  }
+}
+
+@keyframes pageFlipPrev3D {
+  0% {
+    transform: rotateY(65deg) translateX(-40px);
+    opacity: 0.25;
+    filter: brightness(0.82);
+  }
+
+  55% {
+    transform: rotateY(-8deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotateY(0);
+  }
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 900px) {
+  #editorContainer {
+    padding: 78px 14px 20px;
+  }
+
+  .language-page-card,
+  .general-journal,
+  .editor-surface,
+  .freeform-page,
+  .card {
+    width: calc(100vw - 28px);
+    max-width: none;
+    aspect-ratio: auto;
+    min-height: calc(100vh - 120px);
+    margin: 14px auto 20px;
+  }
+
+  .general-content {
+    grid-template-columns: 1fr;
+  }
+
+  #entries .entry-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  #entries .remove-btn {
+    width: 100% !important;
+    min-width: 100% !important;
+    opacity: 1;
+  }
+
+  .freeform-toolbar {
+    top: 12px;
+    right: 14px;
+  }
+
+  .freeform-main-tool,
+  .freeform-save-btn {
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    font-size: 24px !important;
+  }
+
+  .freeform-popover {
+    top: 78px;
+    right: 14px;
+    width: min(280px, calc(100vw - 28px));
+  }
+}
+
+/* WELCOME PAGE */
+.welcome-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f6f2eb;
+}
+
+.welcome-art {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background-image: url("../assets/home/image_main_background2.png");
+  background-size: cover;
+
+  /* 🎯 KEY FIX */
+  background-position: center 70%; /* moves image DOWN to reveal pen */
+
+  background-repeat: no-repeat;
+}
+
+.welcome-art {
+  filter: brightness(0.95) contrast(0.95);
+}
+
+.welcome-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(246, 242, 235, 0.28);
+  pointer-events: none;
+}
+
+.welcome-content {
+  position: relative;
+  z-index: 3;
+  width: min(980px, calc(100% - 40px));
+  text-align: center;
+  color: #2c2623;
+  padding: 60px 0;
+}
+
+.welcome-content {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  width: min(980px, calc(100% - 40px));
+  color: #2c2623;
+  padding: 60px 0;
+}
+
+.welcome-badge {
+  display: inline-block;
+  padding: 10px 18px;
+  margin-bottom: 20px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.8);
+  font-weight: 700;
+}
+
+.welcome-title {
+  font-size: clamp(3rem, 7vw, 5.8rem);
+  font-weight: 800;
+  line-height: 0.95;
+}
+
+.welcome-subtitle {
+  margin: 24px auto;
+  font-size: 1.3rem;
+  max-width: 700px;
+}
+
+.welcome-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.welcome-primary-btn {
+  background: linear-gradient(135deg, #7b6dff, #7fb4ff);
+  color: white;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 16px;
+  font-weight: 700;
+}
+
+.welcome-secondary-btn {
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 16px 24px;
+  border-radius: 16px;
+}
+
+/* =====================================================
+   JOURNAL LIBRARY FIX
+===================================================== */
+
+.journal-card {
+  max-width: 320px;
+}
+
+.journal-card-cover {
+  width: 100%;
+  height: 260px;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* LIBRARY PAGE */
+.library-page {
+  min-height: 100vh;
+  padding: 56px 36px;
+  box-sizing: border-box;
+  color: #2a2522;
+
+  background-image:
+    linear-gradient(rgba(255, 248, 240, 0.72), rgba(255, 248, 240, 0.82)),
+    url("../assets/home/image_main_background1.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  font-family: "Poppins", "Inter", sans-serif;
+}
+
+.library-header {
+  max-width: 1180px;
+  margin: 0 auto 34px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.library-header h1 {
+  margin: 18px 0 10px;
+  font-size: clamp(2.4rem, 5vw, 4.6rem);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+  font-weight: 800;
+  color: #2a2522;
+}
+
+.library-header p {
+  margin: 0;
+  max-width: 560px;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: rgba(42, 37, 34, 0.72);
+}
+
+.library-back-btn,
+.library-create-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 14px 20px !important;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 14px 34px rgba(80, 60, 40, 0.12);
+}
+
+.library-back-btn {
+  background: rgba(255, 255, 255, 0.78);
+  color: #2a2522;
+  backdrop-filter: blur(12px);
+}
+
+.library-create-btn {
+  background: linear-gradient(135deg, #7f68ff, #6da8ff) !important;
+  color: white !important;
+}
+
+.journal-library-grid {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 280px));
+  gap: 28px;
+}
+
+.journal-card {
+  position: relative;
+  border-radius: 28px;
+  overflow: visible;
+  cursor: pointer;
+}
+
+.journal-card-cover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+
+  box-shadow: 0 26px 60px rgba(70, 52, 35, 0.22);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.journal-card:hover .journal-card-cover {
+  transform: translateY(-8px) rotate(-1deg);
+  box-shadow: 0 34px 80px rgba(70, 52, 35, 0.28);
+}
+
+.journal-card-cover-empty {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.82), rgba(240,236,230,0.92));
+}
+
+.journal-card-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.02),
+    rgba(0,0,0,0.18) 45%,
+    rgba(0,0,0,0.58)
+  );
+
+  color: white;
+}
+
+.journal-card-overlay h3 {
+  margin: 0 0 8px;
+  font-size: 1.65rem;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-shadow: 0 3px 16px rgba(0,0,0,0.28);
+}
+
+.journal-card-overlay p {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: rgba(255,255,255,0.88);
+}
+
+.journal-card-meta {
+  font-size: 0.82rem;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.journal-card-emoji {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 2;
+
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+
+  border-radius: 16px;
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(12px);
+  font-size: 24px;
+}
+
+.journal-card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.journal-action-btn {
+  width: auto !important;
+  padding: 10px 14px !important;
+  border-radius: 999px;
+  border: none;
+  font-weight: 800;
+}
+
+.write-btn {
+  background: white !important;
+  color: #252525 !important;
+}
+
+.read-btn {
+  background: linear-gradient(135deg, #7f68ff, #5ba8ff) !important;
+  color: white !important;
+}
+
+.journal-card-delete {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+
+  width: 38px !important;
+  height: 38px !important;
+  border: none;
+  border-radius: 999px;
+
+  background: rgba(0,0,0,0.28) !important;
+  color: white !important;
+  font-size: 22px;
+}
+
+@media (max-width: 900px) {
+  .library-page {
+    padding: 84px 20px 32px;
+  }
+
+  .library-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .journal-library-grid {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  }
+}
+
+/* =====================================================
+   NEW PAGE MODAL
+===================================================== */
+
+.new-journal-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: rgba(15, 12, 10, 0.45);
+  backdrop-filter: blur(12px);
+}
+
+.new-journal-modal.hidden {
+  display: none !important;
+}
+
+.new-journal-panel {
+  width: min(1100px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+
+  border-radius: 34px;
+  padding: 34px;
+
+  background: rgba(255, 252, 247, 0.96);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+
+  color: #24211f;
+}
+
+.new-journal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.new-journal-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.new-journal-close {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 999px;
+  background: #f0ece6;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.new-journal-body {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 32px;
+  align-items: start;
+}
+
+.new-journal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.new-journal-form label {
+  margin: 0 0 6px;
+  font-weight: 800;
+}
+
+.new-journal-form input,
+.new-journal-form select {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(0,0,0,0.14);
+  background: white;
+  font-size: 1rem;
+}
+
+.new-journal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.new-journal-cancel,
+.new-journal-create {
+  border: none;
+  border-radius: 18px;
+  padding: 14px 20px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.new-journal-cancel {
+  background: #eeeae4;
+  color: #222;
+}
+
+.new-journal-create {
+  background: linear-gradient(135deg, #766cff, #76a9ff);
+  color: white;
+}
+
+.new-journal-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 520px;
+}
+
+#newPagePreview .preview-mini-page,
+#newJournalPreview .preview-mini-page {
+  width: 320px;
+  aspect-ratio: 3 / 4;
+  min-height: auto;
+
+  border-radius: 28px;
+  padding: 24px;
+  overflow: hidden;
+  position: relative;
+
+  background: linear-gradient(180deg, #f9f4ee, #eee6dc);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+#newPagePreview .preview-kicker,
+#newJournalPreview .preview-kicker {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: rgba(40, 34, 30, 0.58);
+  margin-bottom: 10px;
+}
+
+#newPagePreview .preview-title,
+#newJournalPreview .preview-title {
+  font-size: 1.7rem;
+  line-height: 1.05;
+  font-weight: 900;
+  color: #2b2724;
+  margin-bottom: 18px;
+}
+
+#newPagePreview .preview-grid,
+#newJournalPreview .preview-grid {
+  display: grid;
+  gap: 14px;
+}
+
+#newPagePreview .preview-box,
+#newJournalPreview .preview-box {
+  border-radius: 18px;
+  min-height: 82px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+#newPagePreview .preview-box-large,
+#newJournalPreview .preview-box-large {
+  min-height: 160px;
+}
+
+#newPagePreview .preview-box-wide,
+#newJournalPreview .preview-box-wide {
+  min-height: 110px;
+}
+
+#newPagePreview .preview-row-2,
+#newJournalPreview .preview-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.template-library-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: rgba(5, 10, 22, 0.62);
+  backdrop-filter: blur(10px);
+}
+
+.template-library-modal.hidden {
+  display: none !important;
+}
+
+.template-library-panel {
+  width: min(1200px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border-radius: 30px;
+  padding: 28px;
+  background: #0e1528;
+  color: white;
+}
+
+.template-library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+.template-card {
+  width: 100%;
+  height: 260px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 22px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.06);
+}
+
+.template-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .new-journal-body {
+    grid-template-columns: 1fr;
+  }
+
+  .new-journal-preview {
+    min-height: auto;
+  }
+
+  #newPagePreview .preview-mini-page,
+  #newJournalPreview .preview-mini-page {
+    width: min(320px, 100%);
+  }
+}
+
+/* =====================================================
+   SIDEBAR / DRAWER
+===================================================== */
+
+.menu-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1400;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+  font-size: 20px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(320px, 86vw);
+  z-index: 1300;
+
+  background-image: url("../assets/icons/sidebar.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  box-shadow: 18px 0 50px rgba(0,0,0,0.18);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  padding: 20px 18px;
+  overflow: hidden;
+}
+
+.sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.28),
+    rgba(255,255,255,0.12)
+  );
+  backdrop-filter: blur(1px);
+  z-index: 0;
+}
+
+.sidebar > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+  overflow-y: auto;
+}
+
+.sidebar:not(.open) .journal-brand,
+.sidebar:not(.open) .sidebar-section,
+.sidebar:not(.open) .sidebar-nav {
+  display: none !important;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.journal-brand {
+  margin-bottom: 28px;
+  padding: 8px 4px 18px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.sidebar-emoji {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.sidebar h1 {
+  margin: 0 0 10px;
+  font-size: 30px;
+  line-height: 1.05;
+  color: #232323;
+}
+
+.sidebar-subtitle {
+  margin: 6px 0 0;
+  font-size: 15px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.sidebar-section {
+  margin-top: 24px;
+}
+
+.sidebar-section h2 {
+  margin: 0 0 14px;
+  font-size: 18px;
+}
+
+
+/* =====================================================
+   SIDEBAR NAV
+===================================================== */
+
+/* Hide stray duplicate titles */
+#appLayout > .journal-title,
+#appLayout > .journal-name,
+#appLayout > h1,
+#appLayout > h2,
+.main-content > .journal-title,
+.main-content > .journal-name {
+  display: none !important;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.sidebar .nav-item {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center;
+  gap: 16px;
+
+  padding: 10px 6px !important;
+  border: none !important;
+  border-radius: 0 !important;
+
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+
+  color: rgba(25,25,25,0.88) !important;
+  font-size: 15px !important;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+
+  transition: transform 0.25s ease, color 0.25s ease, text-shadow 0.25s ease;
+}
+
+.sidebar .nav-item:hover {
+  transform: translateX(8px);
+  color: #111 !important;
+  text-shadow: 0 0 18px rgba(255,255,255,0.75);
+}
+
+.sidebar .nav-item:hover span {
+  transform: translateX(4px);
+}
+
+.sidebar .nav-item span {
+  transition: transform 0.25s ease;
+}
+
+.sidebar .nav-item.active {
+  color: #2f5cff !important;
+  text-shadow: 0 0 20px rgba(120,160,255,0.55);
+}
+
+.sidebar .nav-icon,
+.cover-nav-icon,
+.cover-start-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  opacity: 0.9;
+  transition:
+    transform 0.35s cubic-bezier(.2,.8,.2,1),
+    filter 0.35s ease,
+    opacity 0.25s ease;
+}
+
+.sidebar .nav-item:hover .nav-icon,
+.cover-nav-btn:hover .cover-nav-icon,
+.cover-start-btn:hover .cover-start-icon {
+  transform: scale(2.2) rotate(-6deg);
+  opacity: 1;
+  filter:
+    brightness(1.3)
+    saturate(1.2)
+    drop-shadow(0 0 14px rgba(255,210,120,0.9));
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1);
+}
+
+.sidebar .nav-item.active .nav-icon {
+  transform: scale(1.2);
+  opacity: 1;
+  filter:
+    brightness(1.2)
+    saturate(1.15)
+    drop-shadow(0 0 8px rgba(120,160,255,0.55));
+}
+
+.cover-nav-btn:hover,
+.cover-start-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+
+.cover-nav-icon,
+.cover-start-icon {
+  width: 36px;
+  height: 36px;
+}
+
+/* =====================================================
+   COVER EDIT PANEL + FREEFORM PANEL
+===================================================== */
+
+.cover-sidebar,
+.freeform-panel {
+  background-image: url("../assets/icons/sidebar.png") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+
+  position: relative;
+  overflow: hidden;
+
+  border: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 28px 70px rgba(0,0,0,0.18);
+}
+
+.cover-sidebar::before,
+.freeform-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  z-index: 0;
+}
+
+.cover-sidebar > *,
+.freeform-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cover-sidebar input,
+.cover-sidebar select,
+.freeform-panel input,
+.freeform-panel select {
+  background: rgba(255,255,255,0.65) !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  border-radius: 16px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+}
+
+.cover-sidebar input:hover,
+.cover-sidebar select:hover,
+.freeform-panel input:hover,
+.freeform-panel select:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}
+
+.cover-sidebar input:focus,
+.cover-sidebar select:focus,
+.freeform-panel input:focus,
+.freeform-panel select:focus {
+  outline: none !important;
+  border: 1px solid rgba(110,130,255,0.8) !important;
+  box-shadow: 0 0 0 4px rgba(110,130,255,0.15);
+}
+
+.cover-sidebar button,
+.freeform-panel button {
+  border-radius: 16px !important;
+  background: rgba(255,255,255,0.62) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.cover-sidebar button:hover,
+.freeform-panel button:hover {
+  transform: translateY(-2px) scale(1.04);
+  background: rgba(255,255,255,0.9) !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.cover-nav-btn,
+.cover-start-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 800;
+}
+
+.cover-nav-btn,
+.cover-start-btn {
+  border: none; /* ❌ remove black border */
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+
+  border-radius: 999px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+
+  transition: all 0.25s ease;
+}
+
+.cover-nav-btn {
+  width: auto !important;
+  padding: 10px 14px !important;
+}
+
+.cover-start-btn {
+  width: 100% !important;
+  margin-top: 20px;
+  padding: 14px 18px !important;
+}
+
+
+/* glowing aura + pulse */
+.nav-icon,
+.cover-nav-icon,
+.cover-start-icon {
+  animation: softIconPulse 3.2s ease-in-out infinite;
+}
+
+@keyframes softIconPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(255, 210, 120, 0.25));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(255, 210, 120, 0.65));
+  }
+}
+
+.nav-item:hover .nav-icon,
+.cover-nav-btn:hover .cover-nav-icon,
+.cover-start-btn:hover .cover-start-icon {
+  transform: scale(2.15) rotate(-6deg);
+  filter:
+    brightness(1.35)
+    saturate(1.25)
+    drop-shadow(0 0 22px rgba(255, 210, 120, 1));
+}
+
+/* shimmer on hover */
+.nav-item::after,
+.cover-nav-btn::after,
+.cover-start-btn::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255,230,160,0.5), transparent 65%);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: 0.28s ease;
+  pointer-events: none;
+}
+
+.nav-item:hover::after,
+.cover-nav-btn:hover::after,
+.cover-start-btn:hover::after {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.freeform-panel {
+  animation: panelSlideFade 0.28s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes panelSlideFade {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =====================================================
+   NEW PAGE MODAL — PREMIUM MAGICAL STYLE
+===================================================== */
+
+.new-journal-modal {
+  background: rgba(20, 18, 14, 0.42) !important;
+  backdrop-filter: blur(18px) saturate(1.15);
+}
+
+/* main modal panel */
+.new-journal-panel {
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.80),
+      rgba(255, 250, 240, 0.72)
+    ),
+    url("../assets/icons/sidebar.png") !important;
+
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow:
+    0 35px 100px rgba(0,0,0,0.26),
+    inset 0 1px 0 rgba(255,255,255,0.7);
+
+  animation: modalDreamIn 0.35s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes modalDreamIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* form fields */
+.new-journal-form input,
+.new-journal-form select {
+  background: rgba(255,255,255,0.72) !important;
+  border: 1px solid rgba(0,0,0,0.08) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.05);
+  transition: 0.22s ease;
+}
+
+.new-journal-form input:hover,
+.new-journal-form select:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.9) !important;
+  box-shadow: 0 16px 34px rgba(0,0,0,0.08);
+}
+
+.new-journal-form input:focus,
+.new-journal-form select:focus {
+  outline: none !important;
+  border-color: rgba(120,140,255,0.85) !important;
+  box-shadow:
+    0 0 0 4px rgba(120,140,255,0.18),
+    0 18px 38px rgba(0,0,0,0.1);
+}
+
+/* preview card shell only — DO NOT override JS background */
+#newPagePreview .preview-mini-page,
+#newJournalPreview .preview-mini-page {
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.7) !important;
+  box-shadow:
+    0 28px 70px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.7);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* fallback only when there is no inline template/background */
+#newPagePreview .preview-mini-page:not([style]),
+#newJournalPreview .preview-mini-page:not([style]) {
+  background: rgba(255,255,255,0.62);
+}
+
+#newPagePreview .preview-mini-page:hover,
+#newJournalPreview .preview-mini-page:hover {
+  transform: translateY(-6px) rotate(-1deg) scale(1.02);
+  box-shadow: 0 38px 90px rgba(0,0,0,0.24);
+}
+
+/* preview inner boxes */
+#newPagePreview .preview-box,
+#newJournalPreview .preview-box {
+  background: rgba(255,255,255,0.48) !important;
+  border: 1px solid rgba(255,255,255,0.55) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* buttons */
+.new-journal-create,
+.library-create-btn,
+.template-open-btn {
+  background: linear-gradient(135deg, #7f68ff, #76a9ff) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow:
+    0 16px 36px rgba(100,120,255,0.32),
+    0 0 22px rgba(140,170,255,0.35);
+  transition: 0.25s ease;
+}
+
+.new-journal-create:hover,
+.library-create-btn:hover,
+.template-open-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow:
+    0 24px 48px rgba(100,120,255,0.42),
+    0 0 34px rgba(140,170,255,0.55);
+}
+
+.new-journal-cancel {
+  background: rgba(255,255,255,0.65) !important;
+  border: none !important;
+  border-radius: 18px !important;
+  transition: 0.2s ease;
+}
+
+.new-journal-cancel:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.9) !important;
+}
+
+.journal-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sidebar-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cover-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:8px;
+}
+
+.cover-logo{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  object-fit:cover;
+}
+
+.sidebar-logo,
+.cover-logo{
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* =====================================================
+   AUTH MODAL
+===================================================== */
+
+.auth-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(12px);
+}
+
+.auth-card {
+  width: min(380px, calc(100vw - 32px));
+  padding: 28px;
+  border-radius: 28px;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 30px 90px rgba(0,0,0,0.25);
+}
+
+.auth-card h2 {
+  margin: 0 0 8px;
+}
+
+.auth-card p {
+  color: #666;
+  margin-bottom: 18px;
+}
+
+.auth-card input,
+.auth-card button {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.auth-card input {
+  min-height: 52px;
+}
+
+.auth-card button {
+  border: none;
+  padding: 14px;
+  border-radius: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.auth-close {
+  width: 38px !important;
+  height: 38px;
+  float: right;
+  border-radius: 999px !important;
+}
+
+.auth-open-btn {
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sidebar-auth-section,
+.mobile-auth-section {
+  margin-top: 20px;
+}
+
+.auth-profile-icon {
+  width: 86px;
+  height: 86px;
+  display: block;
+  margin: 0 auto 16px;
+  border-radius: 24px;
+  object-fit: cover;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.16);
+}
+
+/* =====================================================
+   PROFILE MODAL
+===================================================== */
+
+.profile-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(12px);
+}
+
+.profile-card {
+  width: min(420px, calc(100vw - 32px));
+  padding: 32px;
+  border-radius: 32px;
+  background: rgba(255,255,255,0.96);
+  box-shadow: 0 30px 90px rgba(0,0,0,0.22);
+}
+
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  display: block;
+  margin: 0 auto 18px;
+  border-radius: 28px;
+  object-fit: cover;
+}
+
+.profile-card h2 {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.profile-card input,
+.profile-card textarea,
+.profile-card button {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.profile-card input,
+.profile-card textarea {
+  border: none;
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(0,0,0,0.04);
+  font-family: inherit;
+}
+
+.profile-card textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.profile-card button {
+  border: none;
+  border-radius: 18px;
+  padding: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.profile-close {
+  width: 40px !important;
+  height: 40px;
+  float: right;
+  border-radius: 999px !important;
+}
+
+/* =====================================================
+   DESKTOP: HIDE MOBILE UI
+===================================================== */
+
+@media (max-width: 800px) {
+  body[data-view-mode="read"] .cover-preview,
+  body[data-view-mode="read"] .freeform-page,
+  body[data-view-mode="read"] .editor-surface {
+    width: min(88vw, 420px) !important;
+    max-width: 420px !important;
+
+    height: auto !important;
+    min-height: 520px !important;
+
+    aspect-ratio: auto !important;
+
+    margin: 100px auto 160px !important;
+    border-radius: 28px !important;
+
+    overflow: visible !important;
+  }
+
+  body[data-view-mode="read"] .cover-preview-container,
+  body[data-view-mode="read"] .freeform-page-wrap,
+  body[data-view-mode="read"] #editorContainer {
+    display: block !important;
+    padding: 0 !important;
+    min-height: 100vh;
+  }
+
+  body[data-view-mode="read"] {
+    overflow-y: auto !important;
+  }
+
+  body[data-view-mode="read"] .page-navigation,
+  body[data-view-mode="read"] .bottom-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+  }
+}
