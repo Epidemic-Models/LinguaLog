@@ -4,28 +4,30 @@ async function getCurrentUser() {
 }
 
 async function saveJournalToCloud(journal) {
-  const user = await getCurrentUser();
+  const user = await getCurrentUser?.();
 
-  if (!user) return;
+  if (!user || !journal?.id) return false;
 
   const payload = {
-    id: journal.id, // VERY IMPORTANT
+    id: journal.id,
     user_id: user.id,
-    title: journal.title || "Untitled",
+    title: journal.title || "Untitled Journal",
     data: journal,
     updated_at: new Date().toISOString()
   };
 
-  const { data, error } = await supabaseClient
+  const { error } = await supabaseClient
     .from("journals")
     .upsert(payload);
 
   if (error) {
     console.error("Cloud save failed:", error);
-    return;
+    addToSyncQueue?.(journal);
+    return false;
   }
 
-  console.log("Journal saved:", data);
+  console.log("Cloud save success");
+  return true;
 }
 
 async function loadJournalsFromCloud() {
