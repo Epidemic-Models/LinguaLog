@@ -1942,3 +1942,37 @@ body[data-view-mode="read"] #appLayout textarea {
     max-width: calc(100% - 32px) !important;
   }
 }
+
+/* =====================================================
+   FREEFORM MOBILE FIX
+===================================================== */
+
+@media (max-width: 768px) {
+
+  body[data-view-mode="read"] #editorContainer {
+    display: block !important;
+    min-height: auto !important;
+    height: auto !important;
+
+    padding-top: 120px !important;
+    padding-bottom: 140px !important;
+
+    align-items: unset !important;
+    justify-content: unset !important;
+  }
+
+  body[data-view-mode="read"] .freeform-page,
+  body[data-view-mode="read"] .editor-surface {
+    width: calc(100vw - 24px) !important;
+
+    min-height: auto !important;
+    height: auto !important;
+
+    aspect-ratio: unset !important;
+
+    margin: 0 auto 32px !important;
+
+    overflow: visible !important;
+  }
+
+}
