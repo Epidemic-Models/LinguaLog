@@ -86,20 +86,20 @@ textarea {
 }
 
 .main-content {
-  position: relative;
-  min-height: 100vh;
-  width: 100%;
-  overflow-y: auto;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
   background: transparent;
 }
 
 #editorContainer {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   padding: 24px 32px;
+  overflow: hidden;
 }
 
 /* =====================================================
@@ -195,9 +195,8 @@ textarea {
   max-width: 920px;
 
   aspect-ratio: 3 / 4;
-  min-height: auto;
 
-  margin: 24px auto;
+  margin: 0 auto;
   padding: 28px;
 
   box-sizing: border-box;
@@ -205,12 +204,10 @@ textarea {
 
   background: var(--surface);
   box-shadow: var(--shadow);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0,0,0,0.05);
 
   overflow-y: auto;
   overflow-x: hidden;
-  scroll-behavior: smooth;
-  overscroll-behavior: contain;
 
   scrollbar-width: none;
 }

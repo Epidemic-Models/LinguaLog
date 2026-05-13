@@ -807,6 +807,31 @@ function setupAutoGrowTextareas() {
   });
 }
 
+function syncCurrentPageFromDOM() {
+  if (!currentPageId) return;
+
+  const page = getPageById(currentPageId);
+  if (!page) return;
+
+  const titleInput =
+    document.querySelector("#generalPageTitle") ||
+    document.querySelector("#languagePageTitle");
+
+  if (titleInput) {
+    page.title = titleInput.value;
+  }
+
+  const notes =
+    document.querySelector("#generalNotes") ||
+    document.querySelector("#languageNotes");
+
+  if (notes) {
+    page.notes = notes.value;
+  }
+
+  savePage(page);
+}
+
 function resetAppData() {
   localStorage.removeItem("lingualog-settings");
   localStorage.removeItem("lingualog-pages");
@@ -1152,6 +1177,7 @@ document.addEventListener("input", (event) => {
   ) {
     markLocalChanges?.();
 
+    syncCurrentPageFromDOM();
     scheduleAutosave?.();
   }
 });
@@ -1166,6 +1192,7 @@ document.addEventListener("change", (event) => {
   ) {
     markLocalChanges?.();
 
+    syncCurrentPageFromDOM();
     scheduleAutosave?.();
   }
 });
