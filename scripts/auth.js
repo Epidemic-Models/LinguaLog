@@ -47,6 +47,7 @@ async function handleSignUp() {
   }
 
   alert("Account created! Check your email.");
+  updateAuthButtons?.();
 }
 
 async function handleSignIn() {
@@ -88,6 +89,8 @@ async function handleSignIn() {
     await window.startRealtimeSync();
   }
 
+  updateAuthButtons?.();
+
   closeAuthModal();
 
   if (typeof showLibraryPage === "function") {
@@ -108,7 +111,9 @@ async function signOut() {
   localStorage.removeItem("lingualog-pages-index");
   localStorage.removeItem("lingualog-settings");
 
-  location.reload();
+  updateAuthButtons?.();
+
+  showWelcomePage?.();
 
 }
 
@@ -144,6 +149,27 @@ async function restoreSession() {
   showLibraryPage?.();
 }
 
+async function openAuthOrProfile() {
+  const user = await getCurrentUser?.();
+
+  if (user) {
+    openProfileModal?.();
+  } else {
+    openAuthModal?.();
+  }
+}
+
+async function updateAuthButtons() {
+  const user = await getCurrentUser?.();
+  const btn = document.getElementById("welcomeAuthBtn");
+
+  if (!btn) return;
+
+  btn.textContent = user ? "Profile / Log out" : "Login / Sign Up";
+}
+
+window.openAuthOrProfile = openAuthOrProfile;
+window.updateAuthButtons = updateAuthButtons;
 window.restoreSession = restoreSession;
 window.handlePasswordReset = handlePasswordReset;
 window.openAuthModal = openAuthModal;

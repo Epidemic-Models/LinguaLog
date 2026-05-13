@@ -1096,9 +1096,13 @@ function initializeApp() {
     window.__freeformOutsideClickBound = true;
   }
 
-  initCloudSync?.();
+  iinitCloudSync?.();
   startCloudAutoSync?.();
+
   restoreSession?.();
+
+  updateAuthButtons?.();
+
   updateNewPagePreview?.();
 }
 
