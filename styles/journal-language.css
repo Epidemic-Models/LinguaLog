@@ -86,8 +86,8 @@
     width: calc(100vw - 28px) !important;
     min-width: 0 !important;
     max-width: none !important;
-    margin: 14px auto 20px !important;
-    padding: 24px !important;
+    margin: 20px auto !important;
+    padding: 18px !important;
   }
 
   #entries .entry-row {

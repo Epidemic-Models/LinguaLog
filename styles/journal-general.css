@@ -500,19 +500,25 @@
 
 @media (max-width: 900px) {
   .general-journal {
-    width: calc(100vw - 28px) !important;
+    width: calc(100vw - 24px) !important;
     min-width: 0 !important;
-    max-width: none !important;
-    margin: 14px auto 20px !important;
+    max-width: 100% !important;
+    margin: 20px auto !important;
+    aspect-ratio: auto !important;
+    min-height: auto !important;
   }
 
   .general-content,
   .layout-planner .general-content,
   .layout-journal .general-content {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   .general-shell {
-    padding: 18px;
+    padding: 18px !important;
+  }
+
+  .general-journal textarea {
+    min-height: 160px !important;
   }
 }

@@ -130,6 +130,21 @@ async function handlePasswordReset() {
   alert("Password reset email sent.");
 }
 
+async function restoreSession() {
+  const { data } = await supabaseClient.auth.getSession();
+  const session = data?.session;
+
+  if (!session) return;
+
+  console.log("Restored session:", session.user);
+
+  await syncCloudJournalsIntoLocal?.();
+  await startRealtimeSync?.();
+
+  showLibraryPage?.();
+}
+
+window.restoreSession = restoreSession;
 window.handlePasswordReset = handlePasswordReset;
 window.openAuthModal = openAuthModal;
 window.closeAuthModal = closeAuthModal;

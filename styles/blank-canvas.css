@@ -408,7 +408,7 @@
 /* MOBILE */
 @media (max-width: 900px) {
   .freeform-editor-shell {
-    padding: 16px 12px 90px;
+    padding: 16px 12px 24px;
   }
 
   .freeform-page {

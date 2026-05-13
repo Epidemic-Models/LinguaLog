@@ -729,6 +729,15 @@ body[data-view-mode="read"] #appLayout textarea {
   border-radius: 16px;
 }
 
+#welcomeArt {
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/home/image_main_background1.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 /* =====================================================
    JOURNAL LIBRARY FIX
 ===================================================== */
@@ -1974,5 +1983,31 @@ body[data-view-mode="read"] #appLayout textarea {
     left: 0;
     width: 100%;
     z-index: 10;
+  }
+}
+
+@media (max-width: 768px) {
+  .language-page-card,
+  .general-journal,
+  .editor-surface,
+  .freeform-page,
+  .card {
+    width: calc(100vw - 24px) !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+    margin: 20px auto !important;
+    padding: 18px !important;
+    overflow-x: hidden;
+    aspect-ratio: auto !important;
+  }
+
+  #editorContainer {
+    padding: 78px 12px 24px !important;
+    overflow-x: hidden;
+  }
+
+  body {
+    overflow-x: hidden;
   }
 }

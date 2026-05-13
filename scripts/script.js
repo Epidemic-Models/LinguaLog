@@ -553,6 +553,7 @@ function showWelcomePage() {
   document.getElementById("coverPage")?.classList.add("hidden");
   document.getElementById("appLayout")?.classList.add("hidden");
   document.getElementById("mobileTopbar")?.classList.add("hidden");
+  document.getElementById("welcomeArt")?.classList.remove("hidden");
   closeMobileDrawer();
 
   window.scrollTo(0, 0);
@@ -1097,8 +1098,7 @@ function initializeApp() {
 
   initCloudSync?.();
   startCloudAutoSync?.();
-  startRealtimeSync?.();
-
+  restoreSession?.();
   updateNewPagePreview?.();
 }
 
