@@ -146,6 +146,8 @@ async function restoreSession() {
   await syncCloudJournalsIntoLocal?.();
   await startRealtimeSync?.();
 
+  updateAuthButtons?.();
+
   showLibraryPage?.();
 }
 

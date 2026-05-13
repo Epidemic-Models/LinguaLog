@@ -1932,71 +1932,68 @@ body[data-view-mode="read"] #appLayout textarea {
 }
 
 /* =====================================================
-   DESKTOP: HIDE MOBILE UI
+   MOBILE PAGE SIZE FIX — WRITE + READ
 ===================================================== */
 
-@media (max-width: 800px) {
-  body[data-view-mode="read"] .cover-preview,
-  body[data-view-mode="read"] .freeform-page,
-  body[data-view-mode="read"] .editor-surface {
-    width: min(88vw, 420px) !important;
-    max-width: 420px !important;
-
-    height: auto !important;
-    min-height: 520px !important;
-
-    aspect-ratio: auto !important;
-
-    margin: 100px auto 160px !important;
-    border-radius: 28px !important;
-
-    overflow: visible !important;
-  }
-
-  body[data-view-mode="read"] .cover-preview-container,
-  body[data-view-mode="read"] .freeform-page-wrap,
-  body[data-view-mode="read"] #editorContainer {
-    display: block !important;
-    padding: 0 !important;
-    min-height: 100vh;
-  }
-
-  body[data-view-mode="read"] {
-    overflow-y: auto !important;
-  }
-
-  body[data-view-mode="read"] .page-navigation,
-  body[data-view-mode="read"] .bottom-bar {
-    position: fixed;
-    bottom: 20px;
-    left: 0;
-    width: 100%;
-    z-index: 10;
-  }
-}
-
 @media (max-width: 768px) {
+  #editorContainer {
+    width: 100% !important;
+    min-height: 100vh !important;
+    padding: 92px 12px 120px !important;
+    display: block !important;
+    overflow-x: hidden !important;
+  }
+
   .language-page-card,
   .general-journal,
   .editor-surface,
   .freeform-page,
   .card {
     width: calc(100vw - 24px) !important;
-    max-width: 100% !important;
+    max-width: none !important;
     min-width: 0 !important;
-    box-sizing: border-box;
-    margin: 20px auto !important;
-    padding: 18px !important;
-    overflow-x: hidden;
+
+    height: auto !important;
+    min-height: calc(100vh - 170px) !important;
     aspect-ratio: auto !important;
+
+    margin: 0 auto 32px !important;
+    padding: 18px !important;
+
+    box-sizing: border-box !important;
+    overflow: visible !important;
   }
 
-  #editorContainer {
-    padding: 78px 12px 24px !important;
-    overflow-x: hidden;
+  body[data-view-mode="read"] #editorContainer {
+    padding: 92px 12px 150px !important;
+    display: block !important;
   }
 
-  body {
-    overflow-x: hidden;
+  body[data-view-mode="read"] .language-page-card,
+  body[data-view-mode="read"] .general-journal,
+  body[data-view-mode="read"] .editor-surface,
+  body[data-view-mode="read"] .freeform-page,
+  body[data-view-mode="read"] .card {
+    width: calc(100vw - 24px) !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    height: auto !important;
+    min-height: calc(100vh - 210px) !important;
+    aspect-ratio: auto !important;
+
+    margin: 0 auto 40px !important;
+    overflow: visible !important;
+  }
+
+  .freeform-editor-shell {
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 0 !important;
+  }
+
+  .freeform-floating-title,
+  .freeform-direct-text {
+    max-width: calc(100% - 32px) !important;
   }
 }

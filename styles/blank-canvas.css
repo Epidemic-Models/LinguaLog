@@ -408,25 +408,52 @@
 /* MOBILE */
 @media (max-width: 900px) {
   .freeform-editor-shell {
-    padding: 16px 12px 24px;
+    width: 100% !important;
+    min-height: 100vh !important;
+    padding: 92px 12px 120px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+
+  .freeform-page-wrap {
+    width: 100% !important;
+    display: block !important;
   }
 
   .freeform-page {
-    width: calc(100vw - 32px);
-    max-width: none;
-    aspect-ratio: 3 / 4;
+    width: calc(100vw - 24px) !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    height: auto !important;
+    min-height: calc(100vh - 170px) !important;
+    aspect-ratio: auto !important;
+
+    margin: 0 auto 32px !important;
+    overflow: hidden !important;
   }
 
   .freeform-floating-title {
-    left: 28px;
-    right: 28px;
-    top: 30px;
+    left: 28px !important;
+    right: 28px !important;
+    top: 34px !important;
   }
 
   .freeform-direct-text {
-    left: 28px;
-    right: 28px;
-    top: 100px;
-    bottom: 32px;
+    left: 28px !important;
+    right: 28px !important;
+    top: 112px !important;
+    bottom: 36px !important;
+  }
+
+  .freeform-top-actions {
+    top: 92px !important;
+    right: 20px !important;
+  }
+
+  .freeform-popover {
+    top: 160px !important;
+    right: 20px !important;
+    width: min(320px, calc(100vw - 40px)) !important;
   }
 }
