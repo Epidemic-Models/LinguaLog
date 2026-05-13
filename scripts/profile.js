@@ -11,11 +11,10 @@ function closeProfileModal() {
 }
 
 async function loadProfile() {
-  const { data: sessionData } = await supabaseClient.auth.getSession();
-  const user = sessionData?.session?.user;
+  const user = await getCurrentUser?.();
 
   if (!user) {
-    openAuthModal();
+    openAuthModal?.();
     return;
   }
 
@@ -23,10 +22,28 @@ async function loadProfile() {
     .from("profiles")
     .select("*")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
   if (error) {
-    console.error(error);
+    console.error("Profile load failed:", error);
+    return;
+  }
+
+  if (!data) {
+    const newProfile = {
+      id: user.id,
+      username: user.email || "",
+      native_language: "",
+      learning_language: "",
+      bio: ""
+    };
+
+    await supabaseClient.from("profiles").insert(newProfile);
+
+    document.getElementById("profileUsername").value = newProfile.username;
+    document.getElementById("profileNativeLanguage").value = "";
+    document.getElementById("profileLearningLanguage").value = "";
+    document.getElementById("profileBio").value = "";
     return;
   }
 
