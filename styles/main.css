@@ -575,62 +575,6 @@ body[data-view-mode="read"] #appLayout textarea {
   }
 }
 
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 900px) {
-  #editorContainer {
-    padding: 78px 14px 20px;
-  }
-
-  .language-page-card,
-  .general-journal,
-  .editor-surface,
-  .freeform-page,
-  .card {
-    width: calc(100vw - 28px);
-    max-width: none;
-    aspect-ratio: auto;
-    min-height: calc(100vh - 120px);
-    margin: 14px auto 20px;
-  }
-
-  .general-content {
-    grid-template-columns: 1fr;
-  }
-
-  #entries .entry-row {
-    grid-template-columns: 1fr !important;
-  }
-
-  #entries .remove-btn {
-    width: 100% !important;
-    min-width: 100% !important;
-    opacity: 1;
-  }
-
-  .freeform-toolbar {
-    top: 12px;
-    right: 14px;
-  }
-
-  .freeform-main-tool,
-  .freeform-save-btn {
-    width: 56px !important;
-    height: 56px !important;
-    min-width: 56px !important;
-    font-size: 24px !important;
-  }
-
-  .freeform-popover {
-    top: 78px;
-    right: 14px;
-    width: min(280px, calc(100vw - 28px));
-  }
-}
-
 /* WELCOME PAGE */
 .welcome-page {
   position: relative;
@@ -1988,8 +1932,10 @@ body[data-view-mode="read"] #appLayout textarea {
 
   .freeform-editor-shell {
     width: 100% !important;
-    min-height: auto !important;
-    padding: 0 !important;
+    min-height: 100vh !important;
+    padding: 92px 12px 120px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
   }
 
   .freeform-floating-title,
