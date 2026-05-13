@@ -68,13 +68,19 @@ async function handleSignIn() {
     return;
   }
 
-  // load journals from Supabase
+  // clear previous local user data
+  localStorage.removeItem("lingualog-journals");
+  localStorage.removeItem("lingualog-current-journal-id");
+  localStorage.removeItem("lingualog-pages-index");
+  localStorage.removeItem("lingualog-settings");
+
+  // load journals for THIS user
   if (typeof loadJournalsFromCloud === "function") {
+
     const cloudJournals = await loadJournalsFromCloud();
 
-    if (cloudJournals.length > 0) {
-      saveJournals(cloudJournals);
-    }
+    saveJournals(cloudJournals || []);
+
   }
 
   // start realtime sync
@@ -94,13 +100,16 @@ async function handleSignIn() {
 }
 
 async function signOut() {
+
   await supabaseClient.auth.signOut();
 
-  if (typeof showWelcomePage === "function") {
-    showWelcomePage();
-  }
+  localStorage.removeItem("lingualog-journals");
+  localStorage.removeItem("lingualog-current-journal-id");
+  localStorage.removeItem("lingualog-pages-index");
+  localStorage.removeItem("lingualog-settings");
 
-  alert("Logged out.");
+  location.reload();
+
 }
 
 async function handlePasswordReset() {
