@@ -62,9 +62,9 @@ select {
 
 textarea {
   min-height: 140px;
-  resize: vertical;
+  resize: none;
+  overflow-y: hidden;
 }
-
 
 /* =====================================================
    APP LAYOUT
@@ -193,16 +193,34 @@ textarea {
 .freeform-page {
   width: min(920px, calc(100vw - 120px));
   max-width: 920px;
+
   aspect-ratio: 3 / 4;
   min-height: auto;
+
   margin: 24px auto;
   padding: 28px;
+
   box-sizing: border-box;
   border-radius: 28px;
+
   background: var(--surface);
   box-shadow: var(--shadow);
   border: 1px solid rgba(0, 0, 0, 0.05);
+
   overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+
+  scrollbar-width: none;
+}
+
+.card::-webkit-scrollbar,
+.language-page-card::-webkit-scrollbar,
+.general-journal::-webkit-scrollbar,
+.editor-surface::-webkit-scrollbar,
+.freeform-page::-webkit-scrollbar {
+  display: none;
 }
 
 .card {
@@ -1876,92 +1894,41 @@ body[data-view-mode="read"] #appLayout textarea {
 }
 
 /* =====================================================
-   FINAL MOBILE UNIFIED PAGE SIZE FIX
-   Put this at VERY BOTTOM of main.css
+   FINAL MOBILE UNIFIED PAGE FIX
+   Put at VERY BOTTOM of main.css
 ===================================================== */
 
 @media (max-width: 768px) {
-  :root {
-    --mobile-page-width: min(86vw, 430px);
-    --mobile-page-height: calc(var(--mobile-page-width) * 1.333);
-  }
-
   #editorContainer,
   body[data-view-mode="read"] #editorContainer {
     width: 100% !important;
     min-height: 100vh !important;
-    padding: 110px 0 150px !important;
+    padding: 92px 12px 140px !important;
     display: flex !important;
     justify-content: center !important;
     align-items: flex-start !important;
     overflow-x: hidden !important;
   }
 
-  .cover-preview-container,
-  body[data-view-mode="read"] .cover-preview-container,
-  .freeform-page-wrap {
-    width: 100% !important;
-    min-height: auto !important;
-    height: auto !important;
-    padding: 0 !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: flex-start !important;
-    overflow: visible !important;
-  }
-
-  .cover-preview,
-  body[data-view-mode="read"] .cover-preview,
+  .card,
   .language-page-card,
   .general-journal,
   .editor-surface,
   .freeform-page,
-  .card,
+  body[data-view-mode="read"] .card,
   body[data-view-mode="read"] .language-page-card,
   body[data-view-mode="read"] .general-journal,
   body[data-view-mode="read"] .editor-surface,
-  body[data-view-mode="read"] .freeform-page,
-  body[data-view-mode="read"] .card {
-    width: var(--mobile-page-width) !important;
-    max-width: var(--mobile-page-width) !important;
-    min-width: 0 !important;
-
-    height: var(--mobile-page-height) !important;
-    min-height: var(--mobile-page-height) !important;
-    max-height: none !important;
-
+  body[data-view-mode="read"] .freeform-page {
+    width: calc(100vw - 24px) !important;
+    max-width: none !important;
     aspect-ratio: 3 / 4 !important;
-    margin: 0 auto 120px !important;
-
-    box-sizing: border-box !important;
+    min-height: auto !important;
+    margin: 0 auto 40px !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    border-radius: 28px !important;
   }
 
-  .general-journal {
-    padding: 0 !important;
-  }
-
-  .freeform-page {
-    padding: 0 !important;
-  }
-
-  .editor-surface,
-  .language-page-card,
-  .card {
-    padding: 18px !important;
-  }
-
-  .read-mode-nav {
-    bottom: 26px !important;
-    width: min(86vw, 430px) !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-  }
-}
-
-@media (max-width: 768px) {
   .general-content,
   .layout-planner .general-content,
   .layout-journal .general-content {
@@ -1972,12 +1939,7 @@ body[data-view-mode="read"] #appLayout textarea {
     padding: 18px !important;
   }
 
-  .general-card {
-    padding: 18px !important;
-    border-radius: 24px !important;
-  }
-
-  .general-journal textarea {
-    min-height: 160px !important;
+  .read-mode-nav {
+    bottom: 24px !important;
   }
 }

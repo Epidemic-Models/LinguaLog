@@ -536,6 +536,7 @@ function showEditor() {
 
   if (currentPage) {
     renderPage(container, currentPage);
+    setupAutoGrowTextareas();
   }
 
   window.scrollTo(0, 0);
@@ -625,7 +626,7 @@ function loadPage(pageId) {
 
   container.innerHTML = "";
   renderPage(container, page);
-
+  setupAutoGrowTextareas();
   renderPagesList?.();
   renderMobilePagesList?.();
   closeSidebar();
@@ -789,6 +790,21 @@ function deletePage(pageId) {
     renderMobilePagesList?.();
     updateMobileDrawerBrand?.();
   }
+}
+function setupAutoGrowTextareas() {
+  document.querySelectorAll("textarea").forEach((textarea) => {
+    if (textarea.dataset.autogrowAttached) return;
+
+    textarea.dataset.autogrowAttached = "true";
+
+    const resize = () => {
+      textarea.style.height = "auto";
+      textarea.style.height = textarea.scrollHeight + "px";
+    };
+
+    resize();
+    textarea.addEventListener("input", resize);
+  });
 }
 
 function resetAppData() {

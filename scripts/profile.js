@@ -1,3 +1,42 @@
+let profileSaveTimer;
+
+function setupProfileAutosave() {
+  const fields = [
+    "profileUsername",
+    "profileNativeLanguage",
+    "profileLearningLanguage",
+    "profileBio"
+  ];
+
+  fields.forEach((id) => {
+    const el = document.getElementById(id);
+
+    if (!el || el.dataset.autosaveAttached) return;
+
+    el.dataset.autosaveAttached = "true";
+
+    // auto-grow bio textarea
+    if (id === "profileBio") {
+      el.style.height = "auto";
+      el.style.height = el.scrollHeight + "px";
+
+      el.addEventListener("input", (e) => {
+        e.target.style.height = "auto";
+        e.target.style.height = e.target.scrollHeight + "px";
+      });
+    }
+
+    // autosave
+    el.addEventListener("input", () => {
+      clearTimeout(profileSaveTimer);
+
+      profileSaveTimer = setTimeout(() => {
+        saveProfile(true);
+      }, 600);
+    });
+  });
+}
+
 async function openProfileModal() {
   const modal = document.getElementById("profileModal");
   if (!modal) return;
@@ -44,6 +83,9 @@ async function loadProfile() {
     document.getElementById("profileNativeLanguage").value = "";
     document.getElementById("profileLearningLanguage").value = "";
     document.getElementById("profileBio").value = "";
+
+    setupProfileAutosave(); // HERE
+
     return;
   }
 
@@ -51,9 +93,11 @@ async function loadProfile() {
   document.getElementById("profileNativeLanguage").value = data.native_language || "";
   document.getElementById("profileLearningLanguage").value = data.learning_language || "";
   document.getElementById("profileBio").value = data.bio || "";
+
+  setupProfileAutosave(); // HERE
 }
 
-async function saveProfile() {
+async function saveProfile(silent = false) {
   const { data: sessionData } = await supabaseClient.auth.getSession();
   const user = sessionData?.session?.user;
 
@@ -79,8 +123,10 @@ async function saveProfile() {
     return;
   }
 
-  alert("Profile saved!");
-  closeProfileModal();
+  if (!silent) {
+    alert("Profile saved!");
+    closeProfileModal();
+  }
 }
 
 window.openProfileModal = openProfileModal;
