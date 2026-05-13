@@ -449,6 +449,7 @@ body[data-view-mode="read"] .new-journal-panel::-webkit-scrollbar {
 body[data-view-mode="read"] .new-journal-panel {
   overflow: hidden;
 }
+
 /* ✅ ONLY center the EDITOR — NOT cover page */
 body[data-view-mode="read"] #editorContainer {
   min-height: 100vh;
@@ -1875,104 +1876,86 @@ body[data-view-mode="read"] #appLayout textarea {
 }
 
 /* =====================================================
-   MOBILE PAGE SIZE FIX — WRITE + READ
+   FINAL MOBILE UNIFIED PAGE SIZE FIX
+   Put this at VERY BOTTOM of main.css
 ===================================================== */
 
 @media (max-width: 768px) {
-  #editorContainer {
+  :root {
+    --mobile-page-width: min(86vw, 430px);
+    --mobile-page-height: calc(var(--mobile-page-width) * 1.333);
+  }
+
+  #editorContainer,
+  body[data-view-mode="read"] #editorContainer {
     width: 100% !important;
     min-height: 100vh !important;
-    padding: 92px 12px 120px !important;
-    display: block !important;
+    padding: 110px 0 150px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
     overflow-x: hidden !important;
   }
 
+  .cover-preview-container,
+  body[data-view-mode="read"] .cover-preview-container,
+  .freeform-page-wrap {
+    width: 100% !important;
+    min-height: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    overflow: visible !important;
+  }
+
+  .cover-preview,
+  body[data-view-mode="read"] .cover-preview,
   .language-page-card,
   .general-journal,
   .editor-surface,
   .freeform-page,
-  .card {
-    width: calc(100vw - 24px) !important;
-    max-width: none !important;
-    min-width: 0 !important;
-
-    height: auto !important;
-    min-height: calc(100vh - 170px) !important;
-    aspect-ratio: auto !important;
-
-    margin: 0 auto 32px !important;
-    padding: 18px !important;
-
-    box-sizing: border-box !important;
-    overflow: visible !important;
-  }
-
-  body[data-view-mode="read"] #editorContainer {
-    padding: 92px 12px 150px !important;
-    display: block !important;
-  }
-
+  .card,
   body[data-view-mode="read"] .language-page-card,
   body[data-view-mode="read"] .general-journal,
   body[data-view-mode="read"] .editor-surface,
   body[data-view-mode="read"] .freeform-page,
   body[data-view-mode="read"] .card {
-    width: calc(100vw - 24px) !important;
-    max-width: none !important;
+    width: var(--mobile-page-width) !important;
+    max-width: var(--mobile-page-width) !important;
     min-width: 0 !important;
 
-    height: auto !important;
-    min-height: calc(100vh - 210px) !important;
-    aspect-ratio: auto !important;
+    height: var(--mobile-page-height) !important;
+    min-height: var(--mobile-page-height) !important;
+    max-height: none !important;
 
-    margin: 0 auto 40px !important;
-    overflow: visible !important;
-  }
+    aspect-ratio: 3 / 4 !important;
+    margin: 0 auto 120px !important;
 
-  .freeform-editor-shell {
-    width: 100% !important;
-    min-height: 100vh !important;
-    padding: 92px 12px 120px !important;
     box-sizing: border-box !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+    border-radius: 28px !important;
   }
 
-  .freeform-floating-title,
-  .freeform-direct-text {
-    max-width: calc(100% - 32px) !important;
-  }
-}
-
-/* =====================================================
-   FREEFORM MOBILE FIX
-===================================================== */
-
-@media (max-width: 768px) {
-
-  body[data-view-mode="read"] #editorContainer {
-    display: block !important;
-    min-height: auto !important;
-    height: auto !important;
-
-    padding-top: 120px !important;
-    padding-bottom: 140px !important;
-
-    align-items: unset !important;
-    justify-content: unset !important;
+  .general-journal {
+    padding: 0 !important;
   }
 
-  body[data-view-mode="read"] .freeform-page,
-  body[data-view-mode="read"] .editor-surface {
-    width: calc(100vw - 24px) !important;
-
-    min-height: auto !important;
-    height: auto !important;
-
-    aspect-ratio: unset !important;
-
-    margin: 0 auto 32px !important;
-
-    overflow: visible !important;
+  .freeform-page {
+    padding: 0 !important;
   }
 
+  .editor-surface,
+  .language-page-card,
+  .card {
+    padding: 18px !important;
+  }
+
+  .read-mode-nav {
+    bottom: 26px !important;
+    width: min(86vw, 430px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
 }
