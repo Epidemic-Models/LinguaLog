@@ -449,7 +449,6 @@ body[data-view-mode="read"] .new-journal-panel::-webkit-scrollbar {
 body[data-view-mode="read"] .new-journal-panel {
   overflow: hidden;
 }
- i dont understand how to fix this 
 /* ✅ ONLY center the EDITOR — NOT cover page */
 body[data-view-mode="read"] #editorContainer {
   min-height: 100vh;
