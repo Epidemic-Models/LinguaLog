@@ -103,7 +103,6 @@ async function handleSignIn() {
 }
 
 async function signOut() {
-
   await supabaseClient.auth.signOut();
 
   localStorage.removeItem("lingualog-journals");
@@ -111,10 +110,11 @@ async function signOut() {
   localStorage.removeItem("lingualog-pages-index");
   localStorage.removeItem("lingualog-settings");
 
+  closeProfileModal?.();
+  closeAuthModal?.();
+
   updateAuthButtons?.();
-
   showWelcomePage?.();
-
 }
 
 async function handlePasswordReset() {
