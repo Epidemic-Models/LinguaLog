@@ -1,5 +1,3 @@
-const MAX_ROWS_PER_PAGE = 4;
-
 let lastSearchText = "";
 let lastTranslatedText = "";
 
@@ -58,83 +56,19 @@ function addRow(word = "", meaning = "") {
   const entries = document.getElementById("entries");
   if (!entries) return;
 
-  const currentRows = entries.querySelectorAll(".entry-row").length;
-
-  if (currentRows >= MAX_ROWS_PER_PAGE) {
-    saveData();
-    createNewPage();
-
-    setTimeout(() => {
-      addRow(word, meaning);
-    }, 0);
-
-    return;
-  }
-
   const row = document.createElement("div");
   row.className = "entry-row";
 
-  row.style.display = "grid";
-  row.style.gridTemplateColumns = "minmax(0, 1fr) minmax(0, 1fr) 44px";
-  row.style.gap = "12px";
-  row.style.alignItems = "center";
-  row.style.margin = "0 0 12px 0";
-  row.style.padding = "0";
-  row.style.background = "transparent";
+  row.innerHTML = `
+    <input type="text" class="word-input" placeholder="Word" value="${word}">
+    <input type="text" class="meaning-input" placeholder="Meaning" value="${meaning}">
+    <button type="button" class="remove-btn">×</button>
+  `;
 
-  const wordInput = document.createElement("input");
-  wordInput.type = "text";
-  wordInput.className = "word-input";
-  wordInput.placeholder = "Word";
-  wordInput.value = word;
-  wordInput.style.width = "100%";
-  wordInput.style.margin = "0";
-  wordInput.style.minWidth = "0";
-
-  const meaningInput = document.createElement("input");
-  meaningInput.type = "text";
-  meaningInput.className = "meaning-input";
-  meaningInput.placeholder = "Meaning";
-  meaningInput.value = meaning;
-  meaningInput.style.width = "100%";
-  meaningInput.style.margin = "0";
-  meaningInput.style.minWidth = "0";
-
-  const removeBtn = document.createElement("button");
-  removeBtn.type = "button";
-  removeBtn.className = "remove-btn";
-  removeBtn.textContent = "×";
-
-  removeBtn.style.width = "44px";
-  removeBtn.style.minWidth = "44px";
-  removeBtn.style.height = "44px";
-  removeBtn.style.padding = "0";
-  removeBtn.style.margin = "0";
-  removeBtn.style.border = "none";
-  removeBtn.style.borderRadius = "12px";
-  removeBtn.style.background = "rgba(0, 0, 0, 0.08)";
-  removeBtn.style.color = "#444";
-  removeBtn.style.fontSize = "22px";
-  removeBtn.style.lineHeight = "1";
-  removeBtn.style.cursor = "pointer";
-  removeBtn.style.opacity = "0";
-  removeBtn.style.transition = "opacity 0.2s ease, background 0.2s ease, color 0.2s ease";
-
-  row.addEventListener("mouseenter", () => {
-    removeBtn.style.opacity = "1";
-  });
-
-  row.addEventListener("mouseleave", () => {
-    removeBtn.style.opacity = "0";
-  });
-
-  removeBtn.addEventListener("click", () => {
+  row.querySelector(".remove-btn").addEventListener("click", () => {
     row.remove();
+    saveData();
   });
-
-  row.appendChild(wordInput);
-  row.appendChild(meaningInput);
-  row.appendChild(removeBtn);
 
   entries.appendChild(row);
 }

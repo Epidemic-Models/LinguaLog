@@ -1095,7 +1095,7 @@ function initWelcomeParallax() {
   onScroll();
 }
 
-function initializeApp() {
+async function initializeApp() {
   attachCoverPreviewListeners?.();
   populateCoverFromSettings?.();
   updateCoverSourceVisibility?.();
@@ -1137,10 +1137,10 @@ function initializeApp() {
     window.__freeformOutsideClickBound = true;
   }
 
-  iinitCloudSync?.();
+  initCloudSync?.();
   startCloudAutoSync?.();
 
-  restoreSession?.();
+  await restoreSession?.();
 
   updateAuthButtons?.();
 

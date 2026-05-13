@@ -186,6 +186,10 @@ textarea {
    JOURNAL PAGE SIZE
 ===================================================== */
 
+/* =====================================================
+   JOURNAL PAGE SIZE
+===================================================== */
+
 .card,
 .language-page-card,
 .general-journal,
@@ -194,6 +198,8 @@ textarea {
   width: min(920px, calc(100vw - 120px));
   max-width: 920px;
 
+  height: min(1226px, calc((100vw - 120px) * 1.333));
+  max-height: calc(100vh - 80px);
   aspect-ratio: 3 / 4;
 
   margin: 0 auto;
@@ -1899,12 +1905,12 @@ body[data-view-mode="read"] #appLayout textarea {
   #editorContainer,
   body[data-view-mode="read"] #editorContainer {
     width: 100% !important;
-    min-height: 100vh !important;
+    height: 100vh !important;
     padding: 92px 12px 140px !important;
     display: flex !important;
     justify-content: center !important;
     align-items: flex-start !important;
-    overflow-x: hidden !important;
+    overflow: hidden !important;
   }
 
   .card,
@@ -1919,11 +1925,16 @@ body[data-view-mode="read"] #appLayout textarea {
   body[data-view-mode="read"] .freeform-page {
     width: calc(100vw - 24px) !important;
     max-width: none !important;
+
+    height: calc((100vw - 24px) * 1.333) !important;
+    max-height: calc(100vh - 180px) !important;
+
     aspect-ratio: 3 / 4 !important;
-    min-height: auto !important;
     margin: 0 auto 40px !important;
+
     overflow-y: auto !important;
     overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
   }
 
   .general-content,
