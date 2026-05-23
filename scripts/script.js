@@ -791,15 +791,15 @@ function deletePage(pageId) {
     updateMobileDrawerBrand?.();
   }
 }
+
 function setupAutoGrowTextareas() {
   document.querySelectorAll("textarea").forEach((textarea) => {
     if (textarea.dataset.autogrowAttached) return;
-
     textarea.dataset.autogrowAttached = "true";
 
     const resize = () => {
       textarea.style.height = "auto";
-      textarea.style.height = textarea.scrollHeight + "px";
+      textarea.style.height = Math.min(textarea.scrollHeight, 320) + "px";
     };
 
     resize();
