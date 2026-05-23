@@ -536,7 +536,6 @@ function showEditor() {
 
   if (currentPage) {
     renderPage(container, currentPage);
-    setupAutoGrowTextareas();
   }
 
   window.scrollTo(0, 0);
@@ -626,7 +625,6 @@ function loadPage(pageId) {
 
   container.innerHTML = "";
   renderPage(container, page);
-  setupAutoGrowTextareas();
   renderPagesList?.();
   renderMobilePagesList?.();
   closeSidebar();
@@ -792,20 +790,6 @@ function deletePage(pageId) {
   }
 }
 
-function setupAutoGrowTextareas() {
-  document.querySelectorAll("textarea").forEach((textarea) => {
-    if (textarea.dataset.autogrowAttached) return;
-    textarea.dataset.autogrowAttached = "true";
-
-    const resize = () => {
-      textarea.style.height = "auto";
-      textarea.style.height = Math.min(textarea.scrollHeight, 320) + "px";
-    };
-
-    resize();
-    textarea.addEventListener("input", resize);
-  });
-}
 
 function syncCurrentPageFromDOM() {
   if (!currentPageId) return;

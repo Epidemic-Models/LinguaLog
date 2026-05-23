@@ -63,7 +63,8 @@ select {
 textarea {
   min-height: 140px;
   resize: none;
-  overflow-y: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 /* =====================================================
@@ -181,10 +182,6 @@ textarea {
   color: white !important;
 }
 
-
-/* =====================================================
-   JOURNAL PAGE SIZE
-===================================================== */
 
 /* =====================================================
    JOURNAL PAGE SIZE
@@ -359,6 +356,10 @@ textarea {
 /* =====================================================
    GENERAL JOURNAL
 ===================================================== */
+.general-journal textarea {
+  min-height: 170px;
+  max-height: 320px;
+}
 
 .general-shell {
   width: 100%;
