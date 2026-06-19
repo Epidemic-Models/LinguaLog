@@ -170,7 +170,6 @@ async function updateAuthButtons() {
   btn.textContent = user ? "Profile / Log out" : "Login / Sign Up";
 }
 
-window.updateAuthButtons = updateAuthButtons;
 
 document.addEventListener("DOMContentLoaded", async () => {
   await updateAuthButtons?.();
@@ -180,13 +179,6 @@ supabaseClient.auth.onAuthStateChange(async () => {
   await updateAuthButtons?.();
 });
 
-document.addEventListener("DOMContentLoaded", async () => {
-  await updateAuthButtons?.();
-});
-
-supabaseClient.auth.onAuthStateChange(async () => {
-  await updateAuthButtons?.();
-});
 
 window.openAuthOrProfile = openAuthOrProfile;
 window.updateAuthButtons = updateAuthButtons;
