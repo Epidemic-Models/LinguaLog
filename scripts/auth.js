@@ -47,7 +47,7 @@ async function handleSignUp() {
   }
 
   alert("Account created! Check your email.");
-  updateAuthButtons?.();
+  window.updateAuthButtons?.();
 }
 
 async function handleSignIn() {
@@ -110,11 +110,10 @@ async function signOut() {
   localStorage.removeItem("lingualog-pages-index");
   localStorage.removeItem("lingualog-settings");
 
-  closeProfileModal?.();
-  closeAuthModal?.();
-
-  updateAuthButtons?.();
-  showWelcomePage?.();
+  window.closeProfileModal?.();
+  window.closeAuthModal?.();
+  window.updateAuthButtons?.();
+  window.showWelcomePage?.();
 }
 
 async function handlePasswordReset() {
@@ -152,7 +151,7 @@ async function restoreSession() {
 }
 
 async function openAuthOrProfile() {
-  const user = await getCurrentUser?.();
+  const user = await window.getCurrentUser?.();
 
   if (user) {
     openProfileModal?.();
@@ -162,23 +161,13 @@ async function openAuthOrProfile() {
 }
 
 async function updateAuthButtons() {
-  const user = await getCurrentUser?.();
+  const user = await window.getCurrentUser?.();
   const btn = document.getElementById("welcomeAuthBtn");
 
   if (!btn) return;
 
   btn.textContent = user ? "Profile / Log out" : "Login / Sign Up";
 }
-
-
-document.addEventListener("DOMContentLoaded", async () => {
-  await updateAuthButtons?.();
-});
-
-supabaseClient.auth.onAuthStateChange(async () => {
-  await updateAuthButtons?.();
-});
-
 
 window.openAuthOrProfile = openAuthOrProfile;
 window.updateAuthButtons = updateAuthButtons;
@@ -189,3 +178,12 @@ window.closeAuthModal = closeAuthModal;
 window.handleSignUp = handleSignUp;
 window.handleSignIn = handleSignIn;
 window.signOut = signOut;
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await updateAuthButtons?.();
+});
+
+supabaseClient.auth.onAuthStateChange(async () => {
+  await updateAuthButtons?.();
+});
