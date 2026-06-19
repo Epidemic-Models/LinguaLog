@@ -3,6 +3,8 @@ async function getCurrentUser() {
   return data?.user || null;
 }
 
+window.getCurrentUser = getCurrentUser;
+
 async function saveJournalToCloud(journal) {
   const user = await getCurrentUser?.();
 
