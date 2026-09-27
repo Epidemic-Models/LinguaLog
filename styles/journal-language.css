@@ -113,3 +113,32 @@
     opacity: 1;
   }
 }
+
+/* =====================================================
+   LANGUAGE JOURNAL — WRITING TOOLS
+===================================================== */
+
+.language-writing-tools {
+  margin-top: 18px;
+  margin-bottom: 14px;
+}
+
+.language-writing-tools label {
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+.language-writing-tools select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  background: white;
+  font-size: 15px;
+}
+
+.language-pencil-hint {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #777;
+}

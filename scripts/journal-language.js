@@ -13,7 +13,7 @@ function renderLanguageJournal(container, page = null) {
     <div class="card language-page-card editor-surface" ${backgroundStyle}>
       <input
         id="languagePageTitle"
-        class="editor-page-title"
+        class="editor-page-title language-font-target"
         type="text"
         placeholder="Page title"
         value="${activePage.title || ""}"
@@ -30,6 +30,7 @@ function renderLanguageJournal(container, page = null) {
       <label for="search">Search word</label>
       <input
         id="search"
+        class="language-font-target"
         type="text"
         placeholder="Type a word..."
         oninput="searchWord()"
@@ -42,7 +43,28 @@ function renderLanguageJournal(container, page = null) {
       <button type="button" class="add-row-btn" onclick="addRow()">+ Add a row</button>
 
       <label for="notes">Notes</label>
-      <textarea id="notes" placeholder="Write your notes here...">${activePage.notes || ""}</textarea>
+      <textarea
+        id="notes"
+        class="language-font-target"
+        placeholder="Write your notes here..."
+      >${activePage.notes || ""}</textarea>
+
+      <div class="language-writing-tools">
+        <label for="languageTextFont">Writing style</label>
+
+        <select id="languageTextFont" onchange="setLanguageTextFont(this.value)">
+          <option value="'Inter', sans-serif">Inter</option>
+          <option value="'Poppins', sans-serif">Poppins</option>
+          <option value="'Playfair Display', serif">Playfair</option>
+          <option value="'Lora', serif">Lora</option>
+          <option value="'Dancing Script', cursive">Dancing Script</option>
+          <option value="'Pacifico', cursive">Pacifico</option>
+        </select>
+
+        <div class="language-pencil-hint">
+          ✍️ Write in any text field with Apple Pencil
+        </div>
+      </div>
 
       <button type="button" onclick="saveData()">Save</button>
     </div>
@@ -50,6 +72,16 @@ function renderLanguageJournal(container, page = null) {
 
   renderEntries(activePage.words || []);
   updateLanguageBar();
+
+  const savedFont = activePage.textFont || "'Inter', sans-serif";
+
+  const fontSelect = document.getElementById("languageTextFont");
+
+  if (fontSelect) {
+    fontSelect.value = savedFont;
+  }
+
+  setLanguageTextFont(savedFont);
 }
 
 function addRow(word = "", meaning = "") {
@@ -60,8 +92,8 @@ function addRow(word = "", meaning = "") {
   row.className = "entry-row";
 
   row.innerHTML = `
-    <input type="text" class="word-input" placeholder="Word" value="${word}">
-    <input type="text" class="meaning-input" placeholder="Meaning" value="${meaning}">
+    <input type="text" class="word-input language-font-target" placeholder="Word" value="${word}">
+    <input type="text" class="meaning-input language-font-target" placeholder="Meaning" value="${meaning}">
     <button type="button" class="remove-btn">×</button>
   `;
 
@@ -71,6 +103,13 @@ function addRow(word = "", meaning = "") {
   });
 
   entries.appendChild(row);
+  const selectedFont = document.getElementById("languageTextFont")?.value;
+
+  if (selectedFont) {
+    row.querySelectorAll(".language-font-target").forEach((element) => {
+      element.style.fontFamily = selectedFont;
+    });
+  }
 }
 
 function renderEntries(words = []) {
@@ -101,6 +140,20 @@ function collectEntries() {
     .filter((entry) => entry.word || entry.meaning);
 }
 
+function setLanguageTextFont(fontFamily) {
+  document.querySelectorAll(".language-font-target").forEach((element) => {
+    element.style.fontFamily = fontFamily;
+  });
+
+  const page = getPageById(currentPageId);
+
+  if (page) {
+    page.textFont = fontFamily;
+    savePage(page);
+    saveCurrentJournalState();
+  }
+}
+
 function saveData() {
   if (!currentPageId) return;
 
@@ -111,7 +164,8 @@ function saveData() {
     ...existingPage,
     title: document.getElementById("languagePageTitle")?.value.trim() || existingPage.title || "",
     notes: document.getElementById("notes")?.value || "",
-    words: collectEntries()
+    words: collectEntries(),
+    textFont: document.getElementById("languageTextFont")?.value || "'Inter', sans-serif"
   };
 
   savePage(updatedPage);
@@ -324,3 +378,4 @@ window.saveData = saveData;
 window.searchWord = searchWord;
 window.swapLanguages = swapLanguages;
 window.addFromSearch = addFromSearch;
+window.setLanguageTextFont = setLanguageTextFont;
