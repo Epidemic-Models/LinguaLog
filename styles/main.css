@@ -2230,3 +2230,68 @@ body[data-view-mode="read"] #appLayout textarea {
     flex: 1;
   }
 }
+
+/* ========================================
+   PROFILE MODAL - FIT INSIDE SCREEN
+======================================== */
+
+.profile-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  overflow: hidden;
+}
+
+.profile-modal.hidden {
+  display: none;
+}
+
+.profile-card {
+  position: relative;
+
+  width: min(440px, calc(100vw - 32px));
+
+  /* Important: never exceed browser height */
+  max-height: calc(100vh - 48px);
+
+  /* Scroll INSIDE the card */
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  box-sizing: border-box;
+
+  /* keeps your rounded design */
+  border-radius: 32px;
+
+  /* smoother scrolling */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Give the bottom button some breathing room */
+.profile-card > *:last-child {
+  margin-bottom: 10px;
+}
+
+/* Smaller screens */
+@media (max-height: 750px) {
+  .profile-modal {
+    padding: 12px;
+  }
+
+  .profile-card {
+    max-height: calc(100vh - 24px);
+    border-radius: 24px;
+  }
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+  }
+}
