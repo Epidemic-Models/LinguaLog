@@ -41,31 +41,64 @@ async function sendConnectionRequest(receiverId) {
 
 async function loadPendingRequests() {
   const user = await window.getCurrentUser?.();
-  if (!user) return [];
 
-  const { data, error } = await supabaseClient
-    .from("connections")
-    .select(`
-      id,
-      status,
-      created_at,
-      requester:profiles!connections_requester_id_fkey (
-        id,
-        username,
-        native_language,
-        learning_language,
-        bio
-      )
-    `)
-    .eq("receiver_id", user.id)
-    .eq("status", "pending");
-
-  if (error) {
-    console.error("Load pending requests failed:", error);
+  if (!user) {
+    console.log("No logged-in user found.");
     return [];
   }
 
-  return data || [];
+  console.log("CURRENT USER ID:", user.id);
+
+  // 1. Get pending requests sent TO this user
+  const { data: connections, error: connectionError } =
+    await supabaseClient
+      .from("connections")
+      .select("id, requester_id, receiver_id, status, created_at")
+      .eq("receiver_id", user.id)
+      .eq("status", "pending")
+      .order("created_at", { ascending: false });
+
+  console.log("PENDING CONNECTIONS:", connections);
+  console.log("CONNECTION ERROR:", connectionError);
+
+  if (connectionError) {
+    console.error("Load pending requests failed:", connectionError);
+    return [];
+  }
+
+  if (!connections || connections.length === 0) {
+    return [];
+  }
+
+  // 2. Get the profiles of the people who sent the requests
+  const requesterIds = connections.map(
+    (connection) => connection.requester_id
+  );
+
+  const { data: profiles, error: profileError } =
+    await supabaseClient
+      .from("profiles")
+      .select(
+        "id, username, native_language, learning_language, bio"
+      )
+      .in("id", requesterIds);
+
+  console.log("REQUESTER PROFILES:", profiles);
+  console.log("PROFILE ERROR:", profileError);
+
+  if (profileError) {
+    console.error("Load requester profiles failed:", profileError);
+  }
+
+  // 3. Attach each profile to its connection
+  return connections.map((connection) => ({
+    ...connection,
+
+    requester:
+      profiles?.find(
+        (profile) => profile.id === connection.requester_id
+      ) || null
+  }));
 }
 
 async function acceptConnectionRequest(connectionId) {
