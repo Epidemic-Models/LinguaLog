@@ -18,12 +18,9 @@
 }
 
 .general-journal {
-  width: min(900px, 80vw) !important;
-  max-width: 900px !important;
-  min-width: 640px !important;
-
-  aspect-ratio: 3 / 4;
-  min-height: auto !important;
+  width: min(1100px, calc(100% - 48px)) !important;
+  max-width: 1100px !important;
+  min-width: 0 !important;
 
   margin: 32px auto !important;
   padding: 0 !important;
@@ -124,7 +121,51 @@
 .general-shell {
   position: relative;
   z-index: 2;
-  padding: 26px;
+  padding: clamp(18px, 3vw, 32px);
+}
+
+.general-top-actions {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 20;
+}
+
+.general-customize-btn {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+  backdrop-filter: blur(10px);
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.general-style-popover {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 220px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(14px);
+  z-index: 30;
+}
+
+.general-style-panel-title {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.general-style-panel select {
+  width: 100%;
+  margin: 0;
 }
 
 .general-header-block {
@@ -140,7 +181,7 @@
 }
 
 .general-date {
-  margin-top: 10px;
+  margin-top: clamp(6px, 1vw, 10px);
   color: var(--muted);
   font-size: 0.95rem;
 }
@@ -148,7 +189,7 @@
 .general-content {
   display: grid;
   grid-template-columns: 1.45fr 1fr;
-  gap: 24px;
+  gap: clamp(16px, 2.5vw, 28px);
   align-items: start;
 }
 
@@ -156,13 +197,13 @@
 .general-side {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: clamp(12px, 1.8vw, 20px);
 }
 
 .general-card {
   position: relative;
   overflow: hidden;
-  padding: 20px;
+  padding: clamp(14px, 2vw, 20px);
   border-radius: var(--radius-lg);
   background: var(--surface);
   border: 1px solid var(--border);
@@ -205,13 +246,13 @@
 }
 
 .general-journal textarea {
-  min-height: 220px;
+  min-height: clamp(150px, 20vh, 220px);
   max-height: 320px;
   resize: vertical;
 }
 
 #generalPageTitle {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
   font-weight: 700;
   padding: 16px 18px;
 }
@@ -257,12 +298,12 @@
 }
 
 .general-save-btn {
-  margin-top: 2px;
+  margin-top: clamp(8px, 1.5vw, 16px);
 }
 
 .layout-journal .general-content {
-  grid-template-columns: 1fr;
-  max-width: 960px;
+  grid-template-columns: 1.45fr 1fr;
+  max-width: none;
 }
 
 .layout-planner .general-content {
@@ -450,7 +491,7 @@
 }
 
 .theme-soft-pastel textarea {
-  min-height: 220px;
+  min-height: clamp(150px, 20vh, 220px);
 }
 
 .theme-soft-pastel .general-checklist button,
@@ -499,35 +540,39 @@
   transform: rotate(180deg);
 }
 
-/* =====================================================
-   GENERAL JOURNAL WRITING TOOLS
-===================================================== */
+/* Responsive General Journal */
 
-.general-writing-tools {
-  margin-top: 20px;
-  margin-bottom: 16px;
-  padding: 18px 20px;
-
-  border-radius: 22px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-
-  backdrop-filter: blur(var(--blur));
-  -webkit-backdrop-filter: blur(var(--blur));
+@media (max-width: 1000px) {
+  .general-content,
+  .layout-journal .general-content,
+  .layout-planner .general-content {
+    grid-template-columns: 1fr 0.8fr;
+  }
 }
 
-.general-writing-tools label {
-  margin: 0 0 10px;
-}
+@media (max-width: 800px) {
+  .general-journal {
+    width: calc(100% - 24px) !important;
+    margin: 12px auto !important;
+  }
+  
+  #generalPageTitle {
+    padding-right: 60px;
+  }
 
-.general-writing-tools select {
-  width: 100%;
-}
+  .general-card {
+    padding: 14px;
+    border-radius: 22px;
+  }
+  
 
-.general-pencil-hint {
-  margin-top: 10px;
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.4;
+  .general-shell {
+    padding: 18px;
+  }
+
+  .general-content,
+  .layout-journal .general-content,
+  .layout-planner .general-content {
+    grid-template-columns: 1fr;
+  }
 }

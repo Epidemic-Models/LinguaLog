@@ -22,6 +22,18 @@ function renderGeneralJournal(container, page = null) {
   container.innerHTML = `
     <div class="general-journal theme-${activePage.theme || 'soft-elegant'} layout-${activePage.layout || 'journal'}">
       <div class="general-shell editor-surface" ${backgroundStyle}>
+        <div class="general-top-actions">
+          <button
+            type="button"
+            class="general-customize-btn"
+            onclick="toggleGeneralStylePanel()"
+            title="Customize writing"
+          >
+            ✨
+          </button>
+
+          <div id="generalStylePopover" class="general-style-popover hidden"></div>
+        </div>
         <input
           id="generalPageTitle"
           class="editor-page-title general-font-target"
@@ -73,23 +85,6 @@ function renderGeneralJournal(container, page = null) {
           </div>
         </div>
 
-        <div class="general-writing-tools">
-          <label for="generalTextFont">Writing style</label>
-
-          <select id="generalTextFont" onchange="setGeneralTextFont(this.value)">
-            <option value="'Inter', sans-serif">Inter</option>
-            <option value="'Poppins', sans-serif">Poppins</option>
-            <option value="'Playfair Display', serif">Playfair</option>
-            <option value="'Lora', serif">Lora</option>
-            <option value="'Dancing Script', cursive">Dancing Script</option>
-            <option value="'Pacifico', cursive">Pacifico</option>
-          </select>
-
-          <div class="general-pencil-hint">
-            ✍️ Write in any text field with Apple Pencil
-          </div>
-        </div>
-
         <button type="button" class="general-save-btn" onclick="saveGeneralJournal()">Save</button>
       </div>
     </div>
@@ -107,12 +102,6 @@ function renderGeneralJournal(container, page = null) {
   updateGeneralChecklistButton();
 
   const savedFont = activePage.textFont || "'Inter', sans-serif";
-
-  const fontSelect = document.getElementById("generalTextFont");
-
-  if (fontSelect) {
-    fontSelect.value = savedFont;
-  }
 
   document.querySelectorAll(".general-font-target").forEach((element) => {
     element.style.fontFamily = savedFont;
@@ -196,6 +185,45 @@ function addChecklistItem(text = "", checked = false, shouldSave = true) {
   }
 }
 
+function toggleGeneralStylePanel() {
+  const popover = document.getElementById("generalStylePopover");
+  if (!popover) return;
+
+  const isOpen = !popover.classList.contains("hidden");
+
+  if (isOpen) {
+    popover.classList.add("hidden");
+    popover.innerHTML = "";
+    return;
+  }
+
+  const page = getPageById(currentPageId);
+  const savedFont = page?.textFont || "'Inter', sans-serif";
+
+  popover.classList.remove("hidden");
+
+  popover.innerHTML = `
+    <div class="general-style-panel">
+      <div class="general-style-panel-title">Writing style</div>
+
+      <select id="generalStyleFont" onchange="setGeneralTextFont(this.value)">
+        <option value="'Inter', sans-serif">Inter</option>
+        <option value="'Poppins', sans-serif">Poppins</option>
+        <option value="'Playfair Display', serif">Playfair</option>
+        <option value="'Lora', serif">Lora</option>
+        <option value="'Dancing Script', cursive">Dancing Script</option>
+        <option value="'Pacifico', cursive">Pacifico</option>
+      </select>
+    </div>
+  `;
+
+  const select = document.getElementById("generalStyleFont");
+
+  if (select) {
+    select.value = savedFont;
+  }
+}
+
 function setGeneralTextFont(fontFamily) {
   document.querySelectorAll(".general-font-target").forEach((element) => {
     element.style.fontFamily = fontFamily;
@@ -247,7 +275,8 @@ function saveGeneralJournal(showFeedback = true) {
     mood: document.getElementById("generalMood")?.value || "",
     checklist: checklistItems,
     textFont:
-      document.getElementById("generalTextFont")?.value ||
+      document.getElementById("generalStyleFont")?.value ||
+      existingPage.textFont ||
       "'Inter', sans-serif"
   };
 
@@ -651,6 +680,7 @@ window.renderGeneralJournal = renderGeneralJournal;
 window.addChecklistItem = addChecklistItem;
 window.saveGeneralJournal = saveGeneralJournal;
 window.setGeneralTextFont = setGeneralTextFont;
+window.toggleGeneralStylePanel = toggleGeneralStylePanel;
 
 window.renderBlankTemplatePage = renderBlankTemplatePage;
 window.toggleFreeformPanel = toggleFreeformPanel;

@@ -98,9 +98,11 @@ textarea {
   height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  overflow-x: hidden;
+
   padding: 24px 32px;
-  overflow: hidden;
 }
 
 /* =====================================================
@@ -507,7 +509,7 @@ body[data-view-mode="read"] .cover-preview-container {
 
 /* ✅ Clean page layout */
 body[data-view-mode="read"] .language-page-card,
-body[data-view-mode="read"] .general-shell
+body[data-view-mode="read"] .general-shell,
 body[data-view-mode="read"] .freeform-page {
   width: min(920px, calc(100vw - 120px));
   max-width: 920px;
