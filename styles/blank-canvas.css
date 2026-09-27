@@ -197,10 +197,6 @@
   color: rgba(63, 57, 47, 0.55) !important;
 }
 
-.freeform-direct-text {
-  top: 145px !important;
-}
-
 /* ELEMENTS + DRAWING */
 
 .freeform-elements-layer {
@@ -231,10 +227,6 @@
   word-break: break-word;
 }
 
-.editable-text:empty::before {
-  content: attr(data-placeholder);
-  color: rgba(60, 55, 50, 0.45);
-}
 
 /* Canvas elements */
 

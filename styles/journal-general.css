@@ -206,10 +206,11 @@
 
 .general-journal textarea {
   min-height: 220px;
+  max-height: 320px;
   resize: vertical;
 }
 
-#generalTitle {
+#generalPageTitle {
   font-size: clamp(1.6rem, 3vw, 2.2rem);
   font-weight: 700;
   padding: 16px 18px;
@@ -498,3 +499,35 @@
   transform: rotate(180deg);
 }
 
+/* =====================================================
+   GENERAL JOURNAL WRITING TOOLS
+===================================================== */
+
+.general-writing-tools {
+  margin-top: 20px;
+  margin-bottom: 16px;
+  padding: 18px 20px;
+
+  border-radius: 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+.general-writing-tools label {
+  margin: 0 0 10px;
+}
+
+.general-writing-tools select {
+  width: 100%;
+}
+
+.general-pencil-hint {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4;
+}

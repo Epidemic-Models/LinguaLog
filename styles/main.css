@@ -189,8 +189,7 @@ textarea {
 
 .card,
 .language-page-card,
-.general-journal,
-.editor-surface,
+.general-shell,
 .freeform-page {
   width: min(920px, calc(100vw - 120px));
   max-width: 920px;
@@ -217,8 +216,7 @@ textarea {
 
 .card::-webkit-scrollbar,
 .language-page-card::-webkit-scrollbar,
-.general-journal::-webkit-scrollbar,
-.editor-surface::-webkit-scrollbar,
+.general-shell::-webkit-scrollbar,
 .freeform-page::-webkit-scrollbar {
   display: none;
 }
@@ -356,13 +354,24 @@ textarea {
 /* =====================================================
    GENERAL JOURNAL
 ===================================================== */
-.general-journal textarea {
-  min-height: 170px;
-  max-height: 320px;
+
+
+.general-journal {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
 }
 
 .general-shell {
-  width: 100%;
+  position: relative;
 }
 
 .general-content {
@@ -433,8 +442,7 @@ body[data-view-mode="read"] .main-content,
 body[data-view-mode="read"] #editorContainer,
 body[data-view-mode="read"] .card,
 body[data-view-mode="read"] .language-page-card,
-body[data-view-mode="read"] .general-journal,
-body[data-view-mode="read"] .editor-surface,
+body[data-view-mode="read"] .general-shell,
 body[data-view-mode="read"] .freeform-page {
   scrollbar-width: none;
 }
@@ -443,9 +451,18 @@ body[data-view-mode="read"] .main-content::-webkit-scrollbar,
 body[data-view-mode="read"] #editorContainer::-webkit-scrollbar,
 body[data-view-mode="read"] .card::-webkit-scrollbar,
 body[data-view-mode="read"] .language-page-card::-webkit-scrollbar,
-body[data-view-mode="read"] .general-journal::-webkit-scrollbar,
-body[data-view-mode="read"] .editor-surface::-webkit-scrollbar,
+body[data-view-mode="read"] .general-shell::-webkit-scrollbar,
 body[data-view-mode="read"] .freeform-page::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+
+
+
+
+kit-scrollbar {
   display: none;
 }
 
@@ -490,8 +507,7 @@ body[data-view-mode="read"] .cover-preview-container {
 
 /* ✅ Clean page layout */
 body[data-view-mode="read"] .language-page-card,
-body[data-view-mode="read"] .general-journal,
-body[data-view-mode="read"] .editor-surface,
+body[data-view-mode="read"] .general-shell
 body[data-view-mode="read"] .freeform-page {
   width: min(920px, calc(100vw - 120px));
   max-width: 920px;
@@ -1916,13 +1932,11 @@ body[data-view-mode="read"] #appLayout textarea {
 
   .card,
   .language-page-card,
-  .general-journal,
-  .editor-surface,
+  .general-shell,
   .freeform-page,
   body[data-view-mode="read"] .card,
   body[data-view-mode="read"] .language-page-card,
-  body[data-view-mode="read"] .general-journal,
-  body[data-view-mode="read"] .editor-surface,
+  body[data-view-mode="read"] .general-shell,
   body[data-view-mode="read"] .freeform-page {
     width: calc(100vw - 24px) !important;
     max-width: none !important;

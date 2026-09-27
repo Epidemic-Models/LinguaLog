@@ -24,24 +24,32 @@ function renderGeneralJournal(container, page = null) {
       <div class="general-shell editor-surface" ${backgroundStyle}>
         <input
           id="generalPageTitle"
-          class="editor-page-title"
+          class="editor-page-title general-font-target"
           type="text"
           placeholder="Page title"
           value="${activePage.title || ""}"
         />
 
-        <div class="general-date editor-page-date">${activePage.date || ""}</div>
+        <div class="general-date editor-page-date">${getGeneralPageDate(activePage)}</div>
 
         <div class="general-content">
           <div class="general-main">
             <div class="general-card">
               <label for="generalNotes">Main Notes</label>
-              <textarea id="generalNotes" placeholder="Write here...">${activePage.notes || ""}</textarea>
+              <textarea
+                id="generalNotes"
+                class="general-font-target"
+                placeholder="Write here..."
+              >${activePage.notes || ""}</textarea>
             </div>
 
             <div class="general-card">
               <label for="generalHighlight">Highlight</label>
-              <textarea id="generalHighlight" placeholder="Important thought, summary, idea...">${activePage.highlight || ""}</textarea>
+              <textarea
+                id="generalHighlight"
+                class="general-font-target"
+                placeholder="Important thought, summary, idea..."
+              >${activePage.highlight || ""}</textarea>
             </div>
           </div>
 
@@ -50,6 +58,7 @@ function renderGeneralJournal(container, page = null) {
               <label for="generalMood">Mood</label>
               <input
                 id="generalMood"
+                class="general-font-target"
                 type="text"
                 placeholder="How do you feel?"
                 value="${activePage.mood || ""}"
@@ -64,6 +73,23 @@ function renderGeneralJournal(container, page = null) {
           </div>
         </div>
 
+        <div class="general-writing-tools">
+          <label for="generalTextFont">Writing style</label>
+
+          <select id="generalTextFont" onchange="setGeneralTextFont(this.value)">
+            <option value="'Inter', sans-serif">Inter</option>
+            <option value="'Poppins', sans-serif">Poppins</option>
+            <option value="'Playfair Display', serif">Playfair</option>
+            <option value="'Lora', serif">Lora</option>
+            <option value="'Dancing Script', cursive">Dancing Script</option>
+            <option value="'Pacifico', cursive">Pacifico</option>
+          </select>
+
+          <div class="general-pencil-hint">
+            ✍️ Write in any text field with Apple Pencil
+          </div>
+        </div>
+
         <button type="button" class="general-save-btn" onclick="saveGeneralJournal()">Save</button>
       </div>
     </div>
@@ -75,36 +101,114 @@ function renderGeneralJournal(container, page = null) {
   checklistContainer.innerHTML = "";
 
   (activePage.checklist || []).forEach((item) => {
-    addChecklistItem(item.text || "", !!item.done);
+    addChecklistItem(item.text || "", !!item.done, false);
+  });
+
+  updateGeneralChecklistButton();
+
+  const savedFont = activePage.textFont || "'Inter', sans-serif";
+
+  const fontSelect = document.getElementById("generalTextFont");
+
+  if (fontSelect) {
+    fontSelect.value = savedFont;
+  }
+
+  document.querySelectorAll(".general-font-target").forEach((element) => {
+    element.style.fontFamily = savedFont;
+  });
+
+  [
+  "generalPageTitle",
+  "generalNotes",
+  "generalHighlight",
+  "generalMood"
+].forEach((id) => {
+  document.getElementById(id)?.addEventListener("input", () => {
+    saveGeneralJournal(false);
+  });
+});
+
+document
+  .getElementById("checklistContainer")
+  ?.addEventListener("input", () => {
+    saveGeneralJournal(false);
+  });
+
+document
+  .getElementById("checklistContainer")
+  ?.addEventListener("change", () => {
+    saveGeneralJournal(false);
   });
 }
 
-function addChecklistItem(text = "", checked = false) {
+function updateGeneralChecklistButton() {
+  const container = document.getElementById("checklistContainer");
+  const button = document.querySelector(".general-checklist button");
+
+  if (!container || !button) return;
+
+  const count = container.querySelectorAll(".checklist-row").length;
+  const isFull = count >= MAX_GENERAL_CHECKLIST_ITEMS;
+
+  button.disabled = isFull;
+  button.textContent = isFull ? "Checklist full" : "+ Add task";
+}
+
+function addChecklistItem(text = "", checked = false, shouldSave = true) {
   const container = document.getElementById("checklistContainer");
   if (!container) return;
+
+  if (container.querySelectorAll(".checklist-row").length >= MAX_GENERAL_CHECKLIST_ITEMS) {
+    return;
+  }
 
   const row = document.createElement("div");
   row.className = "checklist-row";
 
   row.innerHTML = `
     <input type="checkbox" class="general-check" ${checked ? "checked" : ""} />
-    <input type="text" class="general-check-text" placeholder="Task..." value="${text}" />
+    <input type="text" class="general-check-text general-font-target" placeholder="Task..." value="${text}" />
     <button type="button" class="remove-btn">×</button>
   `;
 
   const removeBtn = row.querySelector(".remove-btn");
   removeBtn?.addEventListener("click", () => {
     row.remove();
+    updateGeneralChecklistButton();
+    saveGeneralJournal(false);
   });
 
   container.appendChild(row);
+
+  updateGeneralChecklistButton();
+
+  const selectedFont = document.getElementById("generalTextFont")?.value;
+
+  if (selectedFont) {
+    row.querySelectorAll(".general-font-target").forEach((element) => {
+      element.style.fontFamily = selectedFont;
+    });
+  }
+
+  if (shouldSave) {
+    saveGeneralJournal(false);
+  }
+}
+
+function setGeneralTextFont(fontFamily) {
+  document.querySelectorAll(".general-font-target").forEach((element) => {
+    element.style.fontFamily = fontFamily;
+  });
+
+  saveGeneralJournal(false);
 }
 
 function collectGeneralJournalData() {
-  const checklistRows = document.querySelectorAll("#generalChecklist .checklist-row");
+  const checklistRows = document.querySelectorAll("#checklistContainer .checklist-row");
 
   return {
-    title: document.getElementById("generalTitle")?.value.trim() || "",
+    title: document.getElementById("generalPageTitle")?.value.trim() || "",
     mood: document.getElementById("generalMood")?.value || "",
     notes: document.getElementById("generalNotes")?.value || "",
     highlight: document.getElementById("generalHighlight")?.value.trim() || "",
@@ -117,7 +221,7 @@ function collectGeneralJournalData() {
   };
 }
 
-function saveGeneralJournal() {
+function saveGeneralJournal(showFeedback = true) {
   if (!currentPageId) return;
 
   const existingPage = getPageById(currentPageId);
@@ -125,10 +229,12 @@ function saveGeneralJournal() {
 
   const checklistItems = Array.from(
     document.querySelectorAll("#checklistContainer .checklist-row")
-  ).map((row) => ({
-    text: row.querySelector(".general-check-text")?.value || "",
-    done: row.querySelector(".general-check")?.checked || false
-  }));
+  )
+    .map((row) => ({
+      text: row.querySelector(".general-check-text")?.value.trim() || "",
+      done: row.querySelector(".general-check")?.checked || false
+    }))
+    .filter((item) => item.text);
 
   const updatedPage = {
     ...existingPage,
@@ -139,7 +245,10 @@ function saveGeneralJournal() {
     notes: document.getElementById("generalNotes")?.value || "",
     highlight: document.getElementById("generalHighlight")?.value || "",
     mood: document.getElementById("generalMood")?.value || "",
-    checklist: checklistItems
+    checklist: checklistItems,
+    textFont:
+      document.getElementById("generalTextFont")?.value ||
+      "'Inter', sans-serif"
   };
 
   savePage(updatedPage);
@@ -147,13 +256,17 @@ function saveGeneralJournal() {
   renderMobilePagesList?.();
   saveCurrentJournalState?.();
 
-  const btn = document.querySelector(".general-save-btn");
-  if (btn) {
-    const original = btn.textContent;
-    btn.textContent = "Saved";
-    setTimeout(() => {
-      btn.textContent = original;
-    }, 800);
+  if (showFeedback) {
+    const btn = document.querySelector(".general-save-btn");
+
+    if (btn) {
+      const original = btn.textContent;
+      btn.textContent = "Saved";
+
+      setTimeout(() => {
+        btn.textContent = original;
+      }, 800);
+    }
   }
 }
 
@@ -207,20 +320,21 @@ function renderBlankTemplatePage(container, page = null) {
               width: ${activePage.titleWidth ?? 760}px;
             "
           >
-            <div
+            <input
               id="freeformPageTitle"
               class="freeform-page-title editable-text"
-              contenteditable="true"
-              data-placeholder="Page title"
-            >${activePage.title || ""}</div>
+              type="text"
+              placeholder="Page title"
+              value="${activePage.title || ""}"
+            />
           </div>
 
-          <div
+          <textarea
             id="freeformDirectText"
             class="freeform-direct-text editable-text"
-            contenteditable="true"
-            data-placeholder="Write directly on the page..."
-          >${activePage.directText || ""}</div>
+            placeholder="Write directly on the page..."
+            spellcheck="true"
+          >${activePage.directText || ""}</textarea>
 
           <div id="elementsLayer" class="freeform-elements-layer"></div>
         </div>
@@ -429,8 +543,8 @@ function saveBlankCanvasPage(showFeedback = true) {
 
   const updatedPage = {
     ...page,
-    title: titleEl ? titleEl.innerHTML.trim() : page.title,
-    directText: bodyEl ? bodyEl.innerHTML : page.directText,
+    title: titleEl ? titleEl.value.trim() : page.title,
+    directText: bodyEl ? bodyEl.value : page.directText,
     titleX: titleBox ? parseInt(titleBox.style.left || "40", 10) : page.titleX,
     titleY: titleBox ? parseInt(titleBox.style.top || "60", 10) : page.titleY,
     titleWidth: titleBox ? parseInt(titleBox.style.width || "760", 10) : page.titleWidth,
@@ -461,33 +575,40 @@ function saveBlankCanvasPage(showFeedback = true) {
 function makeFreeformTitleDraggable(el) {
   if (!el) return;
 
+  const input = el.querySelector("input");
+  if (!input) return;
+
   let isDragging = false;
+  let activePointerId = null;
   let startX = 0;
   let startY = 0;
   let startLeft = 0;
   let startTop = 0;
 
-  const input = el.querySelector("input");
-  if (!input) return;
-
-  input.addEventListener("mousedown", (event) => {
-    if (event.target !== input) return;
-
-    // only drag when user holds Alt/Option
-    if (!event.altKey) return;
+  input.addEventListener("pointerdown", (event) => {
+    // Mouse: Alt/Option + drag
+    // Touch / Apple Pencil: drag directly
+    if (event.pointerType === "mouse" && !event.altKey) {
+      return;
+    }
 
     isDragging = true;
+    activePointerId = event.pointerId;
+
     startX = event.clientX;
     startY = event.clientY;
-    startLeft = parseInt(el.style.left || "0", 10);
-    startTop = parseInt(el.style.top || "0", 10);
+
+    startLeft = parseFloat(el.style.left) || 0;
+    startTop = parseFloat(el.style.top) || 0;
+
+    input.setPointerCapture?.(event.pointerId);
 
     document.body.style.userSelect = "none";
     event.preventDefault();
   });
 
-  document.addEventListener("mousemove", (event) => {
-    if (!isDragging) return;
+  input.addEventListener("pointermove", (event) => {
+    if (!isDragging || event.pointerId !== activePointerId) return;
 
     const dx = event.clientX - startX;
     const dy = event.clientY - startY;
@@ -496,17 +617,40 @@ function makeFreeformTitleDraggable(el) {
     el.style.top = `${startTop + dy}px`;
   });
 
-  document.addEventListener("mouseup", () => {
+  const stopDragging = (event) => {
     if (!isDragging) return;
+
+    if (
+      activePointerId !== null &&
+      event.pointerId !== activePointerId
+    ) {
+      return;
+    }
+
     isDragging = false;
+
+    if (
+      activePointerId !== null &&
+      input.hasPointerCapture?.(activePointerId)
+    ) {
+      input.releasePointerCapture?.(activePointerId);
+    }
+
+    activePointerId = null;
     document.body.style.userSelect = "";
-  });
+
+    saveBlankCanvasPage(false);
+  };
+
+  input.addEventListener("pointerup", stopDragging);
+  input.addEventListener("pointercancel", stopDragging);
 }
 
 /* exports */
 window.renderGeneralJournal = renderGeneralJournal;
 window.addChecklistItem = addChecklistItem;
 window.saveGeneralJournal = saveGeneralJournal;
+window.setGeneralTextFont = setGeneralTextFont;
 
 window.renderBlankTemplatePage = renderBlankTemplatePage;
 window.toggleFreeformPanel = toggleFreeformPanel;

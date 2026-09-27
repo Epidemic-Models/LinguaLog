@@ -97,10 +97,20 @@ function wrapSelectionWithStyle(styleCallback) {
 }
 
 function applyTextStyle(styleCallback) {
+  const target = getActiveTextTarget();
+  if (!target) return;
+
+  // Apple Pencil / Scribble-friendly fields
+  if (target.matches("input, textarea")) {
+    styleCallback(target);
+    saveBlankCanvasPage?.();
+    return;
+  }
+
+  // Existing contenteditable canvas text
   restoreTextSelection();
 
   const selection = window.getSelection();
-  const target = getActiveTextTarget();
 
   if (selection && selection.rangeCount > 0 && !selection.isCollapsed) {
     const range = selection.getRangeAt(0);
@@ -113,18 +123,18 @@ function applyTextStyle(styleCallback) {
 
     const newRange = document.createRange();
     newRange.selectNodeContents(span);
+
     selection.removeAllRanges();
     selection.addRange(newRange);
 
     savedTextRange = newRange.cloneRange();
+
     saveBlankCanvasPage?.();
     return;
   }
 
-  if (target) {
-    styleCallback(target);
-    saveBlankCanvasPage?.();
-  }
+  styleCallback(target);
+  saveBlankCanvasPage?.();
 }
 
 function setActiveTextColor(color) {
@@ -134,9 +144,25 @@ function setActiveTextColor(color) {
 }
 
 function setActiveTextFont(font) {
+  const target = getActiveTextTarget();
+
   applyTextStyle((el) => {
     el.style.fontFamily = font;
   });
+
+  if (
+    target &&
+    (target.id === "freeformDirectText" ||
+      target.id === "freeformPageTitle")
+  ) {
+    const page = getPageById(currentPageId);
+
+    if (page) {
+      page.textFont = font;
+      savePage(page);
+      saveCurrentJournalState?.();
+    }
+  }
 }
 
 function setActiveTextSize(size) {
