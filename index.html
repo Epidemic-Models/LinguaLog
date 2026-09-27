@@ -76,9 +76,11 @@
       ></textarea>
 
       <button onclick="saveProfile()">
-
         Save Profile
+      </button>
 
+      <button type="button" onclick="openFindPeopleModal()">
+        Find People
       </button>
 
       <button onclick="exportJournals()">
@@ -97,6 +99,45 @@
 
     </div>
 
+  </div>
+
+
+  <!-- FIND PEOPLE MODAL -->
+  <div id="findPeopleModal" class="find-people-modal hidden">
+    <div class="find-people-card">
+
+      <button
+        type="button"
+        class="find-people-close"
+        onclick="closeFindPeopleModal()"
+      >
+        ×
+      </button>
+
+      <h2>Find People</h2>
+      <p>Search for language partners by username.</p>
+
+      <div class="find-people-search-row">
+        <input
+          id="findPeopleSearchInput"
+          type="search"
+          placeholder="Search username..."
+          autocomplete="off"
+        />
+
+        <button
+          type="button"
+          class="find-people-search-btn"
+          onclick="handleUserSearch()"
+        >
+          Search
+        </button>
+      </div>
+
+      <div id="findPeopleStatus" class="find-people-status"></div>
+      <div id="findPeopleResults" class="find-people-results"></div>
+
+    </div>
   </div>
 
 
