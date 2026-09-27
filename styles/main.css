@@ -2295,3 +2295,20 @@ body[data-view-mode="read"] #appLayout textarea {
     height: 80px;
   }
 }
+
+/* =====================================================
+   MY CONNECTIONS
+===================================================== */
+
+#connectionsStatus {
+  min-height: 24px;
+  margin: 12px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+#connectionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}

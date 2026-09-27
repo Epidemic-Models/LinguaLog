@@ -101,6 +101,12 @@
         Find People
       </button>
 
+      <button type="button" onclick="openConnectionsModal()">
+
+        My Connections
+
+      </button>
+
       <button onclick="exportJournals()">
         Export Backup
       </button>
@@ -188,6 +194,29 @@
 
     </div>
 
+  </div>
+
+  <!-- MY CONNECTIONS MODAL -->
+  <div id="connectionsModal" class="find-people-modal hidden">
+    <div class="find-people-card">
+
+      <button
+        type="button"
+        class="find-people-close"
+        onclick="closeConnectionsModal()"
+      >
+        ×
+      </button>
+
+      <h2>My Connections</h2>
+
+      <p>People you are connected with.</p>
+
+      <div id="connectionsStatus"></div>
+
+      <div id="connectionsList"></div>
+
+    </div>
   </div>
 
 

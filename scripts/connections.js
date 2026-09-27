@@ -407,6 +407,130 @@ function closeConnectionRequests() {
     ?.classList.add("hidden");
 }
 
+async function loadAcceptedConnections() {
+  const user = await window.getCurrentUser?.();
+
+  if (!user) return [];
+
+  // Get accepted connections where the current user
+  // is either the sender or receiver.
+  const { data: connections, error } = await supabaseClient
+    .from("connections")
+    .select("id, requester_id, receiver_id, status, created_at")
+    .eq("status", "accepted")
+    .or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Load accepted connections failed:", error);
+    return [];
+  }
+
+  if (!connections || connections.length === 0) {
+    return [];
+  }
+
+  // Work out which ID belongs to the OTHER person.
+  const otherUserIds = connections.map((connection) => {
+    return connection.requester_id === user.id
+      ? connection.receiver_id
+      : connection.requester_id;
+  });
+
+  // Load those users' public profiles.
+  const { data: profiles, error: profileError } = await supabaseClient
+    .from("profiles")
+    .select("id, username, native_language, learning_language, bio")
+    .in("id", otherUserIds);
+
+  if (profileError) {
+    console.error("Load connection profiles failed:", profileError);
+    return [];
+  }
+
+  return connections.map((connection) => {
+    const otherUserId =
+      connection.requester_id === user.id
+        ? connection.receiver_id
+        : connection.requester_id;
+
+    return {
+      ...connection,
+      profile:
+        profiles?.find((profile) => profile.id === otherUserId) || null
+    };
+  });
+}
+
+
+async function openConnectionsModal() {
+  const modal = document.getElementById("connectionsModal");
+  const list = document.getElementById("connectionsList");
+  const status = document.getElementById("connectionsStatus");
+
+  if (!modal || !list) return;
+
+  modal.classList.remove("hidden");
+  list.innerHTML = "";
+
+  if (status) {
+    status.textContent = "Loading connections...";
+  }
+
+  const connections = await loadAcceptedConnections();
+
+  if (!connections.length) {
+    if (status) {
+      status.textContent = "You don't have any connections yet.";
+    }
+    return;
+  }
+
+  if (status) {
+    status.textContent =
+      `${connections.length} connection${connections.length === 1 ? "" : "s"}`;
+  }
+
+  connections.forEach((connection) => {
+    const profile = connection.profile || {};
+
+    const username = profile.username || "Unknown user";
+    const nativeLanguage = profile.native_language || "Not specified";
+    const learningLanguage = profile.learning_language || "Not specified";
+    const bio = profile.bio || "";
+
+    const card = document.createElement("div");
+    card.className = "find-person-card";
+
+    card.innerHTML = `
+      <div class="find-person-info">
+        <h3>${escapeHtml(username)}</h3>
+
+        <div class="find-person-languages">
+          <span>Native: ${escapeHtml(nativeLanguage)}</span>
+          <span>Learning: ${escapeHtml(learningLanguage)}</span>
+        </div>
+
+        ${bio ? `<p>${escapeHtml(bio)}</p>` : ""}
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
+}
+
+
+function closeConnectionsModal() {
+  document
+    .getElementById("connectionsModal")
+    ?.classList.add("hidden");
+}
+
+
+window.loadAcceptedConnections = loadAcceptedConnections;
+window.openConnectionsModal = openConnectionsModal;
+window.closeConnectionsModal = closeConnectionsModal;
+
 window.openConnectionRequests = openConnectionRequests;
 window.closeConnectionRequests = closeConnectionRequests;
 window.updateConnectionNotificationBadge =
