@@ -59,6 +59,24 @@
 
       <img src="assets/icons/profile.png" class="profile-avatar" alt="" />
 
+      <div class="profile-notification-area">
+        <button
+          id="connectionNotificationBtn"
+          type="button"
+          class="connection-notification-btn"
+          onclick="openConnectionRequests()"
+          title="Connection requests"
+        >
+          🔔
+          <span
+            id="connectionNotificationBadge"
+            class="connection-notification-badge hidden"
+          >
+            0
+          </span>
+        </button>
+      </div>
+
       <h2>Your Profile</h2>
 
       <input id="profileUsername" type="text" placeholder="Username" />
@@ -138,6 +156,38 @@
       <div id="findPeopleResults" class="find-people-results"></div>
 
     </div>
+  </div>
+
+  <!-- CONNECTION REQUESTS MODAL -->
+
+  <div id="connectionRequestsModal" class="find-people-modal hidden">
+
+    <div class="find-people-card">
+
+      <button
+
+        type="button"
+
+        class="find-people-close"
+
+        onclick="closeConnectionRequests()"
+
+      >
+
+        ×
+
+      </button>
+
+      <h2>Connection Requests</h2>
+
+      <p>People who want to connect with you.</p>
+
+      <div id="connectionRequestsStatus"></div>
+
+      <div id="connectionRequestsList"></div>
+
+    </div>
+
   </div>
 
 

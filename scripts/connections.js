@@ -235,6 +235,150 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+async function updateConnectionNotificationBadge() {
+  const badge = document.getElementById("connectionNotificationBadge");
+  if (!badge) return;
+
+  const requests = await loadPendingRequests();
+  const count = requests.length;
+
+  badge.textContent = count;
+
+  if (count > 0) {
+    badge.classList.remove("hidden");
+  } else {
+    badge.classList.add("hidden");
+  }
+}
+
+async function openConnectionRequests() {
+  const modal = document.getElementById("connectionRequestsModal");
+  const list = document.getElementById("connectionRequestsList");
+  const status = document.getElementById("connectionRequestsStatus");
+
+  if (!modal || !list) return;
+
+  modal.classList.remove("hidden");
+  list.innerHTML = "";
+
+  if (status) {
+    status.textContent = "Loading requests...";
+  }
+
+  const requests = await loadPendingRequests();
+
+  if (!requests.length) {
+    if (status) {
+      status.textContent = "You have no pending connection requests.";
+    }
+
+    await updateConnectionNotificationBadge();
+    return;
+  }
+
+  if (status) {
+    status.textContent =
+      `${requests.length} pending request${requests.length === 1 ? "" : "s"}`;
+  }
+
+  requests.forEach((request) => {
+    const profile = request.requester || {};
+    const username = profile.username || "Unknown user";
+    const nativeLanguage = profile.native_language || "Not specified";
+    const learningLanguage = profile.learning_language || "Not specified";
+
+    const card = document.createElement("div");
+    card.className = "find-person-card";
+
+    card.innerHTML = `
+      <div class="find-person-info">
+        <h3>${escapeHtml(username)}</h3>
+
+        <div class="find-person-languages">
+          <span>Native: ${escapeHtml(nativeLanguage)}</span>
+          <span>Learning: ${escapeHtml(learningLanguage)}</span>
+        </div>
+      </div>
+
+      <div class="connection-request-actions">
+        <button
+          type="button"
+          class="accept-connection-btn"
+        >
+          Accept
+        </button>
+
+        <button
+          type="button"
+          class="decline-connection-btn"
+        >
+          Decline
+        </button>
+      </div>
+    `;
+
+    const acceptButton = card.querySelector(".accept-connection-btn");
+    const declineButton = card.querySelector(".decline-connection-btn");
+
+    acceptButton?.addEventListener("click", async () => {
+      acceptButton.disabled = true;
+      declineButton.disabled = true;
+      acceptButton.textContent = "Accepting...";
+
+      const success = await acceptConnectionRequest(request.id);
+
+      if (success) {
+        card.remove();
+        await refreshConnectionRequests();
+      } else {
+        acceptButton.disabled = false;
+        declineButton.disabled = false;
+        acceptButton.textContent = "Accept";
+      }
+    });
+
+    declineButton?.addEventListener("click", async () => {
+      acceptButton.disabled = true;
+      declineButton.disabled = true;
+      declineButton.textContent = "Declining...";
+
+      const success = await rejectConnectionRequest(request.id);
+
+      if (success) {
+        card.remove();
+        await refreshConnectionRequests();
+      } else {
+        acceptButton.disabled = false;
+        declineButton.disabled = false;
+        declineButton.textContent = "Decline";
+      }
+    });
+
+    list.appendChild(card);
+  });
+}
+
+async function refreshConnectionRequests() {
+  await updateConnectionNotificationBadge();
+
+  const modal = document.getElementById("connectionRequestsModal");
+
+  if (modal && !modal.classList.contains("hidden")) {
+    await openConnectionRequests();
+  }
+}
+
+function closeConnectionRequests() {
+  document
+    .getElementById("connectionRequestsModal")
+    ?.classList.add("hidden");
+}
+
+window.openConnectionRequests = openConnectionRequests;
+window.closeConnectionRequests = closeConnectionRequests;
+window.updateConnectionNotificationBadge =
+  updateConnectionNotificationBadge;
+
 window.openFindPeopleModal = openFindPeopleModal;
 window.closeFindPeopleModal = closeFindPeopleModal;
 window.handleUserSearch = handleUserSearch;

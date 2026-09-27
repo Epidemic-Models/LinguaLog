@@ -71,7 +71,7 @@ async function loadProfile() {
   if (!data) {
     const newProfile = {
       id: user.id,
-      username: user.email || "",
+      username: "",
       native_language: "",
       learning_language: "",
       bio: ""
@@ -106,9 +106,19 @@ async function saveProfile(silent = false) {
     return;
   }
 
+  const username =
+    document.getElementById("profileUsername")?.value.trim() || "";
+
+  if (!username) {
+    if (!silent) {
+      alert("Please choose a username.");
+    }
+    return;
+  }
+
   const profile = {
     id: user.id,
-    username: document.getElementById("profileUsername")?.value.trim() || "",
+    username: username,
     native_language: document.getElementById("profileNativeLanguage")?.value.trim() || "",
     learning_language: document.getElementById("profileLearningLanguage")?.value.trim() || "",
     bio: document.getElementById("profileBio")?.value.trim() || ""
@@ -119,7 +129,20 @@ async function saveProfile(silent = false) {
     .upsert(profile);
 
   if (error) {
-    alert(error.message);
+    console.error("Profile save failed:", error);
+
+    // PostgreSQL unique-constraint violation
+    if (error.code === "23505") {
+      if (!silent) {
+        alert("That username is already taken. Please choose another one.");
+      }
+      return;
+    }
+
+    if (!silent) {
+      alert("Could not save your profile. Please try again.");
+    }
+
     return;
   }
 
