@@ -42,7 +42,12 @@ async function openProfileModal() {
   if (!modal) return;
 
   modal.classList.remove("hidden");
+
   await loadProfile();
+
+  if (window.updateConnectionNotificationBadge) {
+    await window.updateConnectionNotificationBadge();
+  }
 }
 
 function closeProfileModal() {
