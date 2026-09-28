@@ -1456,6 +1456,18 @@
                 ⌧
             </button>
 
+            <!-- HANDWRITING TO TEXT -->
+
+            <button
+                class="ipen-action ipen-convert-action"
+                data-action="convert"
+                type="button"
+                title="Convert handwriting to text"
+                aria-label="Convert handwriting to text"
+            >
+                Aa
+            </button>
+
         </div>
 
 
