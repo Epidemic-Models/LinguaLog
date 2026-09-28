@@ -47,9 +47,13 @@
 
       .ipen-launch {
         position: absolute;
+        top: 18px;
         right: 18px;
-        bottom: 18px;
-        z-index: 120;
+        bottom: auto;
+        z-index: 1002;
+
+        pointer-events: auto !important;
+        touch-action: manipulation;
 
         width: 48px !important;
         height: 48px !important;
@@ -190,10 +194,11 @@
 
       .ipen-tip {
         position: absolute;
+        top: 72px;
         right: 18px;
-        bottom: 74px;
+        bottom: auto;
 
-        z-index: 121;
+        z-index: 1001;
 
         padding: 7px 10px;
 
@@ -233,8 +238,9 @@
         }
 
         .ipen-launch {
-          right: 12px;
-          bottom: 12px;
+        top: 12px;
+        right: 12px;
+        bottom: auto;
         }
       }
 
@@ -860,12 +866,21 @@
   function bindUI() {
     const s = state.surface;
 
-    s.querySelector(
-      ".ipen-launch"
-    ).addEventListener(
-      "click",
-      () => setActive(!state.active)
-    );
+    const launcher = s.querySelector(".ipen-launch");
+
+    if (launcher) {
+    launcher.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+
+    launcher.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        setActive(!state.active);
+    });
+    }
 
     s.querySelectorAll(
       ".ipen-tool"
