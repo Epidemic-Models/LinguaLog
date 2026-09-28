@@ -43,28 +43,15 @@ function renderLanguageJournal(container, page = null) {
       <button type="button" class="add-row-btn" onclick="addRow()">+ Add a row</button>
 
       <label for="notes">Notes</label>
-      <textarea
+
+      <div
         id="notes"
-        class="language-font-target"
-        placeholder="Write your notes here..."
-      >${activePage.notes || ""}</textarea>
-
-      <div class="language-writing-tools">
-        <label for="languageTextFont">Writing style</label>
-
-        <select id="languageTextFont" onchange="setLanguageTextFont(this.value)">
-          <option value="'Inter', sans-serif">Inter</option>
-          <option value="'Poppins', sans-serif">Poppins</option>
-          <option value="'Playfair Display', serif">Playfair</option>
-          <option value="'Lora', serif">Lora</option>
-          <option value="'Dancing Script', cursive">Dancing Script</option>
-          <option value="'Pacifico', cursive">Pacifico</option>
-        </select>
-
-        <div class="language-pencil-hint">
-          ✍️ Write in any text field with Apple Pencil
-        </div>
-      </div>
+        class="language-notes-rich"
+        contenteditable="true"
+        role="textbox"
+        aria-multiline="true"
+        data-placeholder="Write your notes here..."
+      >${activePage.notes || ""}</div>
 
       <button type="button" onclick="saveData()">Save</button>
     </div>
@@ -73,15 +60,6 @@ function renderLanguageJournal(container, page = null) {
   renderEntries(activePage.words || []);
   updateLanguageBar();
 
-  const savedFont = activePage.textFont || "'Inter', sans-serif";
-
-  const fontSelect = document.getElementById("languageTextFont");
-
-  if (fontSelect) {
-    fontSelect.value = savedFont;
-  }
-
-  setLanguageTextFont(savedFont);
 }
 
 function addRow(word = "", meaning = "") {
@@ -103,13 +81,6 @@ function addRow(word = "", meaning = "") {
   });
 
   entries.appendChild(row);
-  const selectedFont = document.getElementById("languageTextFont")?.value;
-
-  if (selectedFont) {
-    row.querySelectorAll(".language-font-target").forEach((element) => {
-      element.style.fontFamily = selectedFont;
-    });
-  }
 }
 
 function renderEntries(words = []) {
@@ -140,20 +111,6 @@ function collectEntries() {
     .filter((entry) => entry.word || entry.meaning);
 }
 
-function setLanguageTextFont(fontFamily) {
-  document.querySelectorAll(".language-font-target").forEach((element) => {
-    element.style.fontFamily = fontFamily;
-  });
-
-  const page = getPageById(currentPageId);
-
-  if (page) {
-    page.textFont = fontFamily;
-    savePage(page);
-    saveCurrentJournalState();
-  }
-}
-
 function saveData() {
   if (!currentPageId) return;
 
@@ -163,9 +120,8 @@ function saveData() {
   const updatedPage = {
     ...existingPage,
     title: document.getElementById("languagePageTitle")?.value.trim() || existingPage.title || "",
-    notes: document.getElementById("notes")?.value || "",
-    words: collectEntries(),
-    textFont: document.getElementById("languageTextFont")?.value || "'Inter', sans-serif"
+    notes: document.getElementById("notes")?.innerHTML || "",
+    words: collectEntries()
   };
 
   savePage(updatedPage);
@@ -209,8 +165,26 @@ async function searchWord() {
       return word.includes(input) || meaning.includes(input);
     });
 
-    const notesText = (page.notes || "").trim();
-    const notesMatch = notesText.toLowerCase().includes(input);
+    const notesHtml =
+      page.notes || "";
+
+    const tempNotes =
+      document.createElement("div");
+
+    tempNotes.innerHTML =
+      notesHtml;
+
+    const notesText =
+      (
+        tempNotes.textContent ||
+        tempNotes.innerText ||
+        ""
+      ).trim();
+
+    const notesMatch =
+      notesText
+        .toLowerCase()
+        .includes(input);
 
     if (matchedWords.length || notesMatch) {
       localMatches.push({
@@ -378,4 +352,3 @@ window.saveData = saveData;
 window.searchWord = searchWord;
 window.swapLanguages = swapLanguages;
 window.addFromSearch = addFromSearch;
-window.setLanguageTextFont = setLanguageTextFont;

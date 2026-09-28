@@ -19,11 +19,6 @@
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
 }
 
-.language-page-card textarea {
-  min-height: 150px;
-  max-height: 260px;
-}
-
 /* page title */
 .language-page-card #languagePageTitle {
   width: 100% !important;
@@ -115,30 +110,86 @@
 }
 
 /* =====================================================
-   LANGUAGE JOURNAL — WRITING TOOLS
+   LANGUAGE JOURNAL — RICH TEXT NOTES
 ===================================================== */
 
-.language-writing-tools {
-  margin-top: 18px;
-  margin-bottom: 14px;
-}
-
-.language-writing-tools label {
-  margin: 0 0 8px;
-  font-weight: 700;
-}
-
-.language-writing-tools select {
+.language-notes-rich {
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 12px;
-  background: white;
-  font-size: 15px;
+  min-height: 180px;
+
+  padding: 14px 16px;
+  margin-bottom: 14px;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.72);
+
+  color: #2d2925;
+
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+
+  outline: none;
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
-.language-pencil-hint {
-  margin-top: 8px;
-  font-size: 13px;
-  color: #777;
+.language-notes-rich:hover {
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.language-notes-rich:focus {
+  background: rgba(255, 255, 255, 0.92);
+
+  border-color: rgba(45, 41, 37, 0.28);
+
+  box-shadow:
+    0 0 0 3px rgba(45, 41, 37, 0.06);
+}
+
+/* Placeholder for contenteditable */
+
+.language-notes-rich:empty::before {
+  content: attr(data-placeholder);
+
+  color: #9b9189;
+
+  pointer-events: none;
+}
+
+/* Rich-text content */
+
+.language-notes-rich p {
+  margin: 0 0 10px;
+}
+
+.language-notes-rich p:last-child {
+  margin-bottom: 0;
+}
+
+.language-notes-rich ul,
+.language-notes-rich ol {
+  padding-left: 26px;
+}
+
+.language-notes-rich table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+
+.language-notes-rich td,
+.language-notes-rich th {
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  padding: 8px;
 }

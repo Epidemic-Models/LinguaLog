@@ -70,3 +70,18 @@ window.hasLocalChanges = hasLocalChanges;
 window.restoreRecoveryBackup = restoreRecoveryBackup;
 window.createRecoverySnapshot = createRecoverySnapshot;
 window.scheduleAutosave = scheduleAutosave;
+
+
+/*
+ * Shared rich-text editor changes
+ */
+
+window.addEventListener(
+  "lingualog:editor-change",
+  () => {
+
+    markLocalChanges();
+
+    scheduleAutosave();
+  }
+);
