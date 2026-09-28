@@ -22,6 +22,9 @@
   max-width: 1100px !important;
   min-width: 0 !important;
 
+  aspect-ratio: 4 / 3;
+  height: auto;
+
   margin: 32px auto !important;
   padding: 0 !important;
 
@@ -121,7 +124,9 @@
 .general-shell {
   position: relative;
   z-index: 2;
-  padding: clamp(18px, 3vw, 32px);
+
+  box-sizing: border-box;
+  padding: 32px;
 }
 
 .general-top-actions {
@@ -181,7 +186,7 @@
 }
 
 .general-date {
-  margin-top: clamp(6px, 1vw, 10px);
+  margin-top: 10px;
   color: var(--muted);
   font-size: 0.95rem;
 }
@@ -189,7 +194,7 @@
 .general-content {
   display: grid;
   grid-template-columns: 1.45fr 1fr;
-  gap: clamp(16px, 2.5vw, 28px);
+  gap: 24px;
   align-items: start;
 }
 
@@ -197,13 +202,13 @@
 .general-side {
   display: flex;
   flex-direction: column;
-  gap: clamp(12px, 1.8vw, 20px);
+  gap: 20px;
 }
 
 .general-card {
   position: relative;
   overflow: hidden;
-  padding: clamp(14px, 2vw, 20px);
+  padding: 20px;
   border-radius: var(--radius-lg);
   background: var(--surface);
   border: 1px solid var(--border);
@@ -246,13 +251,13 @@
 }
 
 .general-journal textarea {
-  min-height: clamp(150px, 20vh, 220px);
-  max-height: 320px;
+  min-height: 180px;
+  max-height: 260px;
   resize: vertical;
 }
 
 #generalPageTitle {
-  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  font-size: 2rem;
   font-weight: 700;
   padding: 16px 18px;
 }
@@ -298,7 +303,7 @@
 }
 
 .general-save-btn {
-  margin-top: clamp(8px, 1.5vw, 16px);
+  margin-top: 16px;
 }
 
 .layout-journal .general-content {
@@ -491,7 +496,8 @@
 }
 
 .theme-soft-pastel textarea {
-  min-height: clamp(150px, 20vh, 220px);
+  min-height: 180px;
+  max-height: 260px;
 }
 
 .theme-soft-pastel .general-checklist button,
@@ -538,41 +544,4 @@
   bottom: 20px;
   right: 10px;
   transform: rotate(180deg);
-}
-
-/* Responsive General Journal */
-
-@media (max-width: 1000px) {
-  .general-content,
-  .layout-journal .general-content,
-  .layout-planner .general-content {
-    grid-template-columns: 1fr 0.8fr;
-  }
-}
-
-@media (max-width: 800px) {
-  .general-journal {
-    width: calc(100% - 24px) !important;
-    margin: 12px auto !important;
-  }
-  
-  #generalPageTitle {
-    padding-right: 60px;
-  }
-
-  .general-card {
-    padding: 14px;
-    border-radius: 22px;
-  }
-  
-
-  .general-shell {
-    padding: 18px;
-  }
-
-  .general-content,
-  .layout-journal .general-content,
-  .layout-planner .general-content {
-    grid-template-columns: 1fr;
-  }
 }

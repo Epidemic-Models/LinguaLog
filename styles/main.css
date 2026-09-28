@@ -102,7 +102,7 @@ textarea {
   overflow-y: auto;
   overflow-x: hidden;
 
-  padding: 24px 32px;
+  padding: 32px 24px 80px;
 }
 
 /* =====================================================
@@ -191,7 +191,6 @@ textarea {
 
 .card,
 .language-page-card,
-.general-shell,
 .freeform-page {
   width: min(920px, calc(100vw - 120px));
   max-width: 920px;
@@ -218,7 +217,6 @@ textarea {
 
 .card::-webkit-scrollbar,
 .language-page-card::-webkit-scrollbar,
-.general-shell::-webkit-scrollbar,
 .freeform-page::-webkit-scrollbar {
   display: none;
 }
@@ -229,7 +227,6 @@ textarea {
 }
 
 .date,
-.general-date,
 .editor-page-date {
   margin-bottom: 18px;
   color: #555;
@@ -237,7 +234,6 @@ textarea {
 }
 
 .card #languagePageTitle,
-#generalPageTitle,
 .editor-page-title {
   margin-bottom: 8px;
 }
@@ -352,73 +348,6 @@ textarea {
   font-weight: 700;
 }
 
-
-/* =====================================================
-   GENERAL JOURNAL
-===================================================== */
-
-
-.general-journal {
-  width: 100%;
-  max-width: none;
-  height: auto;
-  max-height: none;
-  margin: 0;
-  padding: 0;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  overflow: visible;
-}
-
-.general-shell {
-  position: relative;
-}
-
-.general-content {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 20px;
-}
-
-.general-main,
-.general-side {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.general-card {
-  background: rgba(255, 255, 255, 0.86);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 24px;
-  padding: 20px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.04);
-}
-
-.general-save-btn {
-  width: 100% !important;
-  padding: 14px 16px !important;
-  border: none !important;
-  background: #1f1f22 !important;
-  color: white !important;
-  border-radius: 14px !important;
-  font-weight: 700;
-}
-
-.checklist-row {
-  display: grid;
-  grid-template-columns: 24px 1fr 44px;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.general-check-text {
-  width: 100%;
-}
-
 /* =====================================================
    READ MODE
 ===================================================== */
@@ -444,7 +373,6 @@ body[data-view-mode="read"] .main-content,
 body[data-view-mode="read"] #editorContainer,
 body[data-view-mode="read"] .card,
 body[data-view-mode="read"] .language-page-card,
-body[data-view-mode="read"] .general-shell,
 body[data-view-mode="read"] .freeform-page {
   scrollbar-width: none;
 }
@@ -453,7 +381,6 @@ body[data-view-mode="read"] .main-content::-webkit-scrollbar,
 body[data-view-mode="read"] #editorContainer::-webkit-scrollbar,
 body[data-view-mode="read"] .card::-webkit-scrollbar,
 body[data-view-mode="read"] .language-page-card::-webkit-scrollbar,
-body[data-view-mode="read"] .general-shell::-webkit-scrollbar,
 body[data-view-mode="read"] .freeform-page::-webkit-scrollbar {
   display: none;
 }
@@ -509,7 +436,6 @@ body[data-view-mode="read"] .cover-preview-container {
 
 /* ✅ Clean page layout */
 body[data-view-mode="read"] .language-page-card,
-body[data-view-mode="read"] .general-shell,
 body[data-view-mode="read"] .freeform-page {
   width: min(920px, calc(100vw - 120px));
   max-width: 920px;
@@ -652,15 +578,6 @@ body[data-view-mode="read"] #appLayout textarea {
 
 .welcome-content {
   position: relative;
-  z-index: 3;
-  width: min(980px, calc(100% - 40px));
-  text-align: center;
-  color: #2c2623;
-  padding: 60px 0;
-}
-
-.welcome-content {
-  position: relative;
   z-index: 5;
   text-align: center;
   width: min(980px, calc(100% - 40px));
@@ -717,18 +634,6 @@ body[data-view-mode="read"] #appLayout textarea {
 
 .journal-card {
   max-width: 320px;
-}
-
-.journal-card-cover {
-  width: 100%;
-  height: 260px;
-  border-radius: 18px;
-  overflow: hidden;
-  position: relative;
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 }
 
 /* LIBRARY PAGE */
@@ -960,8 +865,6 @@ body[data-view-mode="read"] #appLayout textarea {
   align-items: center;
   justify-content: center;
   padding: 28px;
-  background: rgba(15, 12, 10, 0.45);
-  backdrop-filter: blur(12px);
 }
 
 .new-journal-modal.hidden {
@@ -1934,11 +1837,9 @@ body[data-view-mode="read"] #appLayout textarea {
 
   .card,
   .language-page-card,
-  .general-shell,
   .freeform-page,
   body[data-view-mode="read"] .card,
   body[data-view-mode="read"] .language-page-card,
-  body[data-view-mode="read"] .general-shell,
   body[data-view-mode="read"] .freeform-page {
     width: calc(100vw - 24px) !important;
     max-width: none !important;
@@ -1952,16 +1853,6 @@ body[data-view-mode="read"] #appLayout textarea {
     overflow-y: auto !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch;
-  }
-
-  .general-content,
-  .layout-planner .general-content,
-  .layout-journal .general-content {
-    grid-template-columns: 1fr !important;
-  }
-
-  .general-shell {
-    padding: 18px !important;
   }
 
   .read-mode-nav {
