@@ -2666,16 +2666,12 @@
 
 
                 /*
-                 * Already active:
-                 *
-                 * NEVER deactivate iPen here.
-                 *
-                 * Only toggle toolbar visibility.
-                 */
+                * Already active:
+                * turn handwriting OFF
+                * and return to normal typing.
+                */
 
-                setPopover(
-                    !state.popoverOpen
-                );
+                setActive(false);
             }
         );
 
