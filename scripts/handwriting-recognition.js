@@ -176,7 +176,7 @@ const serverProvider = {
 
         const response =
             await fetch(
-                "http://localhost:3000/api/handwriting",
+                "https://lingualog-ddko.onrender.com/api/handwriting",
                 {
                     method: "POST",
 
