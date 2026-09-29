@@ -40,6 +40,23 @@
         redo: [],
         current: null,
 
+        /*
+        * Handwriting selection.
+        *
+        * selectedStrokeIndexes:
+        * Strokes currently selected by the lasso/select tool.
+        *
+        * selecting:
+        * True while the user is dragging a selection rectangle.
+        *
+        * selectionStart / selectionEnd:
+        * Normalized canvas coordinates for the selection rectangle.
+        */
+        selectedStrokeIndexes: [],
+        selecting: false,
+        selectionStart: null,
+        selectionEnd: null,
+
         pageId: null,
         resizeObserver: null
     };
@@ -90,6 +107,13 @@
             opacity: 1,
             label: "Eraser",
             icon: "⌫"
+        },
+
+        select: {
+            size: 1,
+            opacity: 1,
+            label: "Select",
+            icon: "⌖"
         }
     };
 
@@ -1345,6 +1369,16 @@
                     ◇
                 </button>
 
+                <button
+                    class="ipen-tool ${state.tool === "select" ? "active" : ""}"
+                    data-tool="select"
+                    type="button"
+                    title="Select handwriting"
+                    aria-label="Select handwriting"
+                >
+                    ⌖
+                </button>
+
             </div>
 
 
@@ -2067,7 +2101,205 @@
                 state.current
             );
         }
+
+        /*
+        * Draw handwriting selection.
+        */
+
+        const bounds =
+            selectionBounds();
+
+
+        if (
+            bounds &&
+            (
+                state.selecting ||
+                state.selectedStrokeIndexes.length
+            )
+        ) {
+
+            const canvas =
+                state.canvas;
+
+
+            const left =
+                bounds.left *
+                canvas.width;
+
+
+            const top =
+                bounds.top *
+                canvas.height;
+
+
+            const width =
+                (
+                    bounds.right -
+                    bounds.left
+                ) *
+                canvas.width;
+
+
+            const height =
+                (
+                    bounds.bottom -
+                    bounds.top
+                ) *
+                canvas.height;
+
+
+            const ctx =
+                state.ctx;
+
+
+            ctx.save();
+
+
+            /*
+            * Soft selection background.
+            */
+
+            ctx.fillStyle =
+                "rgba(120, 110, 190, 0.08)";
+
+
+            ctx.fillRect(
+                left,
+                top,
+                width,
+                height
+            );
+
+
+            /*
+            * Dashed selection border.
+            */
+
+            ctx.strokeStyle =
+                "rgba(91, 76, 160, 0.9)";
+
+
+            ctx.lineWidth =
+                Math.max(
+                    1,
+                    window.devicePixelRatio || 1
+                );
+
+
+            ctx.setLineDash([
+                6 *
+                (window.devicePixelRatio || 1),
+
+                4 *
+                (window.devicePixelRatio || 1)
+            ]);
+
+
+            ctx.strokeRect(
+                left,
+                top,
+                width,
+                height
+            );
+
+
+            ctx.restore();
+        }
     }
+
+    /* =========================================================
+        HANDWRITING SELECTION
+        ========================================================= */
+
+        function selectionBounds() {
+
+            if (
+                !state.selectionStart ||
+                !state.selectionEnd
+            ) {
+                return null;
+            }
+
+
+            return {
+                left: Math.min(
+                    state.selectionStart.x,
+                    state.selectionEnd.x
+                ),
+
+                right: Math.max(
+                    state.selectionStart.x,
+                    state.selectionEnd.x
+                ),
+
+                top: Math.min(
+                    state.selectionStart.y,
+                    state.selectionEnd.y
+                ),
+
+                bottom: Math.max(
+                    state.selectionStart.y,
+                    state.selectionEnd.y
+                )
+            };
+        }
+
+
+        function selectStrokesInBounds() {
+
+            const bounds =
+                selectionBounds();
+
+
+            if (!bounds) {
+
+                state.selectedStrokeIndexes = [];
+
+                return;
+            }
+
+
+            state.selectedStrokeIndexes =
+                state.strokes
+                    .map((stroke, index) => {
+
+                        const points =
+                            Array.isArray(stroke.points)
+                                ? stroke.points
+                                : [];
+
+
+                        if (!points.length) {
+                            return -1;
+                        }
+
+
+                        /*
+                        * Select the stroke when at least
+                        * one of its points falls inside
+                        * the selection rectangle.
+                        */
+
+                        const inside =
+                            points.some(point => {
+
+                                return (
+                                    point.x >= bounds.left &&
+                                    point.x <= bounds.right &&
+                                    point.y >= bounds.top &&
+                                    point.y <= bounds.bottom
+                                );
+                            });
+
+
+                        return inside
+                            ? index
+                            : -1;
+                    })
+                    .filter(index =>
+                        index !== -1
+                    );
+        }
 
 
     /* =========================================================
@@ -2113,8 +2345,66 @@
         event.preventDefault();
 
 
-        state.drawing =
-            true;
+            /*
+            * SELECT TOOL
+            *
+            * Start a new handwriting selection
+            * instead of drawing ink.
+            */
+
+            if (
+                state.tool === "select"
+            ) {
+
+                const point =
+                    pointFromEvent(event);
+
+
+                state.selecting =
+                    true;
+
+
+                state.drawing =
+                    false;
+
+
+                state.current =
+                    null;
+
+
+                state.selectedStrokeIndexes =
+                    [];
+
+
+                state.selectionStart = {
+                    x: point.x,
+                    y: point.y
+                };
+
+
+                state.selectionEnd = {
+                    x: point.x,
+                    y: point.y
+                };
+
+
+                try {
+
+                    state.canvas.setPointerCapture?.(
+                        event.pointerId
+                    );
+
+                } catch (_) {}
+
+
+                redraw();
+
+                return;
+            }
+
+
+            state.drawing =
+                true;
 
 
         try {
@@ -2156,7 +2446,31 @@
 
     function move(event) {
 
-        if (
+                if (
+            state.active &&
+            state.tool === "select" &&
+            state.selecting
+        ) {
+
+            event.preventDefault();
+
+
+            const point =
+                pointFromEvent(event);
+
+
+            state.selectionEnd = {
+                x: point.x,
+                y: point.y
+            };
+
+
+            redraw();
+
+            return;
+        }
+
+                if (
             !state.active ||
             !state.drawing ||
             !state.current
@@ -2198,6 +2512,35 @@
        ========================================================= */
 
     function end(event) {
+
+                if (
+            state.tool === "select" &&
+            state.selecting
+        ) {
+
+            event?.preventDefault?.();
+
+
+            const point =
+                pointFromEvent(event);
+
+
+            state.selectionEnd = {
+                x: point.x,
+                y: point.y
+            };
+
+
+            state.selecting =
+                false;
+
+
+            selectStrokesInBounds();
+
+            redraw();
+
+            return;
+        }
 
         if (
             !state.drawing ||
@@ -2885,26 +3228,45 @@
                 event.preventDefault();
                 event.stopPropagation();
 
-                if (
-                    !window.LinguaHandwriting
-                ) {
+                if (!window.LinguaHandwriting) {
                     alert(
                         "Handwriting recognition is not available."
                     );
-
                     return;
                 }
+
+                if (window.LinguaHandwriting.recognizing) {
+                    return;
+                }
+
 
                 /*
-                 * Ignore another click while
-                 * recognition is already running.
+                 * If handwriting has been selected with
+                 * the select tool, convert only that selection.
+                 *
+                 * Otherwise convert all handwriting.
                  */
 
-                if (
-                    window.LinguaHandwriting.recognizing
-                ) {
+                const selectedIndexes =
+                    Array.isArray(state.selectedStrokeIndexes)
+                        ? [...state.selectedStrokeIndexes]
+                        : [];
+
+                const strokesToConvert =
+                    selectedIndexes.length
+                        ? selectedIndexes
+                            .map(index => state.strokes[index])
+                            .filter(Boolean)
+                        : [...state.strokes];
+
+
+                if (!strokesToConvert.length) {
+                    alert(
+                        "Write something first, or select handwriting to convert."
+                    );
                     return;
                 }
+
 
                 const originalText =
                     convertButton.textContent;
@@ -2917,22 +3279,23 @@
                     convertButton.textContent =
                         "…";
 
+
                     const result =
                         await window.LinguaHandwriting.recognize({
-                            strokes: state.strokes
+                            strokes: strokesToConvert
                         });
+
 
                     if (
                         result.status ===
                         "provider-required"
                     ) {
-
                         alert(
                             "Handwriting recognition provider is not configured."
                         );
-
                         return;
                     }
+
 
                     console.log(
                         "LinguaLog handwriting result:",
@@ -2940,33 +3303,46 @@
                     );
 
 
-                    /*
-                    * Put recognized handwriting into the journal field
-                    * underneath the handwriting.
-                    */
-
                     if (
                         result.status === "success" &&
                         result.text
                     ) {
 
-                        const textTargets = [
-                            document.getElementById("generalNotes"),
-                            document.getElementById("generalHighlight")
-                        ].filter(Boolean);
+                        /*
+                         * Every normal editable text field inside
+                         * the current journal surface is eligible.
+                         *
+                         * This includes:
+                         * - General Journal fields
+                         * - Language Journal search
+                         * - Language Journal word/meaning fields
+                         * - Language Journal Notes
+                         * - other text inputs/textareas/contenteditable
+                         */
+
+                        const textTargets =
+                            Array.from(
+                                surface.querySelectorAll(
+                                    'textarea, input[type="text"], input[type="search"], [contenteditable="true"]'
+                                )
+                            ).filter(element =>
+                                !element.disabled &&
+                                !element.readOnly
+                            );
 
 
                         /*
-                        * Find the centre of the handwriting.
-                        */
+                         * Find the centre of ONLY the handwriting
+                         * currently being converted.
+                         */
 
                         const points =
-                            state.strokes
-                                .flatMap(stroke =>
+                            strokesToConvert.flatMap(
+                                stroke =>
                                     Array.isArray(stroke.points)
                                         ? stroke.points
                                         : []
-                                );
+                            );
 
 
                         let target = null;
@@ -3010,7 +3386,6 @@
                                     const rect =
                                         element.getBoundingClientRect();
 
-
                                     return (
                                         pageX >= rect.left &&
                                         pageX <= rect.right &&
@@ -3021,83 +3396,153 @@
                         }
 
 
-                        /*
-                        * If we found the textarea underneath the ink,
-                        * insert the recognized text.
-                        */
-
-                        if (target) {
-
-                            const existing =
-                                target.value.trim();
-
-
-                            target.value =
-                                existing
-                                    ? `${existing}\n${result.text}`
-                                    : result.text;
-
-
-                            /*
-                            * Tell the rest of LinguaLog that the
-                            * textarea changed.
-                            */
-
-                            target.dispatchEvent(
-                                new Event(
-                                    "input",
-                                    {
-                                        bubbles: true
-                                    }
-                                )
-                            );
-
-
-                            target.dispatchEvent(
-                                new Event(
-                                    "change",
-                                    {
-                                        bubbles: true
-                                    }
-                                )
-                            );
-
-
-                            /*
-                            * Persist the General journal page.
-                            */
-
-                            if (
-                                typeof saveGeneralJournal ===
-                                "function"
-                            ) {
-                                saveGeneralJournal(false);
-                            }
-
-
-                            /*
-                            * Recognition succeeded and text was inserted,
-                            * so remove the handwriting.
-                            */
-
-                            state.redo =
-                                state.strokes.splice(0);
-
-
-                            redraw();
-
-                            savePageData();
-
-
-                            target.focus();
-                        } else {
+                        if (!target) {
 
                             alert(
-                                `Recognized text:\n\n${result.text}\n\nThe handwriting was not inside a text field.`
+                                `Recognized text:\n\n${result.text}\n\nSelect handwriting inside the field where you want the text inserted.`
                             );
+
+                            return;
                         }
-                    }
-                                      else {
+
+
+                        /*
+                         * Insert recognized text.
+                         *
+                         * Textareas/inputs use .value.
+                         * Rich editable areas use textContent.
+                         *
+                         * Add a space automatically so separately
+                         * converted words behave like normal typing.
+                         */
+
+                        if (
+                            target.matches(
+                                'textarea, input[type="text"], input[type="search"]'
+                            )
+                        ) {
+
+                            const existing =
+                                target.value || "";
+
+                            const separator =
+                                existing &&
+                                !/\s$/.test(existing)
+                                    ? " "
+                                    : "";
+
+                            target.value =
+                                existing +
+                                separator +
+                                result.text;
+
+                        } else if (
+                            target.isContentEditable
+                        ) {
+
+                            const existing =
+                                target.textContent || "";
+
+                            const separator =
+                                existing &&
+                                !/\s$/.test(existing)
+                                    ? " "
+                                    : "";
+
+                            target.textContent =
+                                existing +
+                                separator +
+                                result.text;
+                        }
+
+
+                        /*
+                         * Notify the journal code that the field changed.
+                         */
+
+                        target.dispatchEvent(
+                            new Event(
+                                "input",
+                                {
+                                    bubbles: true
+                                }
+                            )
+                        );
+
+                        target.dispatchEvent(
+                            new Event(
+                                "change",
+                                {
+                                    bubbles: true
+                                }
+                            )
+                        );
+
+
+                        /*
+                         * Remove ONLY the handwriting that was converted.
+                         */
+
+                        if (selectedIndexes.length) {
+
+                            const selectedSet =
+                                new Set(selectedIndexes);
+
+                            state.strokes =
+                                state.strokes.filter(
+                                    (_, index) =>
+                                        !selectedSet.has(index)
+                                );
+
+                        } else {
+
+                            state.strokes = [];
+                        }
+
+
+                        state.selectedStrokeIndexes =
+                            [];
+
+                        state.selectionStart =
+                            null;
+
+                        state.selectionEnd =
+                            null;
+
+                        state.redo =
+                            [];
+
+
+                        redraw();
+
+                        savePageData();
+
+
+                        /*
+                         * Let each journal's normal input/change
+                         * handlers perform their own persistence.
+                         */
+
+                        if (
+                            typeof saveGeneralJournal ===
+                            "function" &&
+                            target.closest(".general-journal")
+                        ) {
+                            saveGeneralJournal(false);
+                        }
+
+                        if (
+                            typeof saveData ===
+                            "function" &&
+                            target.closest(".language-page-card")
+                        ) {
+                            saveData();
+                        }
+
+
+                        target.focus();
+
+                    } else {
 
                         alert(
                             "No text was recognized."
