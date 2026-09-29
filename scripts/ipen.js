@@ -89,7 +89,7 @@
             size: 18,
             opacity: 1,
             label: "Eraser",
-            icon: "◇"
+            icon: "⌫"
         }
     };
 
@@ -2868,6 +2868,265 @@
                     clearAll();
                 }
             );
+
+                /* =========================================
+           HANDWRITING TO TEXT
+           ========================================= */
+
+        const convertButton =
+            surface.querySelector(
+                '[data-action="convert"]'
+            );
+
+        convertButton?.addEventListener(
+            "click",
+            async event => {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (
+                    !window.LinguaHandwriting
+                ) {
+                    alert(
+                        "Handwriting recognition is not available."
+                    );
+
+                    return;
+                }
+
+                /*
+                 * Ignore another click while
+                 * recognition is already running.
+                 */
+
+                if (
+                    window.LinguaHandwriting.recognizing
+                ) {
+                    return;
+                }
+
+                const originalText =
+                    convertButton.textContent;
+
+                try {
+
+                    convertButton.disabled =
+                        true;
+
+                    convertButton.textContent =
+                        "…";
+
+                    const result =
+                        await window.LinguaHandwriting.recognize({
+                            strokes: state.strokes
+                        });
+
+                    if (
+                        result.status ===
+                        "provider-required"
+                    ) {
+
+                        alert(
+                            "Handwriting recognition provider is not configured."
+                        );
+
+                        return;
+                    }
+
+                    console.log(
+                        "LinguaLog handwriting result:",
+                        result
+                    );
+
+
+                    /*
+                    * Put recognized handwriting into the journal field
+                    * underneath the handwriting.
+                    */
+
+                    if (
+                        result.status === "success" &&
+                        result.text
+                    ) {
+
+                        const textTargets = [
+                            document.getElementById("generalNotes"),
+                            document.getElementById("generalHighlight")
+                        ].filter(Boolean);
+
+
+                        /*
+                        * Find the centre of the handwriting.
+                        */
+
+                        const points =
+                            state.strokes
+                                .flatMap(stroke =>
+                                    Array.isArray(stroke.points)
+                                        ? stroke.points
+                                        : []
+                                );
+
+
+                        let target = null;
+
+
+                        if (points.length) {
+
+                            const averageX =
+                                points.reduce(
+                                    (sum, point) =>
+                                        sum + Number(point.x || 0),
+                                    0
+                                ) / points.length;
+
+
+                            const averageY =
+                                points.reduce(
+                                    (sum, point) =>
+                                        sum + Number(point.y || 0),
+                                    0
+                                ) / points.length;
+
+
+                            const surfaceRect =
+                                surface.getBoundingClientRect();
+
+
+                            const pageX =
+                                surfaceRect.left +
+                                averageX * surfaceRect.width;
+
+
+                            const pageY =
+                                surfaceRect.top +
+                                averageY * surfaceRect.height;
+
+
+                            target =
+                                textTargets.find(element => {
+
+                                    const rect =
+                                        element.getBoundingClientRect();
+
+
+                                    return (
+                                        pageX >= rect.left &&
+                                        pageX <= rect.right &&
+                                        pageY >= rect.top &&
+                                        pageY <= rect.bottom
+                                    );
+                                });
+                        }
+
+
+                        /*
+                        * If we found the textarea underneath the ink,
+                        * insert the recognized text.
+                        */
+
+                        if (target) {
+
+                            const existing =
+                                target.value.trim();
+
+
+                            target.value =
+                                existing
+                                    ? `${existing}\n${result.text}`
+                                    : result.text;
+
+
+                            /*
+                            * Tell the rest of LinguaLog that the
+                            * textarea changed.
+                            */
+
+                            target.dispatchEvent(
+                                new Event(
+                                    "input",
+                                    {
+                                        bubbles: true
+                                    }
+                                )
+                            );
+
+
+                            target.dispatchEvent(
+                                new Event(
+                                    "change",
+                                    {
+                                        bubbles: true
+                                    }
+                                )
+                            );
+
+
+                            /*
+                            * Persist the General journal page.
+                            */
+
+                            if (
+                                typeof saveGeneralJournal ===
+                                "function"
+                            ) {
+                                saveGeneralJournal(false);
+                            }
+
+
+                            /*
+                            * Recognition succeeded and text was inserted,
+                            * so remove the handwriting.
+                            */
+
+                            state.redo =
+                                state.strokes.splice(0);
+
+
+                            redraw();
+
+                            savePageData();
+
+
+                            target.focus();
+                        } else {
+
+                            alert(
+                                `Recognized text:\n\n${result.text}\n\nThe handwriting was not inside a text field.`
+                            );
+                        }
+                    }
+                                      else {
+
+                        alert(
+                            "No text was recognized."
+                        );
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "LinguaLog handwriting recognition error:",
+                        error
+                    );
+
+                    alert(
+                        error?.message ||
+                        "Could not recognize handwriting."
+                    );
+
+                } finally {
+
+                    convertButton.disabled =
+                        false;
+
+                    convertButton.textContent =
+                        originalText;
+                }
+            }
+        );
+
 
 
         /* =========================================

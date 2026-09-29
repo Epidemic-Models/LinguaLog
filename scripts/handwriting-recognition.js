@@ -163,19 +163,105 @@
        PUBLIC API
        ========================================================= */
 
-    window[NS] = {
+/* =========================================================
+   LINGUALOG SERVER PROVIDER
+   ========================================================= */
 
-        recognize,
+const serverProvider = {
 
-        setProvider,
+    async recognize({
+        strokes,
+        language
+    }) {
 
-        normalizeStrokes,
+        const response =
+            await fetch(
+                "http://localhost:3000/api/handwriting",
+                {
+                    method: "POST",
 
-        getLanguage,
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-        get recognizing() {
-            return state.recognizing;
+                    body:
+                        JSON.stringify({
+                            strokes,
+                            language
+                        })
+                }
+            );
+
+
+        let result;
+
+        try {
+
+            result =
+                await response.json();
+
+        } catch (_) {
+
+            throw new Error(
+                "The handwriting server returned an invalid response."
+            );
         }
-    };
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result?.error ||
+                "Handwriting recognition failed."
+            );
+        }
+
+
+        return {
+            text:
+                result?.text || "",
+
+            alternatives:
+                Array.isArray(result?.alternatives)
+                    ? result.alternatives
+                    : [],
+
+            language:
+                result?.language ||
+                language
+        };
+    }
+};
+
+
+/*
+ * Use our secure LinguaLog server
+ * as the current recognition provider.
+ */
+
+setProvider(
+    serverProvider
+);
+
+
+/* =========================================================
+   PUBLIC API
+   ========================================================= */
+
+window[NS] = {
+
+    recognize,
+
+    setProvider,
+
+    normalizeStrokes,
+
+    getLanguage,
+
+    get recognizing() {
+        return state.recognizing;
+    }
+};
 
 })();
