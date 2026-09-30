@@ -6,7 +6,6 @@ let brushSize = 6;
 let brushOpacity = 1;
 let selectedCanvasElementId = null;
 let activeTextTarget = null;
-let savedTextRange = null;
 
 /* 2. SELECTION */
 
@@ -49,154 +48,15 @@ function getActiveTextTarget() {
   return activeTextTarget;
 }
 
-/* 3. TEXT STYLE */
-function wrapSelectionWithStyle(styleCallback) {
+/* 3. TEXT CONTROL SYNC */
 
-  restoreTextSelection();
-
-  const selection = window.getSelection();
-
-  const target = getActiveTextTarget();
-
-  if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
-
-    if (target) {
-
-      styleCallback(target);
-
-      saveBlankCanvasPage?.();
-
-    }
-
-    return;
-
-  }
-
-  const range = selection.getRangeAt(0);
-
-  const span = document.createElement("span");
-
-  styleCallback(span);
-
-  span.appendChild(range.extractContents());
-
-  range.insertNode(span);
-
-  const newRange = document.createRange();
-
-  newRange.selectNodeContents(span);
-
-  selection.removeAllRanges();
-
-  selection.addRange(newRange);
-
-  savedTextRange = newRange.cloneRange();
-
-  saveBlankCanvasPage?.();
-
-}
-
-function applyTextStyle(styleCallback) {
-  const target = getActiveTextTarget();
-  if (!target) return;
-
-  // Apple Pencil / Scribble-friendly fields
-  if (target.matches("input, textarea")) {
-    styleCallback(target);
-    saveBlankCanvasPage?.();
-    return;
-  }
-
-  // Existing contenteditable canvas text
-  restoreTextSelection();
-
-  const selection = window.getSelection();
-
-  if (selection && selection.rangeCount > 0 && !selection.isCollapsed) {
-    const range = selection.getRangeAt(0);
-    const span = document.createElement("span");
-
-    styleCallback(span);
-
-    span.appendChild(range.extractContents());
-    range.insertNode(span);
-
-    const newRange = document.createRange();
-    newRange.selectNodeContents(span);
-
-    selection.removeAllRanges();
-    selection.addRange(newRange);
-
-    savedTextRange = newRange.cloneRange();
-
-    saveBlankCanvasPage?.();
-    return;
-  }
-
-  styleCallback(target);
-  saveBlankCanvasPage?.();
-}
-
-function setActiveTextColor(color) {
-  applyTextStyle((el) => {
-    el.style.color = color;
-  });
-}
-
-function setActiveTextFont(font) {
-  const target = getActiveTextTarget();
-
-  applyTextStyle((el) => {
-    el.style.fontFamily = font;
-  });
-
-  if (
-    target &&
-    (target.id === "freeformDirectText" ||
-      target.id === "freeformPageTitle")
-  ) {
-    const page = getPageById(currentPageId);
-
-    if (page) {
-      page.textFont = font;
-      savePage(page);
-      saveCurrentJournalState?.();
-    }
-  }
-}
-
-function setActiveTextSize(size) {
-  applyTextStyle((el) => {
-    el.style.setProperty("font-size", `${size}px`, "important");
-    el.style.lineHeight = "1.05";
-  });
-}
-
-function saveCurrentTextSelection() {
-  const selection = window.getSelection();
-  if (!selection || selection.rangeCount === 0) return;
-
-  const range = selection.getRangeAt(0);
-  const container = range.commonAncestorContainer;
-  const element =
-    container.nodeType === 3 ? container.parentElement : container;
-
-  if (
-    element?.closest(
-      "#freeformPageTitle, #freeformDirectText, .cute-textbox-text, .canvas-textarea"
-    )
-  ) {
-    savedTextRange = range.cloneRange();
-  }
-}
-
-function restoreTextSelection() {
-  if (!savedTextRange) return;
-
-  const selection = window.getSelection();
-  selection.removeAllRanges();
-  selection.addRange(savedTextRange);
-}
+/*
+ * Text formatting and selection persistence are now handled by
+ * shared-editor-tools.js.
+ *
+ * This section only synchronizes the legacy Freeform controls
+ * with the currently active text target.
+ */
 
 function updateFreeformControlsFromTarget() {
   let target = null;
@@ -887,8 +747,6 @@ document.addEventListener("focusin", (event) => {
 });
 
 document.addEventListener("selectionchange", () => {
-  saveCurrentTextSelection();
-
   setTimeout(() => {
     updateFreeformControlsFromTarget?.();
   }, 0);
@@ -937,9 +795,6 @@ window.getSelectedCanvasElement = getSelectedCanvasElement;
 
 window.setActiveTextTarget = setActiveTextTarget;
 window.getActiveTextTarget = getActiveTextTarget;
-window.setActiveTextColor = setActiveTextColor;
-window.setActiveTextFont = setActiveTextFont;
-window.setActiveTextSize = setActiveTextSize;
 
 window.togglePenMode = togglePenMode;
 window.setBrushTool = setBrushTool;
@@ -958,5 +813,3 @@ window.addCanvasTextBlock = addCanvasTextBlock;
 window.addCanvasNote = addCanvasNote;
 window.addCanvasSticker = addCanvasSticker;
 window.addCanvasShape = addCanvasShape;
-window.saveCurrentTextSelection = saveCurrentTextSelection;
-window.restoreTextSelection = restoreTextSelection;

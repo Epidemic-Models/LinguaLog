@@ -412,10 +412,10 @@ function toggleFreeformPanel() {
         <div class="freeform-panel-title">Selected text style</div>
 
         <label>Color</label>
-        <input id="freeformColorInput" type="color" oninput="setActiveTextColor(this.value)" value="#2d2925">
+        <input id="freeformColorInput" type="color" oninput="LinguaEditorTools.applyTextColor(this.value)" value="#2d2925">
 
         <label>Font</label>
-        <select id="freeformFontSelect" onchange="setActiveTextFont(this.value)">
+        <select id="freeformFontSelect" onchange="LinguaEditorTools.applyFont(this.value)">
           <option value="'Inter', sans-serif">Inter</option>
           <option value="'Poppins', sans-serif">Poppins</option>
           <option value="'Playfair Display', serif">Playfair</option>
@@ -425,7 +425,7 @@ function toggleFreeformPanel() {
         </select>
 
         <label>Size</label>
-        <select id="freeformSizeSelect" onchange="setActiveTextSize(this.value)">
+        <select id="freeformSizeSelect" onchange="LinguaEditorTools.applyFontSize(this.value)">
           <option value="8">8</option>
           <option value="10">10</option>
           <option value="12">12</option>
@@ -467,11 +467,6 @@ function toggleFreeformPanel() {
     </div>
   `;
 
-  popover.querySelectorAll("input, select").forEach((control) => {
-    control.addEventListener("pointerdown", () => {
-      saveCurrentTextSelection?.();
-    });
-  });
   updateFreeformControlsFromTarget();
 }
 
