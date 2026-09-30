@@ -103,8 +103,8 @@
 
             position: absolute;
 
-            top: 18px;
-            right: 80px;
+            top: 78px;
+            right: 18px;
 
             z-index: 145;
 
@@ -753,10 +753,10 @@
             .editor-tools-launch {
 
                 top:
-                    12px;
+                    70px;
 
                 right:
-                    74px;
+                    12px;
             }
 
 

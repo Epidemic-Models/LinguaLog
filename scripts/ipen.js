@@ -336,13 +336,14 @@
         .ipen-toolbar {
             position: absolute;
 
-            left: 50%;
+            left: auto;
+            right: 18px;
             top: 18px;
 
             transform:
-                translateX(-50%);
+                none;
 
-            z-index: 130;
+            z-index: 150;
 
             display:
                 none;
@@ -353,8 +354,14 @@
             gap:
                 7px;
 
+            width:
+                max-content;
+
             max-width:
-                calc(100% - 150px);
+                none;
+
+            overflow:
+                visible;
 
             padding:
                 9px 11px;
@@ -387,6 +394,12 @@
         .ipen-toolbar.open {
             display:
                 flex;
+        }
+
+
+        .ipen-toolbar::-webkit-scrollbar {
+            display:
+                none;
         }
 
 
@@ -757,10 +770,10 @@
 
             .ipen-toolbar {
                 left:
-                    14px;
+                    auto;
 
                 right:
-                    76px;
+                    12px;
 
                 top:
                     12px;
@@ -768,20 +781,26 @@
                 transform:
                     none;
 
+                width:
+                    max-content;
+
                 max-width:
                     none;
 
-                overflow-x:
-                    auto;
+                gap:
+                    7px;
 
-                overflow-y:
-                    hidden;
+                padding:
+                    9px 11px;
+
+                overflow:
+                    visible;
 
                 justify-content:
                     flex-start;
 
-                scrollbar-width:
-                    none;
+                z-index:
+                    150;
             }
 
 
@@ -3002,10 +3021,15 @@
 
 
                 /*
-                 * First click:
+                 * iPen launcher behavior:
                  *
-                 * Activate handwriting and
-                 * show the toolbar.
+                 * If handwriting is not active,
+                 * activate it and open the toolbar.
+                 *
+                 * If handwriting is already active,
+                 * only toggle the toolbar.
+                 * Never deactivate iPen just because
+                 * the launcher was clicked again.
                  */
 
                 if (
@@ -3020,13 +3044,9 @@
                 }
 
 
-                /*
-                * Already active:
-                * turn handwriting OFF
-                * and return to normal typing.
-                */
-
-                setActive(false);
+                setPopover(
+                    !state.popoverOpen
+                );
             }
         );
 
