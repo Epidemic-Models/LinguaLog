@@ -43,7 +43,7 @@ function applyZodiacArtwork(sign) {
     return;
   }
 
-  const zodiacPath = `assets/zodiac/${sign}.png`;
+  const zodiacPath = `assets/backgrounds/zodiac/zodiac-${sign}.webp`;
 
   imageLayer.style.backgroundImage = `url('${zodiacPath}')`;
   imageLayer.style.backgroundSize = "cover";

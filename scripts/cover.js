@@ -404,9 +404,7 @@ function startJournal() {
   showEditor();
 
   const pageIds = getPagesIndex();
-  if (pageIds.length === 0) {
-    createNewPage();
-  } else {
+  if (pageIds.length > 0) {
     loadPage(pageIds[0]);
   }
 }

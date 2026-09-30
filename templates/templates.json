@@ -118,5 +118,65 @@
     "id": "image24",
     "thumb": "templates/thumbs/image24.png",
     "full": "templates/full/image24.png"
+  },
+  {
+    "id": "zodiac-aries",
+    "thumb": "assets/backgrounds/zodiac/zodiac-aries.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-aries.webp"
+  },
+  {
+    "id": "zodiac-taurus",
+    "thumb": "assets/backgrounds/zodiac/zodiac-taurus.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-taurus.webp"
+  },
+  {
+    "id": "zodiac-gemini",
+    "thumb": "assets/backgrounds/zodiac/zodiac-gemini.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-gemini.webp"
+  },
+  {
+    "id": "zodiac-cancer",
+    "thumb": "assets/backgrounds/zodiac/zodiac-cancer.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-cancer.webp"
+  },
+  {
+    "id": "zodiac-leo",
+    "thumb": "assets/backgrounds/zodiac/zodiac-leo.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-leo.webp"
+  },
+  {
+    "id": "zodiac-virgo",
+    "thumb": "assets/backgrounds/zodiac/zodiac-virgo.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-virgo.webp"
+  },
+  {
+    "id": "zodiac-libra",
+    "thumb": "assets/backgrounds/zodiac/zodiac-libra.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-libra.webp"
+  },
+  {
+    "id": "zodiac-scorpio",
+    "thumb": "assets/backgrounds/zodiac/zodiac-scorpio.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-scorpio.webp"
+  },
+  {
+    "id": "zodiac-sagittarius",
+    "thumb": "assets/backgrounds/zodiac/zodiac-sagittarius.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-sagittarius.webp"
+  },
+  {
+    "id": "zodiac-capricorn",
+    "thumb": "assets/backgrounds/zodiac/zodiac-capricorn.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-capricorn.webp"
+  },
+  {
+    "id": "zodiac-aquarius",
+    "thumb": "assets/backgrounds/zodiac/zodiac-aquarius.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-aquarius.webp"
+  },
+  {
+    "id": "zodiac-pisces",
+    "thumb": "assets/backgrounds/zodiac/zodiac-pisces.webp",
+    "full": "assets/backgrounds/zodiac/zodiac-pisces.webp"
   }
 ]

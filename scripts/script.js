@@ -132,7 +132,7 @@ async function loadTemplateLibrary() {
   if (templateLibraryLoaded) return templateLibrary;
 
   try {
-    const response = await fetch("templates/templates.json");
+    const response = await fetch("templates/templates.json", { cache: "no-store" });
     templateLibrary = await response.json();
     templateLibraryLoaded = true;
     return templateLibrary;
@@ -261,12 +261,22 @@ function clearTemplateSelection() {
   closeTemplateLibrary();
 }
 
-function deleteJournal(journalId) {
+async function deleteJournal(journalId) {
   const journals = getJournals().filter((journal) => journal.id !== journalId);
   saveJournals(journals);
 
   if (getCurrentJournalId() === journalId) {
     localStorage.removeItem("lingualog-current-journal-id");
+  }
+
+  // Delete the same journal from Supabase so cloud sync
+  // cannot restore it after it has been removed locally.
+  if (typeof deleteJournalFromCloud === "function") {
+    try {
+      await deleteJournalFromCloud(journalId);
+    } catch (error) {
+      console.error("Failed to delete journal from cloud:", error);
+    }
   }
 
   renderJournalLibrary();
@@ -309,7 +319,7 @@ function renderJournalLibrary() {
       "";
 
     const zodiacImage = zodiacSign
-      ? `assets/zodiac/${zodiacSign.toLowerCase()}.png`
+      ? `assets/backgrounds/zodiac/zodiac-${zodiacSign.toLowerCase()}.webp`
       : "";
 
     const coverImage =
@@ -319,7 +329,7 @@ function renderJournalLibrary() {
       journal.settings?.zodiacCoverImage ||
       journal.settings?.zodiacImage ||
       zodiacImage ||
-      "";
+      "assets/backgrounds/covers/bornali-default.png?v=3";
 
     const coverStyle = coverImage
       ? `style="
@@ -360,6 +370,13 @@ function renderJournalLibrary() {
     const deleteBtn = card.querySelector(".journal-card-delete");
     deleteBtn.addEventListener("click", (event) => {
       event.stopPropagation();
+
+      const confirmed = window.confirm(
+        "Are you sure you want to permanently delete this journal?"
+      );
+
+      if (!confirmed) return;
+
       deleteJournal(journal.id);
     });
 
@@ -386,11 +403,13 @@ function openJournal(journalId) {
   loadJournalIntoLegacyStorage(journalId);
 
   const pages = getPagesIndex();
+
   if (pages.length > 0) {
     showEditor();
     loadPage(pages[0]);
   } else {
-    showCoverPage();
+    currentPageId = null;
+    showEditor();
   }
 }
 
@@ -516,6 +535,55 @@ function showCoverPage() {
   refreshIcons();
 }
 
+function renderEmptyJournalState() {
+  const container = document.getElementById("editorContainer");
+  if (!container) return;
+
+  currentPageId = null;
+
+  container.innerHTML = `
+    <div class="empty-journal-state">
+      <div class="empty-journal-glow empty-journal-glow-one"></div>
+      <div class="empty-journal-glow empty-journal-glow-two"></div>
+
+      <div class="empty-journal-card">
+        <div class="empty-journal-icon" aria-hidden="true">
+          <span>✦</span>
+        </div>
+
+        <div class="empty-journal-eyebrow">A FRESH BEGINNING</div>
+
+        <h1>Your journal awaits</h1>
+
+        <p class="empty-journal-copy">
+          Every journal begins with a blank page.<br>
+          Make the first one yours.
+        </p>
+
+        <button
+          type="button"
+          class="empty-journal-create"
+          onclick="openNewPageModal()"
+        >
+          <span class="empty-journal-plus">＋</span>
+          <span>Create your first page</span>
+        </button>
+
+        <p class="empty-journal-hint">
+          Choose your layout, theme &amp; background
+        </p>
+      </div>
+    </div>
+  `;
+
+  document.body.classList.add("journal-is-empty");
+  refreshIcons?.();
+}
+
+function clearEmptyJournalState() {
+  document.body.classList.remove("journal-is-empty");
+}
+
 function showEditor() {
   document.getElementById("welcomePage")?.classList.add("hidden");
   document.getElementById("libraryPage")?.classList.add("hidden");
@@ -531,8 +599,17 @@ function showEditor() {
   const container = document.getElementById("editorContainer");
   if (!journal || !container) return;
 
+  const pageIds = getPagesIndex();
   const currentPage = currentPageId ? getPageById(currentPageId) : null;
   container.innerHTML = "";
+
+  if (pageIds.length === 0) {
+    renderEmptyJournalState();
+    window.scrollTo(0, 0);
+    return;
+  }
+
+  clearEmptyJournalState();
 
   if (currentPage) {
     renderPage(container, currentPage);
@@ -631,6 +708,8 @@ function loadPage(pageId) {
 }
 
 function renderPage(container, page) {
+  clearEmptyJournalState();
+
   const contentMode = page?.contentMode || "structured";
 
   if (contentMode === "blank" || contentMode === "freeform") {
@@ -763,16 +842,7 @@ function deletePage(pageId) {
   saveCurrentJournalState?.();
 
   if (pageIds.length === 0) {
-    const container = document.getElementById("editorContainer");
-    if (container) {
-      container.innerHTML = `
-        <div class="editor-surface">
-          <h2>No pages yet</h2>
-          <p>Create a new page to continue.</p>
-          <button type="button" onclick="openNewPageModal()">+ New Page</button>
-        </div>
-      `;
-    }
+    renderEmptyJournalState();
 
     renderPagesList?.();
     renderMobilePagesList?.();

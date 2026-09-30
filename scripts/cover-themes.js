@@ -12,9 +12,17 @@ function applyCoverClasses(coverPreview, coverStyle, fontStyle, zodiacSign = '')
 
 function applyPreviewBackground(coverPreview, coverStyle, color) {
   if (coverStyle === 'minimal') {
-    coverPreview.style.background = color;
+    coverPreview.style.backgroundImage =
+      "url('assets/backgrounds/covers/bornali-default.png?v=2')";
+    coverPreview.style.backgroundSize = '100% 100%';
+    coverPreview.style.backgroundPosition = 'center';
+    coverPreview.style.backgroundRepeat = 'no-repeat';
   } else {
     coverPreview.style.background = '';
+    coverPreview.style.backgroundImage = '';
+    coverPreview.style.backgroundSize = '';
+    coverPreview.style.backgroundPosition = '';
+    coverPreview.style.backgroundRepeat = '';
   }
 }
 
