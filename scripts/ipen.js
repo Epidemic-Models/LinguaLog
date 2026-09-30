@@ -31,6 +31,15 @@
         popoverOpen: false,
         drawing: false,
 
+        /*
+         * Pointer currently controlling iPen.
+         *
+         * Important on iPad / Apple Pencil because Safari may
+         * cancel or lose pointer capture during an interrupted
+         * Pencil gesture.
+         */
+        pointerId: null,
+
         tool: "pen",
         color: "#2d2925",
         size: 4,
@@ -2327,9 +2336,7 @@
 
     function begin(event) {
 
-        if (
-            !state.active
-        ) {
+        if (!state.active) {
             return;
         }
 
@@ -2337,7 +2344,6 @@
         /*
          * Ignore right/middle mouse buttons.
          */
-
         if (
             typeof event.button === "number" &&
             event.button > 0
@@ -2347,16 +2353,20 @@
 
 
         /*
-         * If the toolbar is open and the user
-         * starts drawing on empty canvas space,
-         * hide the toolbar first.
+         * Ignore a second simultaneous pointer.
          *
-         * iPen itself remains active.
+         * This prevents a finger from stealing an active
+         * Apple Pencil stroke on iPad.
          */
         if (
-            state.popoverOpen
+            state.pointerId !== null &&
+            state.pointerId !== event.pointerId
         ) {
+            return;
+        }
 
+
+        if (state.popoverOpen) {
             setPopover(false);
         }
 
@@ -2364,66 +2374,11 @@
         event.preventDefault();
 
 
-            /*
-            * SELECT TOOL
-            *
-            * Start a new handwriting selection
-            * instead of drawing ink.
-            */
-
-            if (
-                state.tool === "select"
-            ) {
-
-                const point =
-                    pointFromEvent(event);
-
-
-                state.selecting =
-                    true;
-
-
-                state.drawing =
-                    false;
-
-
-                state.current =
-                    null;
-
-
-                state.selectedStrokeIndexes =
-                    [];
-
-
-                state.selectionStart = {
-                    x: point.x,
-                    y: point.y
-                };
-
-
-                state.selectionEnd = {
-                    x: point.x,
-                    y: point.y
-                };
-
-
-                try {
-
-                    state.canvas.setPointerCapture?.(
-                        event.pointerId
-                    );
-
-                } catch (_) {}
-
-
-                redraw();
-
-                return;
-            }
-
-
-            state.drawing =
-                true;
+        /*
+         * This pointer owns the current iPen gesture.
+         */
+        state.pointerId =
+            event.pointerId;
 
 
         try {
@@ -2433,6 +2388,53 @@
             );
 
         } catch (_) {}
+
+
+        /*
+         * SELECT TOOL
+         */
+        if (
+            state.tool === "select"
+        ) {
+
+            const point =
+                pointFromEvent(event);
+
+
+            state.selecting =
+                true;
+
+            state.drawing =
+                false;
+
+            state.current =
+                null;
+
+            state.selectedStrokeIndexes =
+                [];
+
+            state.selectionStart = {
+                x: point.x,
+                y: point.y
+            };
+
+            state.selectionEnd = {
+                x: point.x,
+                y: point.y
+            };
+
+
+            redraw();
+
+            return;
+        }
+
+
+        /*
+         * DRAWING TOOL
+         */
+        state.drawing =
+            true;
 
 
         state.current = {
@@ -2465,7 +2467,19 @@
 
     function move(event) {
 
-                if (
+        /*
+         * Only the pointer which started the gesture may
+         * continue it.
+         */
+        if (
+            state.pointerId === null ||
+            event.pointerId !== state.pointerId
+        ) {
+            return;
+        }
+
+
+        if (
             state.active &&
             state.tool === "select" &&
             state.selecting
@@ -2489,7 +2503,8 @@
             return;
         }
 
-                if (
+
+        if (
             !state.active ||
             !state.drawing ||
             !state.current
@@ -2502,11 +2517,8 @@
 
 
         const events =
-            typeof event.getCoalescedEvents ===
-                "function"
-
+            typeof event.getCoalescedEvents === "function"
                 ? event.getCoalescedEvents()
-
                 : [event];
 
 
@@ -2527,12 +2539,62 @@
 
 
     /* =========================================================
+       POINTER CLEANUP
+       ========================================================= */
+
+    function releaseActivePointer(event) {
+
+        const pointerId =
+            event?.pointerId ??
+            state.pointerId;
+
+
+        if (
+            pointerId !== null &&
+            pointerId !== undefined
+        ) {
+
+            try {
+
+                if (
+                    state.canvas?.hasPointerCapture?.(
+                        pointerId
+                    )
+                ) {
+
+                    state.canvas.releasePointerCapture?.(
+                        pointerId
+                    );
+                }
+
+            } catch (_) {}
+        }
+
+
+        state.pointerId =
+            null;
+    }
+
+
+    /* =========================================================
        DRAW END
        ========================================================= */
 
     function end(event) {
 
-                if (
+        /*
+         * Ignore pointerup belonging to some other pointer.
+         */
+        if (
+            state.pointerId !== null &&
+            event?.pointerId !== undefined &&
+            event.pointerId !== state.pointerId
+        ) {
+            return;
+        }
+
+
+        if (
             state.tool === "select" &&
             state.selecting
         ) {
@@ -2540,14 +2602,17 @@
             event?.preventDefault?.();
 
 
-            const point =
-                pointFromEvent(event);
+            if (event) {
+
+                const point =
+                    pointFromEvent(event);
 
 
-            state.selectionEnd = {
-                x: point.x,
-                y: point.y
-            };
+                state.selectionEnd = {
+                    x: point.x,
+                    y: point.y
+                };
+            }
 
 
             state.selecting =
@@ -2556,15 +2621,21 @@
 
             selectStrokesInBounds();
 
+            releaseActivePointer(event);
+
             redraw();
 
             return;
         }
 
+
         if (
             !state.drawing ||
             !state.current
         ) {
+
+            releaseActivePointer(event);
+
             return;
         }
 
@@ -2588,14 +2659,105 @@
         /*
          * A new stroke invalidates redo.
          */
-
         state.redo =
             [];
 
 
+        releaseActivePointer(event);
+
         redraw();
 
         savePageData();
+    }
+
+
+    /* =========================================================
+       CANCEL / LOST POINTER
+       ========================================================= */
+
+    function cancelPointer(event) {
+
+        /*
+         * Ignore cancellation from an unrelated pointer.
+         */
+        if (
+            state.pointerId !== null &&
+            event?.pointerId !== undefined &&
+            event.pointerId !== state.pointerId
+        ) {
+            return;
+        }
+
+
+        event?.preventDefault?.();
+
+
+        /*
+         * A cancelled Pencil gesture is NOT the same as a
+         * successful pointerup. Throw away the unfinished
+         * stroke rather than saving corrupted/incomplete ink.
+         */
+        state.drawing =
+            false;
+
+        state.current =
+            null;
+
+
+        if (state.selecting) {
+
+            state.selecting =
+                false;
+
+            state.selectionStart =
+                null;
+
+            state.selectionEnd =
+                null;
+        }
+
+
+        releaseActivePointer(event);
+
+        redraw();
+    }
+
+
+    function lostPointerCapture(event) {
+
+        /*
+         * Safari can lose capture unexpectedly. If this was
+         * our active pointer, reset the transient gesture so
+         * iPen cannot remain stuck in drawing mode.
+         */
+        if (
+            state.pointerId !== null &&
+            event.pointerId !== state.pointerId
+        ) {
+            return;
+        }
+
+
+        state.pointerId =
+            null;
+
+        state.drawing =
+            false;
+
+        state.current =
+            null;
+
+        state.selecting =
+            false;
+
+        state.selectionStart =
+            null;
+
+        state.selectionEnd =
+            null;
+
+
+        redraw();
     }
 
 
@@ -2609,9 +2771,7 @@
             state.canvas;
 
 
-        if (
-            !canvas
-        ) {
+        if (!canvas) {
             return;
         }
 
@@ -2643,9 +2803,26 @@
         );
 
 
+        /*
+         * pointercancel must abort rather than commit
+         * the current stroke.
+         */
         canvas.addEventListener(
             "pointercancel",
-            end,
+            cancelPointer,
+            {
+                passive: false
+            }
+        );
+
+
+        /*
+         * Essential recovery path for interrupted
+         * Apple Pencil gestures in Safari.
+         */
+        canvas.addEventListener(
+            "lostpointercapture",
+            lostPointerCapture,
             {
                 passive: false
             }
@@ -2656,14 +2833,22 @@
             "pointerleave",
             event => {
 
+                /*
+                 * With pointer capture active, leaving the canvas
+                 * is normal and drawing should continue.
+                 *
+                 * If capture has disappeared unexpectedly, abort
+                 * the transient gesture instead of leaving iPen
+                 * stuck.
+                 */
                 if (
-                    state.drawing &&
+                    (state.drawing || state.selecting) &&
                     !canvas.hasPointerCapture?.(
                         event.pointerId
                     )
                 ) {
 
-                    end(event);
+                    cancelPointer(event);
                 }
             },
             {
