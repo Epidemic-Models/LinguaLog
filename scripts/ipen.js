@@ -2342,6 +2342,18 @@
 
 
         /*
+         * iPen is Pencil-only.
+         *
+         * Finger/touch and mouse must never start an iPen stroke.
+         * This prevents normal page interaction from accidentally
+         * becoming handwriting.
+         */
+        if (event.pointerType !== "pen") {
+            return;
+        }
+
+
+        /*
          * Ignore right/middle mouse buttons.
          */
         if (
