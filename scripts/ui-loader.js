@@ -5,11 +5,12 @@ async function loadUI() {
   if (!root || !modalRoot) return;
 
   try {
-    const [welcome, library, cover, editor, modals] = await Promise.all([
+    const [welcome, library, cover, editor, community, modals] = await Promise.all([
       fetch("pages/welcome.html").then(r => r.text()),
       fetch("pages/library.html").then(r => r.text()),
       fetch("pages/cover.html").then(r => r.text()),
       fetch("pages/editor.html").then(r => r.text()),
+      fetch("pages/community.html").then(r => r.text()),
       fetch("pages/modals.html").then(r => r.text())
     ]);
 
@@ -18,6 +19,7 @@ async function loadUI() {
       ${library}
       ${cover}
       ${editor}
+      ${community}
     `;
 
     modalRoot.innerHTML = modals;
@@ -27,6 +29,7 @@ async function loadUI() {
    refreshIcons();   
    
     initializeApp();
+    window.initializeCommunity?.();
 
     /* ✅ CLEAN INITIAL STATE */
     showWelcomePage();

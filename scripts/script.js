@@ -525,6 +525,7 @@ function showLibraryPage() {
   document.getElementById("libraryPage")?.classList.remove("hidden");
   document.getElementById("coverPage")?.classList.add("hidden");
   document.getElementById("appLayout")?.classList.add("hidden");
+  document.getElementById("communityPage")?.classList.add("hidden");
   document.getElementById("mobileTopbar")?.classList.add("hidden");
   closeMobileDrawer();
 
@@ -532,6 +533,27 @@ function showLibraryPage() {
   window.scrollTo(0, 0);
 
   refreshIcons();
+}
+
+function showCommunityPage() {
+  saveCurrentJournalState?.();
+
+  setJournalViewMode?.("edit");
+  document.body.classList.remove("reading-book-mode");
+  document.getElementById("readModeNav")?.classList.add("hidden");
+
+  document.getElementById("welcomePage")?.classList.add("hidden");
+  document.getElementById("libraryPage")?.classList.add("hidden");
+  document.getElementById("coverPage")?.classList.add("hidden");
+  document.getElementById("appLayout")?.classList.add("hidden");
+  document.getElementById("communityPage")?.classList.remove("hidden");
+  document.getElementById("mobileTopbar")?.classList.add("hidden");
+
+  closeMobileDrawer?.();
+  window.initializeCommunity?.();
+
+  window.scrollTo(0, 0);
+  refreshIcons?.();
 }
 
 function showCoverPage() {
@@ -542,6 +564,7 @@ function showCoverPage() {
   document.getElementById("libraryPage")?.classList.add("hidden");
   document.getElementById("coverPage")?.classList.remove("hidden");
   document.getElementById("appLayout")?.classList.add("hidden");
+  document.getElementById("communityPage")?.classList.add("hidden");
   document.getElementById("mobileTopbar")?.classList.remove("hidden");
   updateMobileDrawerBrand();
   closeMobileDrawer();
@@ -605,6 +628,7 @@ function showEditor() {
   document.getElementById("libraryPage")?.classList.add("hidden");
   document.getElementById("coverPage")?.classList.add("hidden");
   document.getElementById("appLayout")?.classList.remove("hidden");
+  document.getElementById("communityPage")?.classList.add("hidden");
   document.getElementById("mobileTopbar")?.classList.remove("hidden");
   applyJournalViewMode?.();
   updateMobileDrawerBrand();
@@ -645,6 +669,7 @@ function showWelcomePage() {
   document.getElementById("libraryPage")?.classList.add("hidden");
   document.getElementById("coverPage")?.classList.add("hidden");
   document.getElementById("appLayout")?.classList.add("hidden");
+  document.getElementById("communityPage")?.classList.add("hidden");
   document.getElementById("mobileTopbar")?.classList.add("hidden");
   document.getElementById("welcomeArt")?.classList.remove("hidden");
   closeMobileDrawer();
@@ -1270,6 +1295,7 @@ document.addEventListener("change", (event) => {
 
 window.showWelcomePage = showWelcomePage;
 window.showLibraryPage = showLibraryPage;
+window.showCommunityPage = showCommunityPage;
 window.showCoverPage = showCoverPage;
 window.showEditor = showEditor;
 window.createJournalAndOpenCover = createJournalAndOpenCover;
