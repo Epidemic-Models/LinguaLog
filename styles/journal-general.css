@@ -545,3 +545,50 @@
   right: 10px;
   transform: rotate(180deg);
 }
+
+
+/* ==========================================================
+   Responsive General Journal
+   ========================================================== */
+
+@media (max-width: 1000px) {
+  .general-content,
+  .layout-journal .general-content,
+  .layout-planner .general-content {
+    grid-template-columns: 1fr 0.8fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .general-journal {
+    width: calc(100% - 24px) !important;
+    margin: 12px auto !important;
+
+    /*
+     * Portrait/mobile must grow with its content instead of
+     * remaining locked to the desktop 4:3 journal shape.
+     */
+    aspect-ratio: auto;
+    height: auto;
+    overflow: visible;
+  }
+
+  #generalPageTitle {
+    padding-right: 60px;
+  }
+
+  .general-card {
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .general-shell {
+    padding: 18px;
+  }
+
+  .general-content,
+  .layout-journal .general-content,
+  .layout-planner .general-content {
+    grid-template-columns: 1fr;
+  }
+}

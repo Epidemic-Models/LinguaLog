@@ -2651,18 +2651,11 @@
 
 
         /*
-         * iPen accepts:
+         * iPen is Apple Pencil / stylus only.
          *
-         * - pen/stylus input on supported devices
-         * - mouse/trackpad input for desktop use and testing
-         *
-         * Finger/touch input is deliberately ignored so normal
-         * page scrolling and tapping do not become handwriting.
+         * Finger/touch and mouse must never start an iPen stroke.
          */
-        if (
-            event.pointerType !== "pen" &&
-            event.pointerType !== "mouse"
-        ) {
+        if (event.pointerType !== "pen") {
             return;
         }
 
@@ -2679,16 +2672,40 @@
 
 
         /*
-         * Ignore a second simultaneous pointer.
+         * A fresh Pencil pointerdown is authoritative.
          *
-         * This prevents a finger from stealing an active
-         * Apple Pencil stroke on iPad.
+         * Safari on iPad can occasionally fail to deliver the
+         * cleanup event for the previous Pencil contact. If that
+         * happens, pointerId still contains the old ID and rejecting
+         * this pointerdown makes every other stroke appear to fail.
+         *
+         * Because finger/touch and mouse have already been rejected
+         * above, a different pointer ID here is another Pencil
+         * contact. Recover the stale transient gesture and accept it.
          */
         if (
             state.pointerId !== null &&
             state.pointerId !== event.pointerId
         ) {
-            return;
+            try {
+                if (
+                    state.canvas?.hasPointerCapture?.(
+                        state.pointerId
+                    )
+                ) {
+                    state.canvas.releasePointerCapture?.(
+                        state.pointerId
+                    );
+                }
+            } catch (_) {}
+
+            state.pointerId = null;
+            state.drawing = false;
+            state.current = null;
+
+            state.selecting = false;
+            state.selectionStart = null;
+            state.selectionEnd = null;
         }
 
 
