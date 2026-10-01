@@ -1,0 +1,77 @@
+<div id="communityPage" class="community-page hidden">
+  <div class="community-shell">
+
+    <header class="community-header">
+      <div>
+        <button
+          type="button"
+          class="community-back-btn"
+          onclick="showWelcomePage()"
+        >
+          ← Home
+        </button>
+
+        <p class="community-eyebrow">LINGUALOG COMMUNITY</p>
+        <h1>Community</h1>
+        <p class="community-intro">
+          A place to share thoughts, ideas, research, and discoveries.
+        </p>
+      </div>
+    </header>
+
+    <main class="community-content">
+
+      <section class="community-compose-card">
+        <div class="community-compose-heading">
+          <div class="community-avatar-placeholder" aria-hidden="true">
+            ✦
+          </div>
+
+          <div>
+            <h2>Share something</h2>
+            <p>Post a thought, idea, question, or research update.</p>
+          </div>
+        </div>
+
+        <textarea
+          id="communityPostInput"
+          class="community-post-input"
+          placeholder="What are you thinking about?"
+          maxlength="5000"
+        ></textarea>
+
+        <div class="community-compose-footer">
+          <span id="communityPostStatus" class="community-post-status"></span>
+
+          <button
+            type="button"
+            id="communityPublishBtn"
+            class="community-publish-btn"
+          >
+            Post
+          </button>
+        </div>
+      </section>
+
+      <section class="community-feed-section">
+        <div class="community-feed-heading">
+          <div>
+            <p class="community-eyebrow">DISCOVER</p>
+            <h2>Recent posts</h2>
+          </div>
+        </div>
+
+        <div id="communityFeed" class="community-feed">
+          <div class="community-empty-state">
+            <div class="community-empty-icon">✦</div>
+            <h3>The conversation starts here</h3>
+            <p>
+              Community posts will appear here.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>

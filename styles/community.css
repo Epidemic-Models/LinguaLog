@@ -1,0 +1,208 @@
+/* ==========================================================
+   LINGUALOG COMMUNITY
+   Isolated community styles
+   ========================================================== */
+
+.community-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 52px 24px 80px;
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(221, 211, 255, 0.5),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 90% 18%,
+      rgba(255, 221, 230, 0.5),
+      transparent 30%
+    ),
+    #f8f6f2;
+  color: #282421;
+  font-family: "Poppins", "Inter", sans-serif;
+}
+
+.community-page.hidden {
+  display: none !important;
+}
+
+.community-shell {
+  width: min(900px, 100%);
+  margin: 0 auto;
+}
+
+.community-header {
+  margin-bottom: 30px;
+}
+
+.community-back-btn {
+  margin-bottom: 32px;
+  padding: 10px 16px;
+  border: 1px solid rgba(40, 36, 33, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #39322e;
+  font-weight: 700;
+}
+
+.community-eyebrow {
+  margin: 0 0 8px;
+  color: #7667a8;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.community-header h1 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2.8rem, 7vw, 5rem);
+  line-height: 1;
+}
+
+.community-intro {
+  max-width: 620px;
+  margin: 18px 0 0;
+  color: #6b625d;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.community-content {
+  display: grid;
+  gap: 38px;
+}
+
+.community-compose-card {
+  padding: 26px;
+  border: 1px solid rgba(54, 45, 39, 0.08);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 20px 55px rgba(55, 44, 37, 0.08);
+}
+
+.community-compose-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.community-avatar-placeholder {
+  display: grid;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ddd4ff, #ffdbe5);
+  color: #5f527d;
+  font-size: 1.2rem;
+}
+
+.community-compose-heading h2 {
+  margin: 0 0 3px;
+  font-size: 1.15rem;
+}
+
+.community-compose-heading p {
+  margin: 0;
+  color: #817772;
+  font-size: 0.9rem;
+}
+
+.community-post-input {
+  width: 100%;
+  min-height: 150px;
+  box-sizing: border-box;
+  padding: 18px;
+  border: 1px solid rgba(53, 46, 42, 0.12);
+  border-radius: 20px;
+  outline: none;
+  resize: vertical;
+  background: #fcfbf9;
+  color: #302a27;
+  font: inherit;
+  line-height: 1.6;
+}
+
+.community-post-input:focus {
+  border-color: rgba(118, 103, 168, 0.5);
+  box-shadow: 0 0 0 4px rgba(118, 103, 168, 0.08);
+}
+
+.community-compose-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.community-post-status {
+  color: #817772;
+  font-size: 0.88rem;
+}
+
+.community-publish-btn {
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: #302a27;
+  color: white;
+  font-weight: 800;
+}
+
+.community-publish-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.community-feed-heading h2 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+}
+
+.community-feed {
+  margin-top: 18px;
+}
+
+.community-empty-state {
+  padding: 52px 24px;
+  border: 1px dashed rgba(54, 45, 39, 0.16);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.5);
+  text-align: center;
+}
+
+.community-empty-icon {
+  margin-bottom: 12px;
+  color: #7667a8;
+  font-size: 2rem;
+}
+
+.community-empty-state h3 {
+  margin: 0 0 8px;
+}
+
+.community-empty-state p {
+  margin: 0;
+  color: #817772;
+}
+
+@media (max-width: 700px) {
+  .community-page {
+    padding: 30px 16px 60px;
+  }
+
+  .community-compose-card {
+    padding: 20px;
+    border-radius: 22px;
+  }
+
+  .community-compose-footer {
+    align-items: flex-end;
+  }
+}
