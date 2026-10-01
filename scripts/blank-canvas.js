@@ -1,9 +1,4 @@
 /* 1. STATE */
-let penModeActive = false;
-let brushTool = "pen";
-let brushColor = "#2d2925";
-let brushSize = 6;
-let brushOpacity = 1;
 let selectedCanvasElementId = null;
 let activeTextTarget = null;
 
@@ -124,112 +119,6 @@ function rgbToHex(rgb) {
       .map((x) => Number(x).toString(16).padStart(2, "0"))
       .join("")
   );
-}
-
-/* 4. DRAWING / PEN */
-
-function togglePenMode() {
-  penModeActive = !penModeActive;
-
-  const canvas = document.getElementById("freeformDrawingCanvas");
-  if (!canvas) return;
-
-  canvas.style.pointerEvents = penModeActive ? "auto" : "none";
-  canvas.classList.toggle("pen-active", penModeActive);
-}
-
-function setBrushTool(tool) {
-  brushTool = tool;
-}
-
-function setBrushColor(color) {
-  brushColor = color;
-}
-
-function setBrushSize(size) {
-  brushSize = Number(size);
-}
-
-function setBrushOpacity(value) {
-  brushOpacity = Number(value);
-}
-
-function clearDrawingCanvas() {
-  const canvas = document.getElementById("freeformDrawingCanvas");
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-
-function initFreeformDrawingCanvas() {
-  const canvas = document.getElementById("freeformDrawingCanvas");
-  const page = document.getElementById("freeformPage");
-  if (!canvas || !page) return;
-
-  const rect = page.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = rect.height;
-
-  const ctx = canvas.getContext("2d");
-  let drawing = false;
-
-  function getPos(e) {
-    const r = canvas.getBoundingClientRect();
-    const point = e.touches ? e.touches[0] : e;
-
-    return {
-      x: point.clientX - r.left,
-      y: point.clientY - r.top
-    };
-  }
-
-  function startDrawing(e) {
-    if (!penModeActive) return;
-
-    drawing = true;
-    const pos = getPos(e);
-
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-    e.preventDefault();
-  }
-
-  function draw(e) {
-    if (!drawing || !penModeActive) return;
-
-    const pos = getPos(e);
-
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.globalAlpha = brushOpacity;
-
-    if (brushTool === "eraser") {
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.lineWidth = brushSize * 2;
-    } else {
-      ctx.globalCompositeOperation = "source-over";
-      ctx.strokeStyle = brushColor;
-      ctx.lineWidth =
-        brushTool === "marker" ? brushSize * 2 :
-        brushTool === "calligraphy" ? brushSize * 1.4 :
-        brushSize;
-    }
-
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
-    e.preventDefault();
-  }
-
-  function stopDrawing() {
-    drawing = false;
-    ctx.closePath();
-  }
-
-  canvas.addEventListener("pointerdown", startDrawing);
-  canvas.addEventListener("pointermove", draw);
-  canvas.addEventListener("pointerup", stopDrawing);
-  canvas.addEventListener("pointerleave", stopDrawing);
 }
 
 /* 5. CANVAS HELPERS */
@@ -795,14 +684,6 @@ window.getSelectedCanvasElement = getSelectedCanvasElement;
 
 window.setActiveTextTarget = setActiveTextTarget;
 window.getActiveTextTarget = getActiveTextTarget;
-
-window.togglePenMode = togglePenMode;
-window.setBrushTool = setBrushTool;
-window.setBrushColor = setBrushColor;
-window.setBrushSize = setBrushSize;
-window.setBrushOpacity = setBrushOpacity;
-window.clearDrawingCanvas = clearDrawingCanvas;
-window.initFreeformDrawingCanvas = initFreeformDrawingCanvas;
 
 window.createCanvasElement = createCanvasElement;
 window.updateCanvasElementData = updateCanvasElementData;

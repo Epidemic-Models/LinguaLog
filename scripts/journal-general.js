@@ -368,8 +368,6 @@ function renderBlankTemplatePage(container, page = null) {
 
       <div class="freeform-page-wrap">
         <div id="freeformPage" class="freeform-page editor-surface" ${pageBackgroundStyle}>
-          <canvas id="freeformDrawingCanvas" class="freeform-drawing-canvas"></canvas>
-
           <div
             id="freeformTitleBox"
             class="freeform-floating-title"
@@ -419,7 +417,6 @@ function renderBlankTemplatePage(container, page = null) {
     });
   });
 
-  initFreeformDrawingCanvas?.();
 }
 
 function toggleFreeformPanel() {
@@ -480,13 +477,12 @@ function toggleFreeformPanel() {
       <div class="freeform-panel-section">
         <div class="freeform-panel-title">Drawing</div>
 
-        <button type="button" onclick="togglePenMode()">Use iPen</button>
-
-        <label>Pen color</label>
-        <input type="color" oninput="setBrushColor(this.value)" value="#2d2925">
-
-        <label>Pen size</label>
-        <input type="range" min="1" max="40" value="6" oninput="setBrushSize(this.value)">
+        <button
+          type="button"
+          onclick="LinguaIPen?.setActive(true); LinguaIPen?.setPopover(true); closeFreeformPanel()"
+        >
+          Use iPen
+        </button>
       </div>
 
     </div>
