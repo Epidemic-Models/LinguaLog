@@ -101,7 +101,9 @@ function renderGeneralJournal(container, page = null) {
 
   updateGeneralChecklistButton();
 
-  const savedFont = activePage.textFont || "'Inter', sans-serif";
+  const savedFont = activePage.textFont || "Inter";
+
+  LinguaEditorTools.ensureFontLoaded(savedFont);
 
   document.querySelectorAll(".general-font-target").forEach((element) => {
     element.style.fontFamily = savedFont;
@@ -172,17 +174,48 @@ function addChecklistItem(text = "", checked = false, shouldSave = true) {
 
   updateGeneralChecklistButton();
 
-  const selectedFont = document.getElementById("generalTextFont")?.value;
+  const page = getPageById(currentPageId);
+  const selectedFont =
+    document.getElementById("generalStyleFont")?.value ||
+    page?.textFont ||
+    "Inter";
 
-  if (selectedFont) {
-    row.querySelectorAll(".general-font-target").forEach((element) => {
-      element.style.fontFamily = selectedFont;
-    });
-  }
+  LinguaEditorTools.ensureFontLoaded(selectedFont);
+
+  row.querySelectorAll(".general-font-target").forEach((element) => {
+    element.style.fontFamily = selectedFont;
+  });
 
   if (shouldSave) {
     saveGeneralJournal(false);
   }
+}
+
+function getLinguaFontOptions(selectedFont = "") {
+  const fonts = window.LinguaEditorTools?.getFonts?.() || [
+    "Inter",
+    "Arial",
+    "Georgia",
+    "Times New Roman"
+  ];
+
+  const selectedName = String(selectedFont)
+    .replaceAll('"', "")
+    .replaceAll("'", "")
+    .split(",")[0]
+    .trim()
+    .toLowerCase();
+
+  return fonts
+    .map((font) => {
+      const selected =
+        font.toLowerCase() === selectedName
+          ? " selected"
+          : "";
+
+      return `<option value="${font}"${selected}>${font}</option>`;
+    })
+    .join("");
 }
 
 function toggleGeneralStylePanel() {
@@ -198,7 +231,7 @@ function toggleGeneralStylePanel() {
   }
 
   const page = getPageById(currentPageId);
-  const savedFont = page?.textFont || "'Inter', sans-serif";
+  const savedFont = page?.textFont || "Inter";
 
   popover.classList.remove("hidden");
 
@@ -207,12 +240,7 @@ function toggleGeneralStylePanel() {
       <div class="general-style-panel-title">Writing style</div>
 
       <select id="generalStyleFont" onchange="setGeneralTextFont(this.value)">
-        <option value="'Inter', sans-serif">Inter</option>
-        <option value="'Poppins', sans-serif">Poppins</option>
-        <option value="'Playfair Display', serif">Playfair</option>
-        <option value="'Lora', serif">Lora</option>
-        <option value="'Dancing Script', cursive">Dancing Script</option>
-        <option value="'Pacifico', cursive">Pacifico</option>
+        ${getLinguaFontOptions(savedFont)}
       </select>
     </div>
   `;
@@ -225,6 +253,8 @@ function toggleGeneralStylePanel() {
 }
 
 function setGeneralTextFont(fontFamily) {
+  LinguaEditorTools.ensureFontLoaded(fontFamily);
+
   document.querySelectorAll(".general-font-target").forEach((element) => {
     element.style.fontFamily = fontFamily;
   });
@@ -277,7 +307,7 @@ function saveGeneralJournal(showFeedback = true) {
     textFont:
       document.getElementById("generalStyleFont")?.value ||
       existingPage.textFont ||
-      "'Inter', sans-serif"
+      "Inter"
   };
 
   savePage(updatedPage);
@@ -416,12 +446,7 @@ function toggleFreeformPanel() {
 
         <label>Font</label>
         <select id="freeformFontSelect" onchange="LinguaEditorTools.applyFont(this.value)">
-          <option value="'Inter', sans-serif">Inter</option>
-          <option value="'Poppins', sans-serif">Poppins</option>
-          <option value="'Playfair Display', serif">Playfair</option>
-          <option value="'Lora', serif">Lora</option>
-          <option value="'Dancing Script', cursive">Dancing Script</option>
-          <option value="'Pacifico', cursive">Pacifico</option>
+          ${getLinguaFontOptions()}
         </select>
 
         <label>Size</label>

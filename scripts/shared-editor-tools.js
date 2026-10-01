@@ -36,14 +36,176 @@
        ========================================================= */
 
     const FONTS = [
+        /* Modern sans-serif */
         "Inter",
+        "Poppins",
+        "Nunito",
+        "Montserrat",
         "Arial",
+        "Helvetica",
+        "Verdana",
+        "Tahoma",
+        "Trebuchet MS",
+        "Arial Narrow",
+        "Century Gothic",
+
+        /* Word / Office-style */
+        "Aptos",
+        "Calibri",
+        "Candara",
+        "Corbel",
+        "Segoe UI",
+        "Franklin Gothic Medium",
+        "Gill Sans",
+
+        /* Serif */
         "Georgia",
         "Times New Roman",
-        "Verdana",
-        "Trebuchet MS",
-        "Courier New"
+        "Cambria",
+        "Garamond",
+        "Baskerville",
+        "Palatino",
+        "Book Antiqua",
+        "Century Schoolbook",
+        "Lora",
+        "Merriweather",
+        "Playfair Display",
+        "Cormorant Garamond",
+        "DM Serif Display",
+
+        /* Monospace */
+        "Courier New",
+        "Consolas",
+        "Lucida Console",
+        "Monaco",
+
+        /* Handwriting / decorative */
+        "Dancing Script",
+        "Pacifico",
+
+        /* Casual / display */
+        "Comic Sans MS",
+        "Impact"
     ];
+
+
+    const GOOGLE_FONTS = new Set([
+        "Inter",
+        "Poppins",
+        "Nunito",
+        "Montserrat",
+        "Lora",
+        "Merriweather",
+        "Playfair Display",
+        "Cormorant Garamond",
+        "DM Serif Display",
+        "Dancing Script",
+        "Pacifico",
+
+        /* Additional writing fonts */
+        "Roboto",
+        "Open Sans",
+        "Source Sans 3",
+        "Work Sans",
+        "Quicksand",
+        "Raleway",
+        "Ubuntu",
+        "Karla",
+        "Rubik",
+        "Manrope",
+
+        /* Additional serif fonts */
+        "Libre Baskerville",
+        "Crimson Text",
+        "EB Garamond",
+        "Libre Caslon Text",
+        "Bitter",
+        "Spectral",
+
+        /* Handwriting */
+        "Caveat",
+        "Kalam",
+        "Patrick Hand",
+        "Shadows Into Light",
+        "Indie Flower",
+        "Sacramento",
+        "Great Vibes",
+        "Satisfy",
+        "Handlee",
+
+        /* Display */
+        "Abril Fatface",
+        "Bebas Neue",
+        "Lobster",
+        "Cinzel",
+        "Righteous"
+    ]);
+
+
+    GOOGLE_FONTS.forEach(font => {
+
+        if (!FONTS.includes(font)) {
+            FONTS.push(font);
+        }
+    });
+
+
+    const loadedGoogleFonts =
+        new Set([
+            "Inter",
+            "Poppins",
+            "Nunito",
+            "Montserrat",
+            "Lora",
+            "Merriweather",
+            "Playfair Display",
+            "Cormorant Garamond",
+            "DM Serif Display",
+            "Dancing Script",
+            "Pacifico"
+        ]);
+
+
+    function ensureFontLoaded(font) {
+
+        if (
+            !GOOGLE_FONTS.has(font) ||
+            loadedGoogleFonts.has(font)
+        ) {
+            return;
+        }
+
+
+        const link =
+            document.createElement("link");
+
+
+        const family =
+            encodeURIComponent(font)
+                .replace(/%20/g, "+");
+
+
+        link.rel =
+            "stylesheet";
+
+
+        link.href =
+            `https://fonts.googleapis.com/css2?family=${family}:wght@400;600;700&display=swap`;
+
+
+        link.dataset.lingualogFont =
+            font;
+
+
+        document.head.appendChild(
+            link
+        );
+
+
+        loadedGoogleFonts.add(
+            font
+        );
+    }
 
 
     const SIZES = [
@@ -1785,6 +1947,11 @@
             font;
 
 
+        ensureFontLoaded(
+            font
+        );
+
+
         const editor =
             state.activeEditor;
 
@@ -3051,6 +3218,13 @@
         toggle,
 
         applyFont,
+
+        getFonts() {
+
+            return [...FONTS];
+        },
+
+        ensureFontLoaded,
 
         applyFontSize,
 
