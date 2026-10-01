@@ -5,6 +5,22 @@ let pendingSelectedTemplate = null;
 
 let currentPageId = null;
 
+/*
+ * Expose the active journal page ID to shared modules such as iPen.
+ *
+ * currentPageId is declared with `let`, so it is not automatically
+ * available as window.currentPageId.
+ */
+Object.defineProperty(window, "currentPageId", {
+  configurable: true,
+  get() {
+    return currentPageId;
+  },
+  set(value) {
+    currentPageId = value;
+  }
+});
+
 console.log("SCRIPT LOADED");
 
 function refreshIcons() {

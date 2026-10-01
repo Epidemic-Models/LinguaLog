@@ -66,6 +66,19 @@
         selectionStart: null,
         selectionEnd: null,
 
+        /*
+         * Handwriting-to-text mode.
+         *
+         * manual:
+         * User selects handwriting (or converts all) and presses Aa.
+         *
+         * auto:
+         * Newly written handwriting is converted after a short pause.
+         */
+        conversionMode: "manual",
+        autoConvertTimer: null,
+        autoBatchStrokes: [],
+
         pageId: null,
         resizeObserver: null
     };
@@ -188,6 +201,18 @@
 
             cursor: crosshair;
         }
+
+
+        /*
+         * iPen owns the complete journal surface while active.
+         *
+         * Do NOT raise ordinary form controls above the canvas.
+         * This allows handwriting across titles, textareas,
+         * search fields and every other part of the journal.
+         *
+         * When iPen is inactive the canvas has pointer-events:none,
+         * so normal editing works exactly as usual.
+         */
 
 
         /* =========================================
@@ -403,6 +428,50 @@
         .ipen-toolbar.open {
             display:
                 flex;
+        }
+
+
+        /*
+         * Keep the iPen toolbar inside the journal on narrower
+         * windows, split-screen layouts and iPad.
+         *
+         * Desktop keeps the compact single-row toolbar.
+         * When there is not enough horizontal room, controls wrap
+         * instead of allowing the popover to extend off-screen.
+         */
+        @media (max-width: 900px) {
+
+            .ipen-toolbar {
+                left: 18px;
+                right: 18px;
+
+                width: auto;
+                max-width: none;
+
+                flex-wrap: wrap;
+
+                justify-content: flex-start;
+
+                row-gap: 6px;
+
+                white-space: normal;
+            }
+
+
+            .ipen-current-tool {
+                flex: 0 0 auto;
+            }
+
+
+            .ipen-tools {
+                flex-wrap: wrap;
+            }
+
+
+            .ipen-conversion-modes {
+                display: flex;
+                align-items: center;
+            }
         }
 
 
@@ -1129,6 +1198,220 @@
         }
 
 
+        /*
+         * =========================================
+         * FINAL RESPONSIVE IPEN POPOVER
+         * =========================================
+         */
+
+        @media (max-width: 1200px) {
+
+            .ipen-toolbar {
+                left: 12px !important;
+                right: 12px !important;
+                top: 12px !important;
+
+                width: auto !important;
+                max-width: calc(100% - 24px) !important;
+
+                box-sizing: border-box !important;
+
+                padding: 8px 10px !important;
+                gap: 5px !important;
+
+                flex-wrap: wrap !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+
+                overflow: visible !important;
+                white-space: normal !important;
+
+                border-radius: 18px !important;
+
+                background:
+                    rgba(255,255,255,.94) !important;
+
+                box-shadow:
+                    0 10px 30px rgba(45,35,28,.16) !important;
+            }
+
+
+            .ipen-toolbar.open {
+                display: flex !important;
+            }
+
+
+            /* Remove unnecessary desktop labels */
+
+            .ipen-current-tool-name,
+            .ipen-control-label {
+                display: none !important;
+            }
+
+
+            .ipen-current-tool {
+                padding: 0 !important;
+                gap: 0 !important;
+            }
+
+
+            .ipen-current-tool-icon {
+                width: 34px !important;
+                height: 34px !important;
+
+                border-radius: 10px !important;
+            }
+
+
+            /* Drawing tools */
+
+            .ipen-tools {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+
+                gap: 2px !important;
+            }
+
+
+            .ipen-tool,
+            .ipen-action {
+                width: 32px !important;
+                height: 32px !important;
+                min-width: 32px !important;
+
+                padding: 0 !important;
+
+                border-radius: 9px !important;
+
+                font-size: 15px !important;
+            }
+
+
+            /* Color */
+
+            .ipen-color {
+                width: 28px !important;
+                height: 28px !important;
+                min-width: 28px !important;
+            }
+
+
+            /* Brush size */
+
+            .ipen-size-control {
+                gap: 4px !important;
+            }
+
+
+            .ipen-slider {
+                width: 58px !important;
+                min-width: 58px !important;
+            }
+
+
+            .ipen-size-label {
+                min-width: 25px !important;
+                font-size: 10px !important;
+            }
+
+
+            /* Separators */
+
+            .ipen-sep {
+                height: 22px !important;
+                margin: 0 1px !important;
+            }
+
+
+            /*
+             * Manual / Auto = compact segmented control
+             */
+
+            .ipen-conversion-modes {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+
+                gap: 2px !important;
+
+                padding: 2px !important;
+
+                border-radius: 10px !important;
+
+                background:
+                    rgba(45,37,34,.06) !important;
+            }
+
+
+            .ipen-mode-action {
+                width: auto !important;
+                min-width: 44px !important;
+                height: 28px !important;
+
+                padding: 0 6px !important;
+
+                font-size: 10px !important;
+                line-height: 1 !important;
+
+                border-radius: 8px !important;
+            }
+
+
+            .ipen-convert-action {
+                width: 32px !important;
+                min-width: 32px !important;
+            }
+        }
+
+
+        /*
+         * Portrait / narrow iPad
+         */
+
+        @media (max-width: 700px) {
+
+            .ipen-toolbar {
+                left: 8px !important;
+                right: 8px !important;
+
+                max-width: calc(100% - 16px) !important;
+
+                padding: 7px !important;
+
+                gap: 4px !important;
+            }
+
+
+            .ipen-tool,
+            .ipen-action {
+                width: 30px !important;
+                height: 30px !important;
+                min-width: 30px !important;
+            }
+
+
+            .ipen-current-tool-icon {
+                width: 30px !important;
+                height: 30px !important;
+            }
+
+
+            .ipen-slider {
+                width: 50px !important;
+                min-width: 50px !important;
+            }
+
+
+            .ipen-mode-action {
+                width: auto !important;
+                min-width: 40px !important;
+
+                padding: 0 5px !important;
+            }
+        }
+
+
+
         @media (prefers-reduced-motion: reduce) {
 
             .ipen-launch,
@@ -1520,11 +1803,37 @@
 
             <!-- HANDWRITING TO TEXT -->
 
+            <div
+                class="ipen-conversion-modes"
+                role="group"
+                aria-label="Handwriting conversion mode"
+            >
+                <button
+                    class="ipen-action ipen-mode-action ${state.conversionMode === "manual" ? "active" : ""}"
+                    data-conversion-mode="manual"
+                    type="button"
+                    title="Choose handwriting to convert"
+                    aria-label="Manual handwriting conversion"
+                >
+                    Manual
+                </button>
+
+                <button
+                    class="ipen-action ipen-mode-action ${state.conversionMode === "auto" ? "active" : ""}"
+                    data-conversion-mode="auto"
+                    type="button"
+                    title="Automatically convert handwriting after a pause"
+                    aria-label="Automatic handwriting conversion"
+                >
+                    Auto
+                </button>
+            </div>
+
             <button
                 class="ipen-action ipen-convert-action"
                 data-action="convert"
                 type="button"
-                title="Convert handwriting to text"
+                title="Convert selected handwriting to text"
                 aria-label="Convert handwriting to text"
             >
                 Aa
@@ -2342,13 +2651,18 @@
 
 
         /*
-         * iPen is Pencil-only.
+         * iPen accepts:
          *
-         * Finger/touch and mouse must never start an iPen stroke.
-         * This prevents normal page interaction from accidentally
-         * becoming handwriting.
+         * - pen/stylus input on supported devices
+         * - mouse/trackpad input for desktop use and testing
+         *
+         * Finger/touch input is deliberately ignored so normal
+         * page scrolling and tapping do not become handwriting.
          */
-        if (event.pointerType !== "pen") {
+        if (
+            event.pointerType !== "pen" &&
+            event.pointerType !== "mouse"
+        ) {
             return;
         }
 
@@ -2659,8 +2973,12 @@
             false;
 
 
+        const completedStroke =
+            state.current;
+
+
         state.strokes.push(
-            state.current
+            completedStroke
         );
 
 
@@ -2680,6 +2998,18 @@
         redraw();
 
         savePageData();
+
+
+        /*
+         * Manual mode stops here.
+         *
+         * Auto mode groups this stroke with the other
+         * recently completed strokes and converts after
+         * the writer pauses.
+         */
+        scheduleAutoConversion(
+            completedStroke
+        );
     }
 
 
@@ -2738,18 +3068,38 @@
     function lostPointerCapture(event) {
 
         /*
-         * Safari can lose capture unexpectedly. If this was
-         * our active pointer, reset the transient gesture so
-         * iPen cannot remain stuck in drawing mode.
+         * Pointer capture is also released normally at the end
+         * of every completed gesture.
+         *
+         * releaseActivePointer() clears state.pointerId before
+         * the browser dispatches lostpointercapture. In that
+         * normal case there is nothing to cancel.
+         *
+         * This is especially important for Select: the completed
+         * selection rectangle must remain visible after pointerup.
+         */
+        if (state.pointerId === null) {
+            return;
+        }
+
+
+        /*
+         * Ignore capture loss belonging to another pointer.
          */
         if (
-            state.pointerId !== null &&
+            event?.pointerId !== undefined &&
             event.pointerId !== state.pointerId
         ) {
             return;
         }
 
 
+        /*
+         * Genuine unexpected capture loss.
+         *
+         * Abort only the transient gesture. A completed selection
+         * is not affected because its pointer was already released.
+         */
         state.pointerId =
             null;
 
@@ -2759,14 +3109,18 @@
         state.current =
             null;
 
-        state.selecting =
-            false;
 
-        state.selectionStart =
-            null;
+        if (state.selecting) {
 
-        state.selectionEnd =
-            null;
+            state.selecting =
+                false;
+
+            state.selectionStart =
+                null;
+
+            state.selectionEnd =
+                null;
+        }
 
 
         redraw();
@@ -3182,6 +3536,518 @@
 
 
     /* =========================================================
+       AUTOMATIC HANDWRITING CONVERSION
+       ========================================================= */
+
+    function scheduleAutoConversion(stroke) {
+
+        if (
+            state.conversionMode !== "auto" ||
+            !stroke
+        ) {
+            return;
+        }
+
+
+        /*
+         * Collect completed strokes into the current
+         * handwriting batch.
+         */
+        if (
+            !state.autoBatchStrokes.includes(stroke)
+        ) {
+            state.autoBatchStrokes.push(
+                stroke
+            );
+        }
+
+
+        /*
+         * Every new stroke restarts the pause timer.
+         */
+        if (state.autoConvertTimer) {
+
+            clearTimeout(
+                state.autoConvertTimer
+            );
+
+            state.autoConvertTimer =
+                null;
+        }
+
+
+        state.autoConvertTimer =
+            setTimeout(
+                async () => {
+
+                    state.autoConvertTimer =
+                        null;
+
+
+                    /*
+                     * The user may have switched back to
+                     * Manual while the timer was waiting.
+                     */
+                    if (
+                        state.conversionMode !== "auto"
+                    ) {
+
+                        state.autoBatchStrokes =
+                            [];
+
+                        return;
+                    }
+
+
+                    /*
+                     * Undo/Clear may have removed strokes
+                     * while the timer was waiting.
+                     */
+                    const batch =
+                        state.autoBatchStrokes.filter(
+                            item =>
+                                state.strokes.includes(item)
+                        );
+
+
+                    state.autoBatchStrokes =
+                        [];
+
+
+                    if (!batch.length) {
+                        return;
+                    }
+
+
+                    /*
+                     * Recognition may still be busy with the
+                     * previous automatic batch.
+                     *
+                     * Do not lose this batch. Put its strokes
+                     * back into the pending automatic queue and
+                     * retry after a short delay.
+                     */
+                    if (
+                        window.LinguaHandwriting?.recognizing
+                    ) {
+
+                        const stillPresent =
+                            batch.filter(
+                                stroke =>
+                                    state.strokes.includes(stroke)
+                            );
+
+
+                        state.autoBatchStrokes = [
+                            ...stillPresent,
+                            ...state.autoBatchStrokes.filter(
+                                stroke =>
+                                    !stillPresent.includes(stroke)
+                            )
+                        ];
+
+
+                        state.autoConvertTimer =
+                            setTimeout(
+                                () => {
+
+                                    state.autoConvertTimer =
+                                        null;
+
+
+                                    if (
+                                        state.conversionMode !== "auto"
+                                    ) {
+                                        return;
+                                    }
+
+
+                                    const retryBatch =
+                                        state.autoBatchStrokes.filter(
+                                            stroke =>
+                                                state.strokes.includes(stroke)
+                                        );
+
+
+                                    if (!retryBatch.length) {
+
+                                        state.autoBatchStrokes =
+                                            [];
+
+                                        return;
+                                    }
+
+
+                                    /*
+                                     * Restore the complete pending batch
+                                     * before rescheduling it.
+                                     *
+                                     * scheduleAutoConversion() will see
+                                     * that the first stroke is already
+                                     * present, preserve the full batch,
+                                     * and restart the normal pause timer.
+                                     */
+                                    state.autoBatchStrokes =
+                                        retryBatch;
+
+
+                                    scheduleAutoConversion(
+                                        retryBatch[0]
+                                    );
+                                },
+                                500
+                            );
+
+                        return;
+                    }
+
+
+                    const converted =
+                        await convertHandwritingBatch({
+                            strokes: batch,
+                            strokeRefs: batch,
+                            quiet: true
+                        });
+
+
+                    /*
+                     * Failed recognition never deletes ink.
+                     */
+                    if (!converted) {
+                        redraw();
+                    }
+                },
+                1200
+            );
+    }
+
+
+    /* =========================================================
+       SHARED HANDWRITING CONVERSION
+       ========================================================= */
+
+    async function convertHandwritingBatch({
+        strokes,
+        strokeRefs = [],
+        quiet = false
+    } = {}) {
+
+        if (!window.LinguaHandwriting) {
+
+            if (!quiet) {
+                alert(
+                    "Handwriting recognition is not available."
+                );
+            }
+
+            return false;
+        }
+
+
+        if (window.LinguaHandwriting.recognizing) {
+            return false;
+        }
+
+
+        const strokesToConvert =
+            Array.isArray(strokes)
+                ? strokes.filter(Boolean)
+                : [];
+
+
+        if (!strokesToConvert.length) {
+            return false;
+        }
+
+
+        try {
+
+            const result =
+                await window.LinguaHandwriting.recognize({
+                    strokes: strokesToConvert
+                });
+
+
+            if (
+                result.status ===
+                "provider-required"
+            ) {
+
+                if (!quiet) {
+                    alert(
+                        "Handwriting recognition provider is not configured."
+                    );
+                }
+
+                return false;
+            }
+
+
+            if (
+                result.status !== "success" ||
+                !result.text
+            ) {
+
+                if (!quiet) {
+                    alert(
+                        "No text was recognized."
+                    );
+                }
+
+                return false;
+            }
+
+
+            const surface =
+                state.surface;
+
+
+            if (!surface) {
+                return false;
+            }
+
+
+            /*
+             * Find editable fields inside the current
+             * journal/editor surface.
+             */
+
+            const textTargets =
+                Array.from(
+                    surface.querySelectorAll(
+                        'textarea, input[type="text"], input[type="search"], [contenteditable="true"]'
+                    )
+                ).filter(element =>
+                    !element.disabled &&
+                    !element.readOnly
+                );
+
+
+            /*
+             * Find the centre of this handwriting batch.
+             */
+
+            const points =
+                strokesToConvert.flatMap(
+                    stroke =>
+                        Array.isArray(stroke.points)
+                            ? stroke.points
+                            : []
+                );
+
+
+            if (!points.length) {
+                return false;
+            }
+
+
+            const averageX =
+                points.reduce(
+                    (sum, point) =>
+                        sum + Number(point.x || 0),
+                    0
+                ) / points.length;
+
+
+            const averageY =
+                points.reduce(
+                    (sum, point) =>
+                        sum + Number(point.y || 0),
+                    0
+                ) / points.length;
+
+
+            const surfaceRect =
+                surface.getBoundingClientRect();
+
+
+            const pageX =
+                surfaceRect.left +
+                averageX * surfaceRect.width;
+
+
+            const pageY =
+                surfaceRect.top +
+                averageY * surfaceRect.height;
+
+
+            const target =
+                textTargets.find(element => {
+
+                    const rect =
+                        element.getBoundingClientRect();
+
+                    return (
+                        pageX >= rect.left &&
+                        pageX <= rect.right &&
+                        pageY >= rect.top &&
+                        pageY <= rect.bottom
+                    );
+                });
+
+
+            /*
+             * No field beneath the handwriting:
+             * preserve the original ink.
+             */
+
+            if (!target) {
+                return false;
+            }
+
+
+            /*
+             * Insert recognized text.
+             */
+
+            if (
+                target.matches(
+                    'textarea, input[type="text"], input[type="search"]'
+                )
+            ) {
+
+                const existing =
+                    target.value || "";
+
+                const separator =
+                    existing &&
+                    !/\s$/.test(existing)
+                        ? " "
+                        : "";
+
+                target.value =
+                    existing +
+                    separator +
+                    result.text;
+
+            } else if (
+                target.isContentEditable
+            ) {
+
+                const existing =
+                    target.textContent || "";
+
+                const separator =
+                    existing &&
+                    !/\s$/.test(existing)
+                        ? " "
+                        : "";
+
+                target.textContent =
+                    existing +
+                    separator +
+                    result.text;
+            }
+
+
+            target.dispatchEvent(
+                new Event(
+                    "input",
+                    {
+                        bubbles: true
+                    }
+                )
+            );
+
+
+            target.dispatchEvent(
+                new Event(
+                    "change",
+                    {
+                        bubbles: true
+                    }
+                )
+            );
+
+
+            /*
+             * Remove only the exact stroke objects
+             * successfully converted.
+             */
+
+            const refs =
+                strokeRefs.length
+                    ? strokeRefs
+                    : strokesToConvert;
+
+
+            const convertedSet =
+                new Set(refs);
+
+
+            state.strokes =
+                state.strokes.filter(
+                    stroke =>
+                        !convertedSet.has(stroke)
+                );
+
+
+            state.selectedStrokeIndexes =
+                [];
+
+            state.selectionStart =
+                null;
+
+            state.selectionEnd =
+                null;
+
+            state.redo =
+                [];
+
+
+            redraw();
+
+            savePageData();
+
+
+            /*
+             * Trigger each journal's normal persistence.
+             */
+
+            if (
+                typeof saveGeneralJournal ===
+                "function" &&
+                target.closest(".general-journal")
+            ) {
+                saveGeneralJournal(false);
+            }
+
+
+            if (
+                typeof saveData ===
+                "function" &&
+                target.closest(".language-page-card")
+            ) {
+                saveData();
+            }
+
+
+            target.focus();
+
+            return true;
+
+        } catch (error) {
+
+            console.error(
+                "LinguaLog automatic handwriting recognition error:",
+                error
+            );
+
+
+            if (!quiet) {
+                alert(
+                    error?.message ||
+                    "Could not recognize handwriting."
+                );
+            }
+
+
+            return false;
+        }
+    }
+
+
+    /* =========================================================
        UI EVENTS
        ========================================================= */
 
@@ -3429,7 +4295,69 @@
                 }
             );
 
-                /* =========================================
+        /* =========================================
+           HANDWRITING CONVERSION MODE
+           ========================================= */
+
+        surface
+            .querySelectorAll(
+                "[data-conversion-mode]"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    event => {
+
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        const mode =
+                            button.dataset.conversionMode;
+
+                        if (
+                            mode !== "manual" &&
+                            mode !== "auto"
+                        ) {
+                            return;
+                        }
+
+                        state.conversionMode =
+                            mode;
+
+                        /*
+                         * Changing mode ends any pending
+                         * automatic handwriting batch.
+                         */
+                        if (state.autoConvertTimer) {
+                            clearTimeout(
+                                state.autoConvertTimer
+                            );
+
+                            state.autoConvertTimer =
+                                null;
+                        }
+
+                        state.autoBatchStrokes =
+                            [];
+
+                        surface
+                            .querySelectorAll(
+                                "[data-conversion-mode]"
+                            )
+                            .forEach(item => {
+
+                                item.classList.toggle(
+                                    "active",
+                                    item.dataset.conversionMode === mode
+                                );
+                            });
+                    }
+                );
+            });
+
+
+        /* =========================================
            HANDWRITING TO TEXT
            ========================================= */
 
