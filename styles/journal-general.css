@@ -559,7 +559,7 @@
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1024px) and (orientation: portrait) {
   .general-journal {
     width: calc(100% - 24px) !important;
     margin: 12px auto !important;
