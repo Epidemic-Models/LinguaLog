@@ -166,7 +166,119 @@
 }
 
 .community-feed {
+  display: grid;
+  gap: 18px;
   margin-top: 18px;
+}
+
+.community-feed-status {
+  margin: 0 0 14px;
+  color: #817772;
+  font-size: 0.9rem;
+}
+
+.community-post {
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  border: 1px solid rgba(54, 45, 39, 0.08);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 16px 45px rgba(55, 44, 37, 0.07);
+}
+
+.community-post::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -70px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(221, 212, 255, 0.34),
+      transparent 70%
+    );
+  pointer-events: none;
+}
+
+.community-post-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.community-post-avatar {
+  display: grid;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 50%;
+  background:
+    linear-gradient(
+      135deg,
+      #ddd4ff,
+      #ffdbe5
+    );
+  color: #5f527d;
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+.community-post-author-block {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.community-post-author {
+  overflow: hidden;
+  color: #302a27;
+  font-size: 0.98rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.community-post-time {
+  color: #978c86;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.community-post-content {
+  position: relative;
+  margin-top: 18px;
+  color: #453d39;
+  font-size: 0.98rem;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.community-post-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(54, 45, 39, 0.07);
+}
+
+.community-post-conversation {
+  color: #9a8f89;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .community-empty-state {
@@ -200,6 +312,15 @@
   .community-compose-card {
     padding: 20px;
     border-radius: 22px;
+  }
+
+  .community-post {
+    padding: 20px;
+    border-radius: 22px;
+  }
+
+  .community-post-content {
+    font-size: 0.95rem;
   }
 
   .community-compose-footer {

@@ -130,11 +130,25 @@
       const profile = profilesById.get(post.author_id);
       const username = profile?.username || "LinguaLog user";
 
+      const initial =
+        username
+          .trim()
+          .charAt(0)
+          .toUpperCase() || "L";
+
       const article = document.createElement("article");
       article.className = "community-post";
 
       const header = document.createElement("div");
       header.className = "community-post-header";
+
+      const avatar = document.createElement("div");
+      avatar.className = "community-post-avatar";
+      avatar.setAttribute("aria-hidden", "true");
+      avatar.textContent = initial;
+
+      const authorBlock = document.createElement("div");
+      authorBlock.className = "community-post-author-block";
 
       const author = document.createElement("strong");
       author.className = "community-post-author";
@@ -145,12 +159,29 @@
       time.dateTime = post.created_at || "";
       time.textContent = formatPostDate(post.created_at);
 
-      const body = document.createElement("p");
+      authorBlock.append(author, time);
+      header.append(avatar, authorBlock);
+
+      const body = document.createElement("div");
       body.className = "community-post-content";
       body.textContent = post.content || "";
 
-      header.append(author, time);
-      article.append(header, body);
+      const actions = document.createElement("div");
+      actions.className = "community-post-actions";
+      actions.setAttribute("aria-hidden", "true");
+
+      const conversationLabel =
+        document.createElement("span");
+
+      conversationLabel.className =
+        "community-post-conversation";
+
+      conversationLabel.textContent =
+        "LinguaLog Community";
+
+      actions.appendChild(conversationLabel);
+
+      article.append(header, body, actions);
       feed.appendChild(article);
     });
   }
