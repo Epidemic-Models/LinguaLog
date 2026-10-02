@@ -2648,3 +2648,110 @@ body.journal-is-empty .freeform-toolbar {
     min-width: 0;
   }
 }
+
+/* =====================================================
+   MY CONNECTIONS — SOCIAL LIST
+===================================================== */
+
+.connection-card {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid rgba(54, 45, 39, 0.09);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 10px 30px rgba(55, 44, 37, 0.06);
+}
+
+.connection-card-avatar {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ddd4ff, #ffdbe5);
+  color: #5f527d;
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.connection-card-details {
+  min-width: 0;
+}
+
+.connection-card-name {
+  margin: 0 0 7px;
+  overflow: hidden;
+  color: #302a27;
+  font-size: 1rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.connection-card-languages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  color: #817772;
+  font-size: 0.82rem;
+}
+
+.connection-card-bio {
+  margin: 9px 0 0;
+  color: #655c57;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.connection-card-actions {
+  display: flex;
+  align-items: center;
+}
+
+.connection-remove-btn {
+  padding: 8px 14px;
+  border: 1px solid rgba(130, 73, 73, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  color: #8a5151;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.connection-remove-btn:hover {
+  border-color: rgba(130, 73, 73, 0.3);
+  background: rgba(138, 81, 81, 0.08);
+}
+
+.connection-remove-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (max-width: 600px) {
+  .connection-card {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 13px;
+    padding: 16px;
+  }
+
+  .connection-card-avatar {
+    width: 46px;
+    height: 46px;
+  }
+
+  .connection-card-actions {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
+}

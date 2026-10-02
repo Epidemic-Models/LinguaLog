@@ -16,6 +16,43 @@
         <p class="community-intro">
           A place to share thoughts, ideas, research, and discoveries.
         </p>
+
+        <nav
+          class="community-social-nav"
+          aria-label="Community connections"
+        >
+          <button
+            type="button"
+            class="community-social-btn"
+            onclick="openConnectionsModal()"
+          >
+            <span class="community-social-icon" aria-hidden="true">◎</span>
+            <span>Connections</span>
+          </button>
+
+          <button
+            type="button"
+            class="community-social-btn"
+            onclick="openConnectionRequests()"
+          >
+            <span class="community-social-icon" aria-hidden="true">♡</span>
+            <span>Requests</span>
+            <span
+              id="communityConnectionBadge"
+              class="community-social-badge hidden"
+              aria-label="Pending connection requests"
+            ></span>
+          </button>
+
+          <button
+            type="button"
+            class="community-social-btn"
+            onclick="openFindPeopleModal()"
+          >
+            <span class="community-social-icon" aria-hidden="true">＋</span>
+            <span>Find People</span>
+          </button>
+        </nav>
       </div>
     </header>
 

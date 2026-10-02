@@ -677,6 +677,7 @@
     }
 
     loadCommunityPosts();
+    window.updateConnectionNotificationBadge?.();
   }
 
   window.initializeCommunity = initializeCommunity;

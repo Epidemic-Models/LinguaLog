@@ -269,19 +269,28 @@ document.addEventListener("keydown", (event) => {
 });
 
 async function updateConnectionNotificationBadge() {
-  const badge = document.getElementById("connectionNotificationBadge");
-  if (!badge) return;
+  const profileBadge =
+    document.getElementById("connectionNotificationBadge");
+
+  const communityBadge =
+    document.getElementById("communityConnectionBadge");
+
+  if (!profileBadge && !communityBadge) return;
 
   const requests = await loadPendingRequests();
   const count = requests.length;
 
-  badge.textContent = count;
+  [profileBadge, communityBadge]
+    .filter(Boolean)
+    .forEach((badge) => {
+      badge.textContent = count;
 
-  if (count > 0) {
-    badge.classList.remove("hidden");
-  } else {
-    badge.classList.add("hidden");
-  }
+      if (count > 0) {
+        badge.classList.remove("hidden");
+      } else {
+        badge.classList.add("hidden");
+      }
+    });
 }
 
 async function openConnectionRequests() {
@@ -463,6 +472,28 @@ async function loadAcceptedConnections() {
 }
 
 
+async function removeConnection(connectionId) {
+  const user = await window.getCurrentUser?.();
+
+  if (!user || !connectionId) {
+    return false;
+  }
+
+  const { error } = await supabaseClient
+    .from("connections")
+    .delete()
+    .eq("id", connectionId)
+    .or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`);
+
+  if (error) {
+    console.error("Remove connection failed:", error);
+    return false;
+  }
+
+  return true;
+}
+
+
 async function openConnectionsModal() {
   const modal = document.getElementById("connectionsModal");
   const list = document.getElementById("connectionsList");
@@ -499,22 +530,89 @@ async function openConnectionsModal() {
     const learningLanguage = profile.learning_language || "Not specified";
     const bio = profile.bio || "";
 
-    const card = document.createElement("div");
-    card.className = "find-person-card";
+    const initial =
+      username
+        .trim()
+        .charAt(0)
+        .toUpperCase() || "L";
 
-    card.innerHTML = `
-      <div class="find-person-info">
-        <h3>${escapeHtml(username)}</h3>
+    const card = document.createElement("article");
+    card.className = "connection-card";
 
-        <div class="find-person-languages">
-          <span>Native: ${escapeHtml(nativeLanguage)}</span>
-          <span>Learning: ${escapeHtml(learningLanguage)}</span>
-        </div>
+    const avatar = document.createElement("div");
+    avatar.className = "connection-card-avatar";
+    avatar.setAttribute("aria-hidden", "true");
+    avatar.textContent = initial;
 
-        ${bio ? `<p>${escapeHtml(bio)}</p>` : ""}
-      </div>
-    `;
+    const details = document.createElement("div");
+    details.className = "connection-card-details";
 
+    const name = document.createElement("h3");
+    name.className = "connection-card-name";
+    name.textContent = username;
+
+    const languages = document.createElement("div");
+    languages.className = "connection-card-languages";
+
+    const native = document.createElement("span");
+    native.textContent = `Native: ${nativeLanguage}`;
+
+    const learning = document.createElement("span");
+    learning.textContent = `Learning: ${learningLanguage}`;
+
+    languages.append(native, learning);
+    details.append(name, languages);
+
+    if (bio) {
+      const bioElement = document.createElement("p");
+      bioElement.className = "connection-card-bio";
+      bioElement.textContent = bio;
+      details.appendChild(bioElement);
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "connection-card-actions";
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "connection-remove-btn";
+    removeButton.textContent = "Remove";
+    removeButton.setAttribute(
+      "aria-label",
+      `Remove ${username} from your connections`
+    );
+
+    removeButton.addEventListener("click", async () => {
+      const confirmed = window.confirm(
+        `Remove ${username} from your connections?`
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      removeButton.disabled = true;
+      removeButton.textContent = "Removing...";
+
+      const success = await removeConnection(connection.id);
+
+      if (!success) {
+        removeButton.disabled = false;
+        removeButton.textContent = "Remove";
+
+        window.alert(
+          "Could not remove this connection. Please try again."
+        );
+
+        return;
+      }
+
+      await openConnectionsModal();
+    });
+
+    actions.appendChild(removeButton);
+
+    card.append(avatar, details, actions);
     list.appendChild(card);
   });
 }
@@ -528,6 +626,7 @@ function closeConnectionsModal() {
 
 
 window.loadAcceptedConnections = loadAcceptedConnections;
+window.removeConnection = removeConnection;
 window.openConnectionsModal = openConnectionsModal;
 window.closeConnectionsModal = closeConnectionsModal;
 
