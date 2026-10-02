@@ -168,7 +168,6 @@
 
       const actions = document.createElement("div");
       actions.className = "community-post-actions";
-      actions.setAttribute("aria-hidden", "true");
 
       const conversationLabel =
         document.createElement("span");
@@ -180,6 +179,55 @@
         "LinguaLog Community";
 
       actions.appendChild(conversationLabel);
+
+      if (post.author_id === user.id) {
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "community-post-delete";
+        deleteButton.textContent = "Delete";
+        deleteButton.setAttribute(
+          "aria-label",
+          "Delete this community post"
+        );
+
+        deleteButton.addEventListener("click", async () => {
+          const confirmed = window.confirm(
+            "Delete this post? This cannot be undone."
+          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          deleteButton.disabled = true;
+          deleteButton.textContent = "Deleting...";
+
+          const { error: deleteError } = await supabaseClient
+            .from("posts")
+            .delete()
+            .eq("id", post.id)
+            .eq("author_id", user.id);
+
+          if (deleteError) {
+            console.error(
+              "Community post delete failed:",
+              deleteError
+            );
+
+            deleteButton.disabled = false;
+            deleteButton.textContent = "Delete";
+
+            window.alert(
+              "Could not delete the post. Please try again."
+            );
+            return;
+          }
+
+          await loadCommunityPosts();
+        });
+
+        actions.appendChild(deleteButton);
+      }
 
       article.append(header, body, actions);
       feed.appendChild(article);
