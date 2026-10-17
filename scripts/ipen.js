@@ -430,6 +430,37 @@
                 flex;
         }
 
+        /*
+         * Switch from handwriting to normal typing.
+         */
+        .ipen-type-mode {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 10px 14px;
+
+            border: 1px solid rgba(45,35,28,.14);
+            border-radius: 12px;
+
+            background: #292522;
+            color: #ffffff;
+
+            font: 600 13px Inter, Arial, sans-serif;
+
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .ipen-type-mode:hover {
+            background: #49413b;
+        }
+
+        .ipen-type-mode:focus-visible {
+            outline: 3px solid #7b85ff;
+            outline-offset: 3px;
+        }
+
 
         /*
          * Keep the iPen toolbar inside the journal on narrower
@@ -1606,6 +1637,17 @@
 
             <span class="ipen-sep"></span>
 
+
+            <!-- TYPE MODE -->
+
+            <button
+                class="ipen-type-mode"
+                type="button"
+                title="Switch to typing"
+                aria-label="Switch to typing"
+            >
+                ⌨ Type
+            </button>
 
             <!-- DRAWING TOOLS -->
 
@@ -4079,6 +4121,31 @@
         ) {
             return;
         }
+
+
+        /* =========================================
+           TYPE MODE
+           ========================================= */
+
+        const typeButton =
+            surface.querySelector(
+                ".ipen-type-mode"
+            );
+
+        typeButton?.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                /*
+                 * Disable handwriting interception.
+                 * Existing strokes remain untouched.
+                 */
+                setActive(false);
+            }
+        );
 
 
         /* =========================================

@@ -631,9 +631,9 @@ function makeFreeformTitleDraggable(el) {
   let startTop = 0;
 
   input.addEventListener("pointerdown", (event) => {
-    // Mouse: Alt/Option + drag
-    // Touch / Apple Pencil: drag directly
-    if (event.pointerType === "mouse" && !event.altKey) {
+    // Touch and Apple Pencil must edit the title normally.
+    // Dragging is available only with Alt/Option + mouse.
+    if (event.pointerType !== "mouse" || !event.altKey) {
       return;
     }
 
